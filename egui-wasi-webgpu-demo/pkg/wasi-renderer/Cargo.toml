@@ -14,3 +14,8 @@ ahash = "0.8.12"
 image = { version = "0.25.9", default-features = false, features = ["png", "jpeg"] }
 epaint = { version = "0.33.3", default-features = false, features = ["bytemuck"] }
 egui = "0.33.3"
+
+[profile.release]
+opt-level = "z"
+codegen-units = 1
+lto = true
