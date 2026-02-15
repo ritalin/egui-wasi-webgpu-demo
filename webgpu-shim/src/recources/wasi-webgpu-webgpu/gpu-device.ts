@@ -37,7 +37,7 @@ import type {
 } from "../../types/wasi-webgpu-webgpu.js";
 import { TextureFormat } from "../../supports/enum-conv.js";
 import { Pollable } from "../../types/wasi-io-poll.js";
-import { SafeNumber } from "../../supports/num-conv.js";
+import { SafeU64, StrictU64 } from "../../supports/num-conv.js";
 // origin: src/types/wasi-webgpu-webgpu.d.ts:1314
 export class GpuDevice {
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1318
@@ -73,7 +73,7 @@ export class GpuDevice {
   createBuffer(descriptor: GpuBufferDescriptor): GpuBuffer {
     const desc: GPUBufferDescriptor = {
       label: descriptor.label,
-      size: SafeNumber(descriptor.size),
+      size: StrictU64(descriptor.size),
       usage: descriptor.usage,
       mappedAtCreation: descriptor.mappedAtCreation,
     };
@@ -144,8 +144,8 @@ export class GpuDevice {
             const val = res0.val.buffer as unknown as GpuBuffer;
             res = {
               buffer: val._handle,
-              offset: SafeNumber(res0.val.offset),
-              size: SafeNumber(res0.val.size),
+              offset: SafeU64(res0.val.offset),
+              size: SafeU64(res0.val.size),
             };
             break;
           }

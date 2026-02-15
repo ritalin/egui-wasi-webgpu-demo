@@ -8,7 +8,7 @@ import type {
   GpuTexelCopyBufferLayout,
   GpuTexelCopyTextureInfo,
 } from "../../types/wasi-webgpu-webgpu.js";
-import { SafeNumber } from "../../supports/num-conv.js";
+import { SafeU64, StrictU64 } from "../../supports/num-conv.js";
 // origin: src/types/wasi-webgpu-webgpu.d.ts:1395
 export class GpuQueue {
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1399
@@ -35,10 +35,10 @@ export class GpuQueue {
   ): void {
     this._handle.writeBuffer(
       buffer._handle,
-      SafeNumber(bufferOffset),
+      StrictU64(bufferOffset),
       data.slice(),
-      SafeNumber(dataOffset),
-      SafeNumber(size),
+      SafeU64(dataOffset),
+      SafeU64(size),
     );
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1403
@@ -57,7 +57,7 @@ export class GpuQueue {
     };
 
     const data_layout_raw: GPUTexelCopyBufferLayout = {
-      offset: SafeNumber(dataLayout.offset),
+      offset: SafeU64(dataLayout.offset),
       bytesPerRow: dataLayout.bytesPerRow,
       rowsPerImage: dataLayout.rowsPerImage,
     };

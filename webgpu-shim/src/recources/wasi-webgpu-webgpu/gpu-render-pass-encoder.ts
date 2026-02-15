@@ -13,7 +13,7 @@ import type {
   GpuSize64,
   GpuStencilValue,
 } from "../../types/wasi-webgpu-webgpu.js";
-import { SafeNumber } from "../../supports/num-conv.js";
+import { SafeU64, StrictU64 } from "../../supports/num-conv.js";
 // origin: src/types/wasi-webgpu-webgpu.d.ts:1438
 export class GpuRenderPassEncoder {
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1442
@@ -104,17 +104,28 @@ export class GpuRenderPassEncoder {
     dynamicOffsetsDataStart: GpuSize64 | undefined,
     dynamicOffsetsDataLength: GpuSize32 | undefined,
   ): void {
+    if (bindGroup === undefined) return;
     if (dynamicOffsetsData === undefined) {
       this._handle.setBindGroup(index, bindGroup._handle);
       return;
     }
 
+    const start =
+      dynamicOffsetsDataStart === undefined
+        ? 0
+        : StrictU64(dynamicOffsetsDataStart);
+
+    const length =
+      dynamicOffsetsDataLength === undefined
+        ? dynamicOffsetsData.length
+        : dynamicOffsetsDataLength;
+
     this._handle.setBindGroup(
       index,
       bindGroup._handle,
-      dynamicOffsetsData,
-      SafeNumber(dynamicOffsetsDataStart),
-      dynamicOffsetsDataLength,
+      dynamicOffsetsData.slice(),
+      start,
+      length,
     );
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1457
@@ -131,8 +142,8 @@ export class GpuRenderPassEncoder {
     this._handle.setIndexBuffer(
       buffer._handle,
       indexFormat,
-      SafeNumber(offset),
-      SafeNumber(size),
+      SafeU64(offset),
+      SafeU64(size),
     );
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1459
@@ -142,11 +153,21 @@ export class GpuRenderPassEncoder {
     offset: GpuSize64 | undefined,
     size: GpuSize64 | undefined,
   ): void {
+    if (buffer === undefined) {
+      this._handle.setVertexBuffer(
+        slot,
+        undefined,
+        SafeU64(offset),
+        SafeU64(size),
+      );
+      return;
+    }
+
     this._handle.setVertexBuffer(
       slot,
       buffer._handle,
-      SafeNumber(offset),
-      SafeNumber(size),
+      SafeU64(offset),
+      SafeU64(size),
     );
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1460

@@ -27,6 +27,8 @@ export class GpuCommandEncoder {
     const desc: GPURenderPassDescriptor = {
       label: descriptor.label,
       colorAttachments: descriptor.colorAttachments.map((att) => {
+        if (!att) return undefined as unknown as GPURenderPassColorAttachment;
+
         const att_raw: GPURenderPassColorAttachment = {
           view: (att.view as unknown as GpuTextureView)._handle,
           loadOp: att.loadOp,
