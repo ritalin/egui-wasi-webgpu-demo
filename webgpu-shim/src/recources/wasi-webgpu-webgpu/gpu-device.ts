@@ -240,7 +240,10 @@ export class GpuDevice {
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1340
   lost(): GpuDeviceLostInfo {
-    console.error("(Todo)", "GpuDevice.lost(...)");
+    this._handle.lost.then((info) => {
+      console.log(info);
+    });
+    console.error("(Todo)", "GpuDevice.setLabel(...)");
     return undefined as any;
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1341

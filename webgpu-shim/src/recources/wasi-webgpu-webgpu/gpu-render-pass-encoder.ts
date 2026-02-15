@@ -105,7 +105,7 @@ export class GpuRenderPassEncoder {
     dynamicOffsetsDataLength: GpuSize32 | undefined,
   ): void {
     if (dynamicOffsetsData === undefined) {
-      this._handle.setBindGroup(index, bindGroup._handle, dynamicOffsetsData);
+      this._handle.setBindGroup(index, bindGroup._handle);
       return;
     }
 

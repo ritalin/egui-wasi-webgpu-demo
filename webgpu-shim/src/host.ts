@@ -51,6 +51,7 @@ export const createWebGpuRuntime = async function (): Promise<WebGpuRuntime> {
   const adapter = await navigator.gpu.requestAdapter();
   const device = await adapter.requestDevice();
 
+  device.lost.then((info) => console.error("gpu-device", info));
   return new WebGpuRuntime(device);
 };
 

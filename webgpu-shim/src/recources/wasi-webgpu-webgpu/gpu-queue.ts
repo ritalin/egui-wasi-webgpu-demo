@@ -36,7 +36,7 @@ export class GpuQueue {
     this._handle.writeBuffer(
       buffer._handle,
       SafeNumber(bufferOffset),
-      data as BufferSource,
+      data.slice(),
       SafeNumber(dataOffset),
       SafeNumber(size),
     );
@@ -62,12 +62,7 @@ export class GpuQueue {
       rowsPerImage: dataLayout.rowsPerImage,
     };
 
-    this._handle.writeTexture(
-      dest_raw,
-      data as BufferSource,
-      data_layout_raw,
-      size,
-    );
+    this._handle.writeTexture(dest_raw, data.slice(), data_layout_raw, size);
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1404
   label(): string {
