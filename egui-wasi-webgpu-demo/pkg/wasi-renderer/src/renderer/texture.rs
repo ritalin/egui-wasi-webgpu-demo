@@ -103,7 +103,7 @@ impl TextureCache {
         let queue = device.queue();
 
         for img in images {
-            log::debug!("New texture/key: {:?}", img.key());
+            // log::debug!("New texture/key: {:?}", img.key());
 
             let size = webgpu::GpuExtent3D{
                 width: img.size().width,

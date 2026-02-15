@@ -25,3 +25,4 @@ dist-ssr
 
 *.wgsl.js
 _transpiled
+target
