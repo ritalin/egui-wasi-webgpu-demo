@@ -7,7 +7,7 @@
     "dev": "vite",
     "build:shim": "pnpm --filter webgpu-shim run build",
     "build:pkg": "./scripts/transpile.sh",
-    "build": "tsc && vite build",
+    "build": "pnpm run build:shim && pnpm run build:pkg release && tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
