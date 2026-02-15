@@ -1,0 +1,33 @@
+{
+  "name": "webgpu-shim",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node ./scripts/embed-wgsl.mjs",
+    "prepare": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./types/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./instantiation": "./src/instantiation.ts",
+    "./host": {
+      "types": "./types/host.d.ts",
+      "import": "./src/host.ts"
+    }
+  },
+  "packageManager": "pnpm@10.12.1",
+  "dependencies": {
+    "@bytecodealliance/preview2-shim": "^0.17.8"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "@webgpu/types": "^0.1.69"
+  }
+}
