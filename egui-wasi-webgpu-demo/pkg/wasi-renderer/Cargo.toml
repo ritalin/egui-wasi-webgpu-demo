@@ -1,0 +1,17 @@
+[package]
+name = "wasi-renderer"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wit-bindgen.workspace = true
+bytemuck.workspace = true
+anyhow.workspace = true
+log.workspace = true
+ahash = "0.8.12"
+image = { version = "0.25.9", default-features = false, features = ["png", "jpeg"] }
+epaint = { version = "0.33.3", default-features = false, features = ["bytemuck"] }
+egui = "0.33.3"
