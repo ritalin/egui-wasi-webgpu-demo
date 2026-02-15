@@ -31,3 +31,8 @@ pnpm -r build
 ```
 pnpm run -F egui-wasi-webgpu-demo preview
 ```
+
+## Credits
+
+- **WebGPU Rendering**: Inspired by the excellent [Learn wgpu](https://sotrh.github.io/learn-wgpu/) tutorial and [egui-wgpu](https://github.com/emilk/egui/tree/main/crates/egui-wgpu) implementation.
+- **Assets**: The "Happy Apple" texture and rendering logic are based on [Learn wgpu](https://sotrh.github.io/learn-wgpu/) by Ben Hansen (Licensed under MIT/Apache-2.0).

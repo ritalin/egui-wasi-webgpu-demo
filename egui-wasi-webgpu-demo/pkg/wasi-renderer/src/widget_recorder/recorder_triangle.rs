@@ -1,3 +1,7 @@
+// Based on the excellent tutorial "Learn wgpu" by Ben Hansen.
+// Original: https://sotrh.github.io/learn-wgpu/
+// Licensed under Apache-2.0 or MIT.
+
 use anyhow::Context;
 use crate::{bindings::immediate_renderer_world::{local::immediate_renderer::{surface, types}}, renderer, widget_recorder::ScreenDescriptor};
 
