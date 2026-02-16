@@ -1,7 +1,7 @@
 import type {
   GpuTextureFormat,
   GpuTextureViewDimension,
-} from "../types/wasi-webgpu-webgpu";
+} from "../types/wasi-webgpu-webgpu.js";
 
 const TEXTURE_FORMAT_MAP: Partial<Record<GpuTextureFormat, GPUTextureFormat>> =
   {
