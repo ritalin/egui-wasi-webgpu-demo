@@ -18,6 +18,6 @@
   },
   "dependencies": {
     "@bytecodealliance/preview2-shim": "^0.17.8",
-    "webgpu-shim": "link:../webgpu-shim"
+    "webgpu-shim": "link:../wasi-webgpu-shim"
   }
 }

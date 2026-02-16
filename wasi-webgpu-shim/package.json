@@ -1,5 +1,5 @@
 {
-  "name": "webgpu-shim",
+  "name": "wasi-webgpu-shim",
   "version": "1.0.0",
   "description": "",
   "type": "module",
