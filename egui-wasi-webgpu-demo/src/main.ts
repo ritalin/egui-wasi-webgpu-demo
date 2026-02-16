@@ -1,13 +1,13 @@
 import "./style.css";
-import { createWebGpuRuntime, WebGpuRuntime } from "webgpu-shim/host";
-import { getImportObject } from "webgpu-shim/instantiation";
+import { createWebGpuRuntime, WebGpuRuntime } from "wasi-webgpu-runtime/host";
+import { getImportObject } from "wasi-webgpu-runtime/instantiation";
 import { WASIShim } from "@bytecodealliance/preview2-shim/instantiation";
 import { instantiate, type ImportObject, type Root } from "egui-renderer";
 import type {
   Dispatcher,
   Event as DispatchEvent,
+  RenderContext,
 } from "pkg/_transpiled/interfaces/local-immediate-renderer-render";
-import type { RenderContext } from "node_modules/webgpu-shim/src/types/local-immediate-renderer-surface";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
@@ -105,7 +105,9 @@ class WasmEngine {
   launch(route: Route, canvas: HTMLCanvasElement): boolean {
     if (this.dispatchers.has(route)) return false;
 
-    const surface = this.runtime.createRenderContext(canvas);
+    const surface = this.runtime.createRenderContext(
+      canvas,
+    ) as unknown as RenderContext;
 
     let dispatcher;
     switch (route) {

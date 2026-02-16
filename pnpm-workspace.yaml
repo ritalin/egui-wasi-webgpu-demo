@@ -1,3 +1,4 @@
 packages:
   - "egui-wasi-webgpu-demo"
   - "wasi-webgpu-shim"
+  - "wasi-webgpu-runtime"

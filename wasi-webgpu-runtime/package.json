@@ -1,0 +1,26 @@
+{
+  "name": "wasi-webgpu-runtime",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node ./scripts/embed-wgsl.mjs",
+    "prepare": "npm run build"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "packageManager": "pnpm@10.12.1",
+  "exports": {
+    "./instantiation": "./src/instantiation.js",
+    "./host": "./src/host.js"
+  },
+  "dependencies": {
+    "@bytecodealliance/preview2-shim": "^0.17.8",
+    "wasi-webgpu-shim": "link:../wasi-webgpu-shim"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "@webgpu/types": "^0.1.69"
+  }
+}

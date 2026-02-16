@@ -1,0 +1,30 @@
+package local:webgpu-runtime;
+
+interface surface {
+    use wasi:webgpu/webgpu@0.0.1.{
+        gpu-device,
+        gpu-canvas-context,
+        gpu-render-pipeline,
+        gpu-bind-group-layout
+    };
+
+    record frame-size {
+        width:u32,
+        height: u32,
+    }
+
+    resource render-context {
+        size: func() -> frame-size;
+        scale-factor: func() -> f32;
+        request-set-size: func(size: frame-size);
+        get-device: func() -> gpu-device;
+        get-canvas: func() -> gpu-canvas-context;
+        get-pipeline: func() -> gpu-render-pipeline;
+        get-uniform-layout: func() -> gpu-bind-group-layout;
+        get-texture-layout: func() -> gpu-bind-group-layout;
+    }
+}
+
+world immediate-renderer-world {
+    import surface;
+}

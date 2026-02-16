@@ -4,7 +4,7 @@ use std::{cell::RefCell, marker::PhantomData};
 use anyhow::Context;
 
 use immediate_renderer_world::exports::local::immediate_renderer::render;
-use crate::{bindings::immediate_renderer_world::{export, local::immediate_renderer::{surface, types}, wasi::webgpu::webgpu}, widget_recorder::{self, RecordOutput}};
+use crate::{bindings::immediate_renderer_world::{export, local::{immediate_renderer::types, webgpu_runtime::surface}, wasi::webgpu::webgpu}, widget_recorder::{self, RecordOutput}};
 use crate::renderer;
 
 struct DispatcherEngine<'a, Recorder: widget_recorder::Recorder> {

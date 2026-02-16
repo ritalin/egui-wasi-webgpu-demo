@@ -1,4 +1,4 @@
-use crate::{bindings::immediate_renderer_world::{local::immediate_renderer::surface, wasi::webgpu::webgpu::{self, GpuBufferUsage}}};
+use crate::bindings::immediate_renderer_world::{exports::local::immediate_renderer::render, local::webgpu_runtime::surface, wasi::webgpu::webgpu::{self, GpuBufferUsage}};
 
 pub use epaint::{Vertex, Pos2, Color32, Rect};
 
@@ -25,7 +25,7 @@ pub struct Renderer {
 impl Renderer {
     const MIN_BUFFER_SIZE: usize = 4096;
 
-    pub fn new(context: &surface::RenderContext) -> Self
+    pub fn new(context: &render::RenderContext) -> Self
     {
         let device = context.get_device();
         let uniform_bind_group_layout = context.get_uniform_layout();

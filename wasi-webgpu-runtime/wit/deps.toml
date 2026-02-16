@@ -1,0 +1,6 @@
+webgpu = { path = "../webgpu/deps/webgpu" }
+graphics-context = { path = "../webgpu/deps/graphics-context" }
+
+[io]
+url = "https://github.com/WebAssembly/WASI/archive/refs/tags/v0.2.9.tar.gz"
+prefix = "WASI-0.2.9/proposals/io"

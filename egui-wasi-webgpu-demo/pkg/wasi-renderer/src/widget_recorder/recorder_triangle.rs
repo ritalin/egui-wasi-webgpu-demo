@@ -3,7 +3,7 @@
 // Licensed under Apache-2.0 or MIT.
 
 use anyhow::Context;
-use crate::{bindings::immediate_renderer_world::{local::immediate_renderer::{surface, types}}, renderer, widget_recorder::ScreenDescriptor};
+use crate::{bindings::immediate_renderer_world::local::{immediate_renderer::types, webgpu_runtime::surface}, renderer, widget_recorder::ScreenDescriptor};
 
 const SAMPLE_IAMGE: &'static [u8] = include_bytes!("../../assets/img/happy-tree.png");
 

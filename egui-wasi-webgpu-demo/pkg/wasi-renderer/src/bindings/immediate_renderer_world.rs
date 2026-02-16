@@ -6,248 +6,6 @@ pub mod local {
   pub mod immediate_renderer {
 
     #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
-    pub mod surface {
-      #[used]
-      #[doc(hidden)]
-      static __FORCE_SECTION_REF: fn() =
-      super::super::super::__link_custom_section_describing_imports;
-      
-      use super::super::super::_rt;
-      pub type GpuDevice = super::super::super::wasi::webgpu::webgpu::GpuDevice;
-      pub type GpuCanvasContext = super::super::super::wasi::webgpu::webgpu::GpuCanvasContext;
-      pub type GpuRenderPipeline = super::super::super::wasi::webgpu::webgpu::GpuRenderPipeline;
-      pub type GpuBindGroupLayout = super::super::super::wasi::webgpu::webgpu::GpuBindGroupLayout;
-      #[repr(C)]
-      #[derive(Clone, Copy)]
-      pub struct FrameSize {
-        pub width: u32,
-        pub height: u32,
-      }
-      impl ::core::fmt::Debug for FrameSize {
-        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-          f.debug_struct("FrameSize").field("width", &self.width).field("height", &self.height).finish()
-        }
-      }
-
-      #[derive(Debug)]
-      #[repr(transparent)]
-      pub struct RenderContext{
-        handle: _rt::Resource<RenderContext>,
-      }
-
-      impl RenderContext{
-        #[doc(hidden)]
-        pub unsafe fn from_handle(handle: u32) -> Self {
-          Self {
-            handle: unsafe { _rt::Resource::from_handle(handle) },
-          }
-        }
-
-        #[doc(hidden)]
-        pub fn take_handle(&self) -> u32 {
-          _rt::Resource::take_handle(&self.handle)
-        }
-
-        #[doc(hidden)]
-        pub fn handle(&self) -> u32 {
-          _rt::Resource::handle(&self.handle)
-        }
-      }
-      
-
-      unsafe impl _rt::WasmResource for RenderContext{
-        #[inline]
-        unsafe fn drop(_handle: u32) {
-          
-          #[cfg(target_arch = "wasm32")]
-          #[link(wasm_import_module = "local:immediate-renderer/surface")]
-          unsafe extern "C" {
-            #[link_name = "[resource-drop]render-context"]
-            fn drop(_: i32, );
-          }
-
-          #[cfg(not(target_arch = "wasm32"))]
-          unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
-          unsafe { drop(_handle as i32); }
-        }
-      }
-      
-      impl RenderContext {
-        #[allow(unused_unsafe, clippy::all)]
-        #[allow(async_fn_in_trait)]
-        pub fn size(&self,) -> FrameSize{
-          unsafe {
-
-            #[repr(align(4))]
-            struct RetArea([::core::mem::MaybeUninit::<u8>; 8]);
-            let mut ret_area = RetArea([::core::mem::MaybeUninit::uninit(); 8]);
-            let ptr0 = ret_area.0.as_mut_ptr().cast::<u8>();
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "local:immediate-renderer/surface")]
-            unsafe extern "C" {
-              #[link_name = "[method]render-context.size"]
-              fn wit_import1(_: i32, _: *mut u8, );
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn wit_import1(_: i32, _: *mut u8, ) { unreachable!() }
-            wit_import1((self).handle() as i32, ptr0);
-            let l2 = *ptr0.add(0).cast::<i32>();
-            let l3 = *ptr0.add(4).cast::<i32>();
-            let result4 = FrameSize{
-              width: l2 as u32,
-              height: l3 as u32,
-            };
-            result4
-          }
-        }
-      }
-      impl RenderContext {
-        #[allow(unused_unsafe, clippy::all)]
-        #[allow(async_fn_in_trait)]
-        pub fn scale_factor(&self,) -> f32{
-          unsafe {
-
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "local:immediate-renderer/surface")]
-            unsafe extern "C" {
-              #[link_name = "[method]render-context.scale-factor"]
-              fn wit_import0(_: i32, ) -> f32;
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn wit_import0(_: i32, ) -> f32 { unreachable!() }
-            let ret = wit_import0((self).handle() as i32);
-            ret
-          }
-        }
-      }
-      impl RenderContext {
-        #[allow(unused_unsafe, clippy::all)]
-        #[allow(async_fn_in_trait)]
-        pub fn request_set_size(&self,size: FrameSize,) -> (){
-          unsafe {
-            let FrameSize{ width:width0, height:height0, } = size;
-
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "local:immediate-renderer/surface")]
-            unsafe extern "C" {
-              #[link_name = "[method]render-context.request-set-size"]
-              fn wit_import1(_: i32, _: i32, _: i32, );
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn wit_import1(_: i32, _: i32, _: i32, ) { unreachable!() }
-            wit_import1((self).handle() as i32, _rt::as_i32(width0), _rt::as_i32(height0));
-          }
-        }
-      }
-      impl RenderContext {
-        #[allow(unused_unsafe, clippy::all)]
-        #[allow(async_fn_in_trait)]
-        pub fn get_device(&self,) -> GpuDevice{
-          unsafe {
-
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "local:immediate-renderer/surface")]
-            unsafe extern "C" {
-              #[link_name = "[method]render-context.get-device"]
-              fn wit_import0(_: i32, ) -> i32;
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
-            let ret = wit_import0((self).handle() as i32);
-            super::super::super::wasi::webgpu::webgpu::GpuDevice::from_handle(ret as u32)
-          }
-        }
-      }
-      impl RenderContext {
-        #[allow(unused_unsafe, clippy::all)]
-        #[allow(async_fn_in_trait)]
-        pub fn get_canvas(&self,) -> GpuCanvasContext{
-          unsafe {
-
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "local:immediate-renderer/surface")]
-            unsafe extern "C" {
-              #[link_name = "[method]render-context.get-canvas"]
-              fn wit_import0(_: i32, ) -> i32;
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
-            let ret = wit_import0((self).handle() as i32);
-            super::super::super::wasi::webgpu::webgpu::GpuCanvasContext::from_handle(ret as u32)
-          }
-        }
-      }
-      impl RenderContext {
-        #[allow(unused_unsafe, clippy::all)]
-        #[allow(async_fn_in_trait)]
-        pub fn get_pipeline(&self,) -> GpuRenderPipeline{
-          unsafe {
-
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "local:immediate-renderer/surface")]
-            unsafe extern "C" {
-              #[link_name = "[method]render-context.get-pipeline"]
-              fn wit_import0(_: i32, ) -> i32;
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
-            let ret = wit_import0((self).handle() as i32);
-            super::super::super::wasi::webgpu::webgpu::GpuRenderPipeline::from_handle(ret as u32)
-          }
-        }
-      }
-      impl RenderContext {
-        #[allow(unused_unsafe, clippy::all)]
-        #[allow(async_fn_in_trait)]
-        pub fn get_uniform_layout(&self,) -> GpuBindGroupLayout{
-          unsafe {
-
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "local:immediate-renderer/surface")]
-            unsafe extern "C" {
-              #[link_name = "[method]render-context.get-uniform-layout"]
-              fn wit_import0(_: i32, ) -> i32;
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
-            let ret = wit_import0((self).handle() as i32);
-            super::super::super::wasi::webgpu::webgpu::GpuBindGroupLayout::from_handle(ret as u32)
-          }
-        }
-      }
-      impl RenderContext {
-        #[allow(unused_unsafe, clippy::all)]
-        #[allow(async_fn_in_trait)]
-        pub fn get_texture_layout(&self,) -> GpuBindGroupLayout{
-          unsafe {
-
-            #[cfg(target_arch = "wasm32")]
-            #[link(wasm_import_module = "local:immediate-renderer/surface")]
-            unsafe extern "C" {
-              #[link_name = "[method]render-context.get-texture-layout"]
-              fn wit_import0(_: i32, ) -> i32;
-            }
-
-            #[cfg(not(target_arch = "wasm32"))]
-            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
-            let ret = wit_import0((self).handle() as i32);
-            super::super::super::wasi::webgpu::webgpu::GpuBindGroupLayout::from_handle(ret as u32)
-          }
-        }
-      }
-
-    }
-
-
-    #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
     pub mod types {
       #[used]
       #[doc(hidden)]
@@ -375,6 +133,250 @@ pub mod local {
             UnhandleEvent::OpenWindow(e) => {
               f.debug_tuple("UnhandleEvent::OpenWindow").field(e).finish()
             }
+          }
+        }
+      }
+
+    }
+
+  }
+  pub mod webgpu_runtime {
+
+    #[allow(dead_code, async_fn_in_trait, unused_imports, clippy::all)]
+    pub mod surface {
+      #[used]
+      #[doc(hidden)]
+      static __FORCE_SECTION_REF: fn() =
+      super::super::super::__link_custom_section_describing_imports;
+      
+      use super::super::super::_rt;
+      pub type GpuDevice = super::super::super::wasi::webgpu::webgpu::GpuDevice;
+      pub type GpuCanvasContext = super::super::super::wasi::webgpu::webgpu::GpuCanvasContext;
+      pub type GpuRenderPipeline = super::super::super::wasi::webgpu::webgpu::GpuRenderPipeline;
+      pub type GpuBindGroupLayout = super::super::super::wasi::webgpu::webgpu::GpuBindGroupLayout;
+      #[repr(C)]
+      #[derive(Clone, Copy)]
+      pub struct FrameSize {
+        pub width: u32,
+        pub height: u32,
+      }
+      impl ::core::fmt::Debug for FrameSize {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          f.debug_struct("FrameSize").field("width", &self.width).field("height", &self.height).finish()
+        }
+      }
+
+      #[derive(Debug)]
+      #[repr(transparent)]
+      pub struct RenderContext{
+        handle: _rt::Resource<RenderContext>,
+      }
+
+      impl RenderContext{
+        #[doc(hidden)]
+        pub unsafe fn from_handle(handle: u32) -> Self {
+          Self {
+            handle: unsafe { _rt::Resource::from_handle(handle) },
+          }
+        }
+
+        #[doc(hidden)]
+        pub fn take_handle(&self) -> u32 {
+          _rt::Resource::take_handle(&self.handle)
+        }
+
+        #[doc(hidden)]
+        pub fn handle(&self) -> u32 {
+          _rt::Resource::handle(&self.handle)
+        }
+      }
+      
+
+      unsafe impl _rt::WasmResource for RenderContext{
+        #[inline]
+        unsafe fn drop(_handle: u32) {
+          
+          #[cfg(target_arch = "wasm32")]
+          #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+          unsafe extern "C" {
+            #[link_name = "[resource-drop]render-context"]
+            fn drop(_: i32, );
+          }
+
+          #[cfg(not(target_arch = "wasm32"))]
+          unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
+          
+          unsafe { drop(_handle as i32); }
+        }
+      }
+      
+      impl RenderContext {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn size(&self,) -> FrameSize{
+          unsafe {
+
+            #[repr(align(4))]
+            struct RetArea([::core::mem::MaybeUninit::<u8>; 8]);
+            let mut ret_area = RetArea([::core::mem::MaybeUninit::uninit(); 8]);
+            let ptr0 = ret_area.0.as_mut_ptr().cast::<u8>();
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+            unsafe extern "C" {
+              #[link_name = "[method]render-context.size"]
+              fn wit_import1(_: i32, _: *mut u8, );
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import1(_: i32, _: *mut u8, ) { unreachable!() }
+            wit_import1((self).handle() as i32, ptr0);
+            let l2 = *ptr0.add(0).cast::<i32>();
+            let l3 = *ptr0.add(4).cast::<i32>();
+            let result4 = FrameSize{
+              width: l2 as u32,
+              height: l3 as u32,
+            };
+            result4
+          }
+        }
+      }
+      impl RenderContext {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn scale_factor(&self,) -> f32{
+          unsafe {
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+            unsafe extern "C" {
+              #[link_name = "[method]render-context.scale-factor"]
+              fn wit_import0(_: i32, ) -> f32;
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import0(_: i32, ) -> f32 { unreachable!() }
+            let ret = wit_import0((self).handle() as i32);
+            ret
+          }
+        }
+      }
+      impl RenderContext {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn request_set_size(&self,size: FrameSize,) -> (){
+          unsafe {
+            let FrameSize{ width:width0, height:height0, } = size;
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+            unsafe extern "C" {
+              #[link_name = "[method]render-context.request-set-size"]
+              fn wit_import1(_: i32, _: i32, _: i32, );
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import1(_: i32, _: i32, _: i32, ) { unreachable!() }
+            wit_import1((self).handle() as i32, _rt::as_i32(width0), _rt::as_i32(height0));
+          }
+        }
+      }
+      impl RenderContext {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn get_device(&self,) -> GpuDevice{
+          unsafe {
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+            unsafe extern "C" {
+              #[link_name = "[method]render-context.get-device"]
+              fn wit_import0(_: i32, ) -> i32;
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
+            let ret = wit_import0((self).handle() as i32);
+            super::super::super::wasi::webgpu::webgpu::GpuDevice::from_handle(ret as u32)
+          }
+        }
+      }
+      impl RenderContext {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn get_canvas(&self,) -> GpuCanvasContext{
+          unsafe {
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+            unsafe extern "C" {
+              #[link_name = "[method]render-context.get-canvas"]
+              fn wit_import0(_: i32, ) -> i32;
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
+            let ret = wit_import0((self).handle() as i32);
+            super::super::super::wasi::webgpu::webgpu::GpuCanvasContext::from_handle(ret as u32)
+          }
+        }
+      }
+      impl RenderContext {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn get_pipeline(&self,) -> GpuRenderPipeline{
+          unsafe {
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+            unsafe extern "C" {
+              #[link_name = "[method]render-context.get-pipeline"]
+              fn wit_import0(_: i32, ) -> i32;
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
+            let ret = wit_import0((self).handle() as i32);
+            super::super::super::wasi::webgpu::webgpu::GpuRenderPipeline::from_handle(ret as u32)
+          }
+        }
+      }
+      impl RenderContext {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn get_uniform_layout(&self,) -> GpuBindGroupLayout{
+          unsafe {
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+            unsafe extern "C" {
+              #[link_name = "[method]render-context.get-uniform-layout"]
+              fn wit_import0(_: i32, ) -> i32;
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
+            let ret = wit_import0((self).handle() as i32);
+            super::super::super::wasi::webgpu::webgpu::GpuBindGroupLayout::from_handle(ret as u32)
+          }
+        }
+      }
+      impl RenderContext {
+        #[allow(unused_unsafe, clippy::all)]
+        #[allow(async_fn_in_trait)]
+        pub fn get_texture_layout(&self,) -> GpuBindGroupLayout{
+          unsafe {
+
+            #[cfg(target_arch = "wasm32")]
+            #[link(wasm_import_module = "local:webgpu-runtime/surface")]
+            unsafe extern "C" {
+              #[link_name = "[method]render-context.get-texture-layout"]
+              fn wit_import0(_: i32, ) -> i32;
+            }
+
+            #[cfg(not(target_arch = "wasm32"))]
+            unsafe extern "C" fn wit_import0(_: i32, ) -> i32 { unreachable!() }
+            let ret = wit_import0((self).handle() as i32);
+            super::super::super::wasi::webgpu::webgpu::GpuBindGroupLayout::from_handle(ret as u32)
           }
         }
       }
@@ -14836,7 +14838,7 @@ pub mod wasi {
                                                                                       super::super::super::super::__link_custom_section_describing_imports;
                                                                                       
                                                                                       use super::super::super::super::_rt;
-                                                                                      pub type RenderContext = super::super::super::super::local::immediate_renderer::surface::RenderContext;
+                                                                                      pub type RenderContext = super::super::super::super::local::webgpu_runtime::surface::RenderContext;
                                                                                       pub type Event = super::super::super::super::local::immediate_renderer::types::Event;
                                                                                       pub type UnhandleEvent = super::super::super::super::local::immediate_renderer::types::UnhandleEvent;
 
@@ -15174,7 +15176,7 @@ pub mod wasi {
                                                                                 #[allow(non_snake_case, unused_unsafe)]
                                                                                 pub unsafe fn _export_create_main_renderer_cabi<T: Guest>(arg0: i32,) -> i32 { unsafe {#[cfg(target_arch="wasm32")]
                                                                                 _rt::run_ctors_once();let result0 = {
-                                                                                  T::create_main_renderer(super::super::super::super::local::immediate_renderer::surface::RenderContext::from_handle(arg0 as u32))
+                                                                                  T::create_main_renderer(super::super::super::super::local::webgpu_runtime::surface::RenderContext::from_handle(arg0 as u32))
                                                                                 };
                                                                                 (result0).take_handle() as i32
                                                                               } }
@@ -15182,7 +15184,7 @@ pub mod wasi {
                                                                               #[allow(non_snake_case, unused_unsafe)]
                                                                               pub unsafe fn _export_create_triangle_renderer_cabi<T: Guest>(arg0: i32,) -> i32 { unsafe {#[cfg(target_arch="wasm32")]
                                                                               _rt::run_ctors_once();let result0 = {
-                                                                                T::create_triangle_renderer(super::super::super::super::local::immediate_renderer::surface::RenderContext::from_handle(arg0 as u32))
+                                                                                T::create_triangle_renderer(super::super::super::super::local::webgpu_runtime::surface::RenderContext::from_handle(arg0 as u32))
                                                                               };
                                                                               (result0).take_handle() as i32
                                                                             } }
@@ -15190,7 +15192,7 @@ pub mod wasi {
                                                                             #[allow(non_snake_case, unused_unsafe)]
                                                                             pub unsafe fn _export_create_counter_renderer_cabi<T: Guest>(arg0: i32,) -> i32 { unsafe {#[cfg(target_arch="wasm32")]
                                                                             _rt::run_ctors_once();let result0 = {
-                                                                              T::create_counter_renderer(super::super::super::super::local::immediate_renderer::surface::RenderContext::from_handle(arg0 as u32))
+                                                                              T::create_counter_renderer(super::super::super::super::local::webgpu_runtime::surface::RenderContext::from_handle(arg0 as u32))
                                                                             };
                                                                             (result0).take_handle() as i32
                                                                           } }
@@ -15627,8 +15629,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.52.0:local:immediate-renderer:immediate-renderer-world:encoded world")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 29660] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xcc\xe6\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 29656] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xc8\xe6\x01\x01A\x02\
 \x01A\x16\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16185,11 +16187,11 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 ![method]render-context.get-canvas\x01\x12\x01i\x05\x01@\x01\x04self\x0b\0\x13\x04\
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
-ntext.get-texture-layout\x01\x16\x03\0\x20local:immediate-renderer/surface\x05\x0a\
-\x01B\x0c\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04\
-ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\
-\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\x05\x04left\x05right\x06\
-middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\x01q\x04\x09modifiers\x01\
+ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
+B\x0c\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ct\
+rl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\x02\
+\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\x05\x04left\x05right\x06m\
+iddle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\x01q\x04\x09modifiers\x01\
 \x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x04\0\x05\
 event\x03\0\x08\x01q\x02\x05event\x01\x09\0\x0bopen-window\x01s\0\x04\0\x0eunhan\
 dle-event\x03\0\x0a\x03\0\x1elocal:immediate-renderer/types\x05\x0b\x02\x03\0\x03\

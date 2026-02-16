@@ -1,4 +1,4 @@
-use crate::{bindings::immediate_renderer_world::{local::immediate_renderer::{surface, types}, wasi::webgpu::webgpu}, renderer};
+use crate::{bindings::immediate_renderer_world::{local::{immediate_renderer::types, webgpu_runtime::surface}, wasi::webgpu::webgpu}, renderer};
 
 pub mod recorder_main;
 pub mod recorder_triangle;
