@@ -3,7 +3,7 @@ import path from "path";
 
 const root = process.cwd();
 
-const wgslPath = path.join(root, "src/shader.wgsl");
+const wgslPath = path.join(root, "src/shaders/shader.wgsl");
 const jsPath = wgslPath + ".js";
 
 const content = await readFile(wgslPath, "utf8");
