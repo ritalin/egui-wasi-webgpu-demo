@@ -42,8 +42,7 @@ export class GpuTexture {
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1557
   destroy(): void {
-    console.error("(Todo)", "GpuTexture.destroy(...)");
-    return undefined as any;
+    this._handle.destroy();
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1558
   width(): GpuIntegerCoordinateOut {

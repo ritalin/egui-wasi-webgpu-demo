@@ -193,6 +193,13 @@ impl Renderer {
     }
 }
 
+impl Drop for Renderer {
+    fn drop(&mut self) {
+        self.uniform_buffer.destroy();
+        self.vertex_buffer.destroy();
+    }
+}
+
 fn new_buffer(device: &webgpu::GpuDevice, size: u64, usage: webgpu::GpuFlagsConstant, label: Option<String>) -> webgpu::GpuBuffer {
     let desc = webgpu::GpuBufferDescriptor {
         label,

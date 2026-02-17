@@ -1,6 +1,6 @@
 /// <reference types="@webgpu/types" />
 
-import { RenderContext as PublicRenderContext } from "./resources/local-immediate-renderer-surface/render-context.js";
+import { RenderContext } from "./resources/local-immediate-renderer-surface/render-context.js";
 import {
   type RenderContextPeer,
   UNIFORM_LAYOUT_SIZE,
@@ -16,8 +16,6 @@ import {
 import SHADER_SOURCE from "./shaders/shader.wgsl.js";
 import type { FrameSize } from "./types/local-immediate-renderer-surface.js";
 
-export { RenderContext };
-
 export interface IRenderContext {
   size(): FrameSize;
   scaleFactor(): number;
@@ -28,7 +26,7 @@ export interface IRenderContext {
   getUniformLayout(): GpuBindGroupLayout;
   getTextureLayout(): GpuBindGroupLayout;
 }
-class RenderContext extends PublicRenderContext implements IRenderContext {}
+class ProtectedRenderContext extends RenderContext implements IRenderContext {}
 
 export class WebGpuRuntime {
   private device: GPUDevice;
@@ -58,7 +56,7 @@ export class WebGpuRuntime {
       uniformLayout,
       textureLayout,
     };
-    const context = new PublicRenderContext(peer);
+    const context = new ProtectedRenderContext(peer);
 
     context.getCanvas().configure({
       device: new GpuDevice(this.device),

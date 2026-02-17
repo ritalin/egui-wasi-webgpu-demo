@@ -53,8 +53,7 @@ export class GpuBuffer {
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1190
   destroy(): void {
-    console.error("(Todo)", "GpuBuffer.destroy(...)");
-    return undefined as any;
+    this._handle.destroy();
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1191
   label(): string {

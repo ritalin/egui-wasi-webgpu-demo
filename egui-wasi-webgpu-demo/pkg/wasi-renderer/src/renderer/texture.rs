@@ -157,7 +157,17 @@ impl TextureCache {
 
     pub fn remove_from_cache(&mut self, keys: &[TextureKey]) {
         for k in keys {
-            self.map.remove(k);
+            if let Some(entry) = self.map.remove(k) {
+                entry.texture.destroy();
+            }
+        }
+    }
+}
+
+impl Drop for TextureCache {
+    fn drop(&mut self) {
+        for entry in self.map.values() {
+            entry.texture.destroy();
         }
     }
 }
