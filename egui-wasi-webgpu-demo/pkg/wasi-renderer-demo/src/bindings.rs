@@ -1,21 +1,22 @@
-pub mod immediate_renderer_world;
+pub mod demo_world;
 
 use std::{cell::RefCell, marker::PhantomData};
 use anyhow::Context;
 
-use immediate_renderer_world::exports::local::immediate_renderer::render;
-use crate::{bindings::immediate_renderer_world::{export, local::{immediate_renderer::types, webgpu_runtime::surface}, wasi::webgpu::webgpu}, widget_recorder::{self, RecordOutput}};
-use crate::renderer;
+use wasi_renderer::{ScreenDescriptor, recorder_core, render_core, bindings::{surface, types, webgpu}};
+use wasi_renderer::recorder_core::RecordOutput;
 
-struct DispatcherEngine<'a, Recorder: widget_recorder::Recorder> {
+use crate::{bindings::demo_world::exports::local::immediate_renderer_demo::render, widget_recorder};
+
+struct DispatcherEngine<'a, Recorder: recorder_core::Recorder> {
     events: Vec<types::Event>,
     recorder: Recorder,
-    renderer: renderer::Renderer,
+    renderer: render_core::Renderer,
     _marker: PhantomData<&'a ()>,
 
 }
-impl<'a, Recorder: widget_recorder::Recorder> DispatcherEngine<'a, Recorder> {
-    fn new(recorder: Recorder, mut renderer: renderer::Renderer) -> Self {
+impl<'a, Recorder: recorder_core::Recorder> DispatcherEngine<'a, Recorder> {
+    fn new(recorder: Recorder, mut renderer: render_core::Renderer) -> Self {
         renderer.send_texture(recorder.preset_textures());
 
         Self { events: vec![], recorder, renderer, _marker: PhantomData }
@@ -25,10 +26,10 @@ impl<'a, Recorder: widget_recorder::Recorder> DispatcherEngine<'a, Recorder> {
 trait Engine {
     fn push_event(&mut self, events: types::Event);
     fn push_event_all(&mut self, events: Vec<types::Event>);
-    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: widget_recorder::ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, anyhow::Error>;
+    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, anyhow::Error>;
 }
 
-impl<'a, Recorder: widget_recorder::Recorder + 'a> Engine for DispatcherEngine<'a, Recorder> {
+impl<'a, Recorder: recorder_core::Recorder + 'a> Engine for DispatcherEngine<'a, Recorder> {
     fn push_event(&mut self, event: types::Event) {
         self.events.push(event);
     }
@@ -37,14 +38,14 @@ impl<'a, Recorder: widget_recorder::Recorder + 'a> Engine for DispatcherEngine<'
         self.events.extend(events);
     }
 
-    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: widget_recorder::ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, anyhow::Error> {
+    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, anyhow::Error> {
         self.renderer.send_uniform(
-            renderer::UniformInfo::from_size(screen.size, screen.scale_factor)
+            render_core::UniformInfo::from_size(screen.size, screen.scale_factor)
         ).context("Failed to send uniform")?;
 
         let output = self.recorder.record(screen, &self.events.split_off(0))?;
         self.renderer.send_texture(output.textures());
-        let resolved = self.renderer.update_mesh(renderer::MeshVectorIter::new(&output.meshes()))?;
+        let resolved = self.renderer.update_mesh(render_core::MeshVectorIter::new(&output.meshes()))?;
         self.renderer.render(canvas.get_current_texture(), resolved)?;
         self.renderer.remove_textures(&output.removed_textures());
 
@@ -54,13 +55,13 @@ impl<'a, Recorder: widget_recorder::Recorder + 'a> Engine for DispatcherEngine<'
 
 #[allow(unused)]
 struct DispatcherImpl {
-    context: render::RenderContext,
+    context: surface::RenderContext,
     canvas: webgpu::GpuCanvasContext,
     engine: RefCell<Box<dyn Engine>>,
 }
 impl DispatcherImpl {
-    fn new<Recorder: for<'a> widget_recorder::Recorder + 'static>(context: render::RenderContext, recorder: Recorder) -> Self {
-        let renderer = renderer::Renderer::new(&context);
+    fn new<Recorder: for<'a> recorder_core::Recorder + 'static>(context: surface::RenderContext, recorder: Recorder) -> Self {
+        let renderer = render_core::Renderer::new(&context);
         let inner = DispatcherEngine::new(recorder, renderer);
 
         Self {
@@ -75,22 +76,22 @@ impl DispatcherImpl {
         let scale_factor = self.context.scale_factor();
 
         let mut engine = self.engine.borrow_mut();
-        engine.render(&self.canvas, widget_recorder::ScreenDescriptor { size: screen_size, scale_factor })
+        engine.render(&self.canvas, ScreenDescriptor { size: screen_size, scale_factor })
     }
 }
 
 impl render::GuestDispatcher for DispatcherImpl {
-    fn push_event(&self,event: render::Event,) -> () {
+    fn push_event(&self,event: types::Event,) -> () {
         let mut engine = self.engine.borrow_mut();
         engine.push_event(event);
     }
 
-    fn push_event_all(&self,events: Vec::<render::Event>,) -> () {
+    fn push_event_all(&self,events: Vec::<types::Event>,) -> () {
         let mut engine = self.engine.borrow_mut();
         engine.push_event_all(events);
     }
 
-    fn dispatch(&self,) -> Vec::<render::UnhandleEvent> {
+    fn dispatch(&self,) -> Vec::<types::UnhandleEvent> {
         match self.render() {
             Ok(events) => events,
             Err(err) => {
@@ -106,23 +107,23 @@ struct Component;
 impl render::Guest for Component {
     type Dispatcher = DispatcherImpl;
 
-    fn create_main_renderer(context: render::RenderContext,) -> render::Dispatcher {
+    fn create_main_renderer(context: surface::RenderContext,) -> render::Dispatcher {
         context.request_set_size(surface::FrameSize{ width: 512, height: 1024 });
         let recorder = widget_recorder::recorder_main::MainWidgetRecorder::new();
         render::Dispatcher::new(DispatcherImpl::new(context, recorder))
     }
 
-    fn create_triangle_renderer(context: render::RenderContext,) -> render::Dispatcher {
+    fn create_triangle_renderer(context: surface::RenderContext,) -> render::Dispatcher {
         context.request_set_size(surface::FrameSize{ width: 512, height: 512 });
         let recorder = widget_recorder::recorder_triangle::TriangleRecorder;
         render::Dispatcher::new(DispatcherImpl::new(context, recorder))
     }
 
-    fn create_counter_renderer(context: render::RenderContext,) -> render::Dispatcher {
+    fn create_counter_renderer(context: surface::RenderContext,) -> render::Dispatcher {
         context.request_set_size(surface::FrameSize{ width: 768, height: 1024 });
         let recorder = widget_recorder::recorder_counter::CounterWidgetRecorder::new();
         render::Dispatcher::new(DispatcherImpl::new(context, recorder))
     }
 }
 
-export!(Component);
+demo_world::export!(Component);

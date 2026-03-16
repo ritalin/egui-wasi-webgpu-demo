@@ -1,6 +1,5 @@
 
 mod bindings;
-mod renderer;
 mod widget_recorder;
 
 mod supports {

@@ -1,6 +1,7 @@
 use std::marker::PhantomData;
 
 use egui::{RawInput, Vec2};
+use wasi_renderer::{ScreenDescriptor, recorder_core, bindings::types};
 
 use crate::supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}};
 
@@ -18,7 +19,7 @@ impl<'a> CounterWidgetRecorder<'a> {
     }
 }
 
-impl<'a> super::Recorder for CounterWidgetRecorder<'a> {
+impl<'a> recorder_core::Recorder for CounterWidgetRecorder<'a> {
     type ImageSpec = EguiTexture<'a>;
     type ImageSpecs = EguiTextureSet<'a>;
     type Output = EguiOutput;
@@ -27,7 +28,7 @@ impl<'a> super::Recorder for CounterWidgetRecorder<'a> {
         EguiTextureSet::default()
     }
 
-    fn record(&mut self, screen: super::ScreenDescriptor, events: &[crate::bindings::immediate_renderer_world::local::immediate_renderer::types::Event]) -> Result<Self::Output, anyhow::Error> {
+    fn record(&mut self, screen: ScreenDescriptor, events: &[types::Event]) -> Result<Self::Output, recorder_core::RecorderError> {
         let mut input = RawInput::default();
         egui_supports::populate_events(events, &screen, &mut input);
 

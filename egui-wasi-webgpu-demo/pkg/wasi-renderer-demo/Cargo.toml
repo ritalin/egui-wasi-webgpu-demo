@@ -1,5 +1,5 @@
 [package]
-name = "wasi-renderer"
+name = "wasi-renderer-demo"
 version = "0.1.0"
 edition = "2024"
 
@@ -7,6 +7,7 @@ edition = "2024"
 crate-type = ["cdylib"]
 
 [dependencies]
+wasi-renderer = { path = "../wasi-renderer" }
 wit-bindgen = { version = "0.50.0", features = ["async", "async-spawn"] }
 bytemuck = {version = "1.24.0", features = ["derive"] }
 anyhow = "1.0.100"
