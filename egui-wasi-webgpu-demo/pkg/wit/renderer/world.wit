@@ -1,0 +1,46 @@
+package local:immediate-renderer;
+
+interface types {
+    variant event {
+        modifiers(modifier-options),
+        pointer(location),
+        mouse-down(mouse-button),
+        mouse-up(mouse-button),
+    }
+
+    variant unhandle-event {
+        event(event),
+        open-window(string),
+    }
+
+    record modifier-options {
+        ctrl: modifier-pressed,
+        shift: modifier-pressed,
+        alt: modifier-pressed,
+        super-key: modifier-pressed,
+    }
+
+    flags modifier-pressed {
+        left,
+        right,
+    }
+
+    record location {
+        x: f32,
+        y: f32,
+    }
+
+    enum mouse-button {
+        left,
+        right,
+        middle,
+        back,
+        forward,
+    }
+}
+
+world immediate-renderer-world {
+    import local:webgpu-runtime/surface;
+    export local:webgpu-runtime/surface;
+    export types;
+}

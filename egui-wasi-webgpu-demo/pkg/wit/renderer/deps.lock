@@ -1,0 +1,20 @@
+[graphics-context]
+path = "../../../../wasi-webgpu-shim/wit/graphics-context"
+sha256 = "b138ab44463c5bb074207687c88d59dfca9c6bc7a5dad482dba626094cccbc3f"
+sha512 = "b9cef19d2cf0a0f3d0a58c94cf4483d051acfb5622e379bf0abcc6aa34c14d92210c56554387b932f08aba3c9c1e9e9cadb554e9dd0cf464b20c7d31c806515e"
+
+[io]
+url = "https://github.com/WebAssembly/WASI/archive/refs/tags/v0.2.9.tar.gz"
+prefix = "WASI-0.2.9/proposals/io"
+sha256 = "3699f94c981bacfd4034e92d47d0c888befb9297c54f6082bd37e83c86e5796e"
+sha512 = "fd3fdd9d6b0df1ee8846aaaba469942e110c6ffc935d331651e338ff9c75b453748d626fffeee9a6026f1ed90d94d8854887e209c5832acc26da6385d189db6b"
+
+[surface]
+path = "../../../../wasi-webgpu-runtime/wit"
+sha256 = "b62499dc67357b491d8dccf23abfd2159adea67675dbf9a0cae782bc4f114c0d"
+sha512 = "f5de94ea756154a1a8a1a484951585c5b22089d3a61c3dce912a92c1a0012b3f01d6818fd0b088e55bc0946b70bc7a8b71559e799d37f81331dad486726e8e30"
+
+[webgpu]
+path = "../../../../wasi-webgpu-shim/wit/webgpu"
+sha256 = "a4d80a317f44fa4756c4f00b01ac0f2404e2642662089724443b81cf0b405e30"
+sha512 = "d0db6d2403b8a0349810dedebac0949e0ecf44297cc2d037e7523c6026a771800da73e0189dd9ff7441e9670666309d2334c4bd593b2caec7b1785dc909b4df5"

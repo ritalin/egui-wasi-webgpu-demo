@@ -1,0 +1,7 @@
+surface = { path = "../../../../wasi-webgpu-runtime/wit" }
+webgpu = { path = "../../../../wasi-webgpu-shim/wit/webgpu" }
+graphics-context = { path = "../../../../wasi-webgpu-shim/wit/graphics-context" }
+
+[io]
+url = "https://github.com/WebAssembly/WASI/archive/refs/tags/v0.2.9.tar.gz"
+prefix = "WASI-0.2.9/proposals/io"

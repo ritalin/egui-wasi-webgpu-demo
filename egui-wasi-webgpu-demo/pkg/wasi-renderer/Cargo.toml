@@ -1,0 +1,11 @@
+[package]
+name = "wasi-renderer"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+wit-bindgen = "0.53.1"
+thiserror = "2.0.18"
+ahash = "0.8.12"
+epaint = { version = "0.33.3", default-features = false, features = ["bytemuck"] }
+bytemuck = {version = "1.24.0", features = ["derive"] }

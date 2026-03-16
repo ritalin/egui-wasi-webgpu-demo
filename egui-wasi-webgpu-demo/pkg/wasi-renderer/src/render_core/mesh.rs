@@ -1,4 +1,4 @@
-use crate::renderer::{Rect, TextureKey, Vertex};
+use crate::render_core::{Rect, TextureKey, Vertex};
 
 pub struct Mesh<'a> {
     pub key: TextureKey,
