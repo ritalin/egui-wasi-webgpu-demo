@@ -3,14 +3,16 @@
 // Licensed under Apache-2.0 or MIT.
 
 use anyhow::Context;
-use crate::{bindings::immediate_renderer_world::local::{immediate_renderer::types, webgpu_runtime::surface}, renderer, widget_recorder::ScreenDescriptor};
+use wasi_renderer::{ScreenDescriptor, recorder_core, render_core, bindings::{surface, types}};
+
+use crate::widget_recorder::BitmapImage;
 
 const SAMPLE_IAMGE: &'static [u8] = include_bytes!("../../assets/img/happy-tree.png");
 
 pub struct TriangleRecorder;
 
-impl super::Recorder for TriangleRecorder {
-    type ImageSpec = super::BitmapImage;
+impl recorder_core::Recorder for TriangleRecorder {
+    type ImageSpec = BitmapImage;
     type ImageSpecs = std::vec::IntoIter<Self::ImageSpec>;
     type Output = TriangleOutput;
 
@@ -24,14 +26,14 @@ impl super::Recorder for TriangleRecorder {
         }].into_iter()
     }
 
-    fn record(&mut self, screen: super::ScreenDescriptor, _events: &[types::Event]) -> Result<Self::Output, anyhow::Error> {
+    fn record(&mut self, screen: ScreenDescriptor, _events: &[types::Event]) -> Result<Self::Output, recorder_core::RecorderError> {
         Ok(TriangleOutput::new(screen))
     }
 }
 
 pub struct TriangleOutput {
-    vertices: Vec<renderer::Vertex>,
-    scissor_rect: renderer::ScissorRect,
+    vertices: Vec<render_core::Vertex>,
+    scissor_rect: render_core::ScissorRect,
 }
 
 impl TriangleOutput {
@@ -41,18 +43,18 @@ impl TriangleOutput {
                 let x = (1.0 + v.position[0]) / 2.0 * screen.size.width as f32 / screen.scale_factor;
                 let y = (1.0 - v.position[1]) / 2.0 * screen.size.height as f32 / screen.scale_factor;
 
-                renderer::Vertex{
-                    pos: renderer::Pos2{ x, y },
-                    uv: renderer::Pos2{ x: v.uv[0], y: v.uv[1] },
-                    color: renderer::Color32::from_rgba_premultiplied(v.color[0], v.color[1], v.color[2], v.color[3]),
+                render_core::Vertex{
+                    pos: render_core::Pos2{ x, y },
+                    uv: render_core::Pos2{ x: v.uv[0], y: v.uv[1] },
+                    color: render_core::Color32::from_rgba_premultiplied(v.color[0], v.color[1], v.color[2], v.color[3]),
                 }
             })
             .collect::<Vec<_>>()
         ;
-        let (tl, rb) = vertices.iter().fold((renderer::Pos2::new(f32::MAX, f32::MAX), renderer::Pos2::ZERO), |(tl, rb), v| {
+        let (tl, rb) = vertices.iter().fold((render_core::Pos2::new(f32::MAX, f32::MAX), render_core::Pos2::ZERO), |(tl, rb), v| {
             (tl.min(v.pos), rb.max(v.pos))
         });
-        let scissor_rect = screen.into_scissor_rect(renderer::Rect::from_min_max(tl, rb));
+        let scissor_rect = screen.into_scissor_rect(render_core::Rect::from_min_max(tl, rb));
 
         // println!("Vertices: {vertices:?}");
         Self {
@@ -62,13 +64,13 @@ impl TriangleOutput {
     }
 }
 
-impl super::RecordOutput for TriangleOutput {
-    type ImageSpec<'s> = super::BitmapImage;
-    type Textures<'s> = std::vec::IntoIter<super::BitmapImage>;
+impl recorder_core::RecordOutput for TriangleOutput {
+    type ImageSpec<'s> = BitmapImage;
+    type Textures<'s> = std::vec::IntoIter<BitmapImage>;
 
-    fn meshes<'s>(&'s self) -> Vec<Option<renderer::Mesh<'s>>> {
-        let mesh = renderer::Mesh{
-            key: renderer::TextureKey::Managed(1),
+    fn meshes<'s>(&'s self) -> Vec<Option<render_core::Mesh<'s>>> {
+        let mesh = render_core::Mesh{
+            key: render_core::TextureKey::Managed(1),
             vertices: &self.vertices,
             indices: INDICES,
             scissor_rect: self.scissor_rect,
@@ -81,7 +83,7 @@ impl super::RecordOutput for TriangleOutput {
         vec![].into_iter()
     }
 
-    fn removed_textures(&self) -> Vec<renderer::TextureKey> {
+    fn removed_textures(&self) -> Vec<render_core::TextureKey> {
         vec![]
     }
 

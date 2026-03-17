@@ -1,4 +1,4 @@
-use crate::bindings::immediate_renderer_world::{exports::local::immediate_renderer::render, local::webgpu_runtime::surface, wasi::webgpu::webgpu::{self, GpuBufferUsage}};
+use crate::bindings::{surface, webgpu};
 
 pub use epaint::{Vertex, Pos2, Color32, Rect};
 
@@ -6,8 +6,9 @@ mod mesh;
 pub use mesh::{Mesh, ScissorRect, MeshVectorIter, ResolvedMeshSet};
 
 mod texture;
-use anyhow::Context;
 pub use texture::{ImageSpec, TextureKey, SamplingOption};
+
+mod error;
 
 pub struct Renderer {
     device: webgpu::GpuDevice,
@@ -25,7 +26,7 @@ pub struct Renderer {
 impl Renderer {
     const MIN_BUFFER_SIZE: usize = 4096;
 
-    pub fn new(context: &render::RenderContext) -> Self
+    pub fn new(context: &surface::RenderContext) -> Self
     {
         let device = context.get_device();
         let uniform_bind_group_layout = context.get_uniform_layout();
@@ -55,18 +56,18 @@ impl Renderer {
         }
     }
 
-    pub fn update_mesh<'a>(&mut self, meshes: MeshVectorIter<'a>) -> Result<ResolvedMeshSet, anyhow::Error> {
+    pub fn update_mesh<'a>(&mut self, meshes: MeshVectorIter<'a>) -> Result<ResolvedMeshSet, error::RenderError> {
         let mut result = ResolvedMeshSet::new(meshes.len(), meshes.clip_rects().collect(), meshes.keys().collect());
 
         let buf_size = meshes.vertices().fold(0, |acc, m| acc + m.len()) * Vertex::stride_size() as usize;
-        self.send_vertex_internal(buf_size, meshes.vertices(), &mut result).context("failed to send vertex")?;
+        self.send_vertex_internal(buf_size, meshes.vertices(), &mut result)?;
 
         let buf_size = meshes.indices().fold(0, |acc, i| acc + i.len()) * size_of::<u32>();
-        self.send_index_internal(buf_size, meshes.indices(), &mut result).context("failed to send index")?;
+        self.send_index_internal(buf_size, meshes.indices(), &mut result)?;
         Ok(result)
     }
 
-    fn send_vertex_internal<'a>(&mut self, buf_size: usize, vertices: impl Iterator<Item = &'a [Vertex]>, result: &mut ResolvedMeshSet) -> Result<(), anyhow::Error> {
+    fn send_vertex_internal<'a>(&mut self, buf_size: usize, vertices: impl Iterator<Item = &'a [Vertex]>, result: &mut ResolvedMeshSet) -> Result<(), error::RenderError> {
         let (stage, buffer) = (&mut self.vertex_staging, &mut self.vertex_buffer);
 
         // log::debug!("[B] Vertex buffer/current: {}, staging: {}, required: {buf_size}, need?: {}", buffer.size(), stage.capacity(), stage.capacity() < buf_size);
@@ -94,14 +95,16 @@ impl Renderer {
             offset += size;
         }
 
-        self.queue.write_buffer_with_copy(&buffer, 0, &stage, Some(0), Some(stage.len() as u64))?;
+        self.queue.write_buffer_with_copy(&buffer, 0, &stage, Some(0), Some(stage.len() as u64))
+            .map_err(|err| error::RenderError::WriteVertexFailed(err.to_string()))?
+        ;
 
         // println!("[A] Vertex buffer send/offset: {offset}, byte-offset: {byte_offset}, buffer/len: {}, stage/len: {}, stride: {}", buffer.size(), stage.len(), Vertex::stride_size());
         // println!("----------------------------------------");
         Ok(())
     }
 
-    fn send_index_internal<'a>(&mut self, buf_size: usize, indices: impl Iterator<Item = &'a [u32]>, result: &mut ResolvedMeshSet) -> Result<(), anyhow::Error> {
+    fn send_index_internal<'a>(&mut self, buf_size: usize, indices: impl Iterator<Item = &'a [u32]>, result: &mut ResolvedMeshSet) -> Result<(), error::RenderError> {
         let (stage, buffer) = (&mut self.index_staging, &mut self.index_buffer);
 
         // println!("Index buffer/current: {}, staging: {}, required: {buf_size}", buffer.size(), stage.capacity());
@@ -127,26 +130,28 @@ impl Renderer {
             offset += size;
         }
 
-        self.queue.write_buffer_with_copy(buffer, 0, stage, Some(0), Some(stage.len() as u64))?;
+        self.queue.write_buffer_with_copy(buffer, 0, stage, Some(0), Some(stage.len() as u64))
+            .map_err(|err| error::RenderError::WriteIndexFailed(err.to_string()))?
+        ;
 
         // println!("[A] Index buffer send/offset: {offset}, byte-offset: {byte_offset}, buffer/len: {}, stage/len: {}, stride/size: {}", buffer.size(), stage.len(), size_of::<u32>() as u64);
         // println!("----------------------------------------");
         Ok(())
     }
 
-    pub fn send_uniform(&self, uniform_info: UniformInfo) -> Result<(), anyhow::Error> {
+    pub fn send_uniform(&self, uniform_info: UniformInfo) -> Result<(), error::RenderError> {
         // log::debug!("uniform: {uniform_info:?}");
 
         let bytes = bytemuck::bytes_of(&uniform_info);
-        self.queue.write_buffer_with_copy(&self.uniform_buffer, 0, bytes, Some(0), None)?;
-        Ok(())
+        self.queue.write_buffer_with_copy(&self.uniform_buffer, 0, bytes, Some(0), None)
+            .map_err(|err| error::RenderError::WriteUniformFailed(err.to_string()))
     }
 
     pub fn send_texture<'a, T: texture::ImageSpec + 'a>(&mut self, images: impl Iterator<Item = T>) {
         self.texture_cache.update_cache(&self.device, images);
     }
 
-    pub fn render(&self, surface_texture: webgpu::GpuTexture, meshes: ResolvedMeshSet) -> Result<(), anyhow::Error> {
+    pub fn render(&self, surface_texture: webgpu::GpuTexture, meshes: ResolvedMeshSet) -> Result<(), error::RenderError> {
         let view = surface_texture.create_view(None);
 
         let desc = webgpu::GpuCommandEncoderDescriptor { label: Some("Command encoder".into()) };
@@ -171,13 +176,17 @@ impl Renderer {
         };
         let pass = enc.begin_render_pass(&desc);
         pass.set_pipeline(&self.pipeline);
-        pass.set_bind_group(0, Some(&self.uniform_bind_group), None, None, None)?;
+        pass.set_bind_group(0, Some(&self.uniform_bind_group), None, None, None)
+            .map_err(|err| error::RenderError::SwitchBindGroupFailed{ index: 0, msg: err.to_string() })?
+        ;
 
         for mesh in meshes.iter() {
             pass.set_scissor_rect(mesh.scissor_rect.x, mesh.scissor_rect.y, mesh.scissor_rect.width, mesh.scissor_rect.height);
             pass.set_vertex_buffer(0, Some(&self.vertex_buffer), Some(mesh.vertex_buffer_range.offset), Some(mesh.vertex_buffer_range.len));
             pass.set_index_buffer(&self.index_buffer, webgpu::GpuIndexFormat::Uint32, Some(mesh.index_buffer_range.offset as u64), Some(mesh.index_buffer_range.len));
-            pass.set_bind_group(1, Some(self.texture_cache.get_bind_group(mesh.key)), None, None, None).context("Faild to get texture bind group")?;
+            pass.set_bind_group(1, Some(self.texture_cache.get_bind_group(mesh.key)), None, None, None)
+                .map_err(|err| error::RenderError::BindGroupMissed{ key: mesh.key, msg: err.to_string() })?
+            ;
             // println!("Draw/mesh(vertex): {:?}, mesh(index): {:?}, draw_index: {:?}", &mesh.vertex_buffer_range, &mesh.index_buffer_range, &mesh.draw_range);
             pass.draw_indexed(mesh.draw_range.len, Some(1), None, None, Some(0));
         }
@@ -204,7 +213,7 @@ fn new_buffer(device: &webgpu::GpuDevice, size: u64, usage: webgpu::GpuFlagsCons
     let desc = webgpu::GpuBufferDescriptor {
         label,
         size,
-        usage: usage | GpuBufferUsage::copy_dst(),
+        usage: usage | webgpu::GpuBufferUsage::copy_dst(),
         mapped_at_creation: None,
     };
     device.create_buffer(&desc)
