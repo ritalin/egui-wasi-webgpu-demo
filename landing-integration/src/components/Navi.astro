@@ -1,0 +1,13 @@
+---
+import Node from './Node.astro';
+import type { TreeNode } from '../lib/page-tree';
+
+const { tree } = Astro.props;
+---
+<nav style="width:250px; border-right:1px solid #ccc; padding:8px;">
+    <ul>
+    {tree.map(node => (
+        <Node node={node} />
+    ))}
+    </ul>
+</nav>

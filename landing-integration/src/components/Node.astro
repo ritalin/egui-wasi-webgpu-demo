@@ -1,0 +1,18 @@
+---
+const { node } = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+---
+<li>
+    {node.children && node.children.length > 0
+        ? (<>
+        {node.name}
+        <ul>
+            {node.children.map(child => (
+            <Node node={child} />
+            ))}
+        </ul>
+        </>)
+        : (<a href={`${base}${node.path}/`}>{node.name}</a>)
+    }
+</li>

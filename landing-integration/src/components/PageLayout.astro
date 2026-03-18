@@ -1,0 +1,14 @@
+---
+import Navi from '../components/Navi.astro';
+const { tree, content } = Astro.props;
+---
+
+<div style="display: flex; height: 100vh;">
+  <aside style="width: 240px; border-right: 1px solid #ccc; overflow-y: auto;">
+    <Navi {tree} />
+  </aside>
+
+  <main style="flex: 1; overflow: auto;">
+    <slot />
+  </main>
+</div>

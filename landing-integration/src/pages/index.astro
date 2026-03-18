@@ -1,0 +1,10 @@
+---
+import PageLayout from "../components/PageLayout.astro";
+import { getPagesFromDist } from "../lib/asset-supports";
+import { buildPageTree, type TreeNode } from "../lib/page-tree";
+
+const pages = await getPagesFromDist();
+const tree = buildPageTree(pages);
+---
+<PageLayout {tree}>
+</PageLayout>

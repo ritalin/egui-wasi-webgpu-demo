@@ -27,3 +27,6 @@ dist-ssr
 _transpiled
 target
 deps
+
+.astro
+.vscode
