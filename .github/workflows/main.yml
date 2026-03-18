@@ -45,7 +45,7 @@ jobs:
           node-version: lts/*
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile -r
+        run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm run -r build
       - name: Setup Pages
