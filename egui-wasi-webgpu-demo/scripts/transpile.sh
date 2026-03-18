@@ -17,7 +17,7 @@ fi
 (
     cd $BASE_DIR
 
-    cargo build --target wasm32-wasip2 --manifest-path $BASE_DIR/pkg/wasi-renderer/Cargo.toml $PROFILE_FLAG
+    cargo build --target wasm32-wasip2 --manifest-path $BASE_DIR/pkg/wasi-renderer-demo/Cargo.toml $PROFILE_FLAG
 
     pnpm exec jco transpile \
     --name egui-renderer \
@@ -25,5 +25,5 @@ fi
     --instantiation async \
     --no-nodejs-compat \
     $OPTIMIZE \
-    $BASE_DIR/pkg/wasi-renderer/target/wasm32-wasip2/$PROFILE_DIR/wasi_renderer.wasm
+    $BASE_DIR/pkg/wasi-renderer-demo/target/wasm32-wasip2/$PROFILE_DIR/wasi_renderer_demo.wasm
 )

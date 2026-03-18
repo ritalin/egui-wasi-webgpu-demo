@@ -1,8 +1,9 @@
 use std::marker::PhantomData;
 
 use egui::RawInput;
+use wasi_renderer::{ScreenDescriptor, recorder_core, bindings::types};
 
-use crate::{bindings::immediate_renderer_world::local::immediate_renderer::types, supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}}};
+use crate::{supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}}};
 
 pub struct MainWidgetRecorder<'a> {
     egui_context: egui::Context,
@@ -20,7 +21,7 @@ impl<'a> MainWidgetRecorder<'a> {
     }
 }
 
-impl<'a> super::Recorder for MainWidgetRecorder<'a> {
+impl<'a> recorder_core::Recorder for MainWidgetRecorder<'a> {
     type ImageSpec = EguiTexture<'a>;
     type ImageSpecs = EguiTextureSet<'a>;
     type Output = EguiOutput;
@@ -29,7 +30,7 @@ impl<'a> super::Recorder for MainWidgetRecorder<'a> {
         EguiTextureSet::default()
     }
 
-    fn record(&mut self, screen: super::ScreenDescriptor, events: &[types::Event]) -> Result<Self::Output, anyhow::Error> {
+    fn record(&mut self, screen: ScreenDescriptor, events: &[types::Event]) -> Result<Self::Output, recorder_core::RecorderError> {
         let mut input = RawInput::default();
         egui_supports::populate_events(events, &screen, &mut input);
 
