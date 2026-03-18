@@ -8,7 +8,7 @@
   "scripts": {
     "predev": "rm -rf public && ln -s ../dist public",
     "dev": "astro dev",
-    "prebuild": "rm -rf public && cp -al ../dist public",
+    "prebuild": "rm -rf public && cp -alr ../dist public",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
