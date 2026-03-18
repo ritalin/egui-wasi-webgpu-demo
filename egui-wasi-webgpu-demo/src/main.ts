@@ -2,12 +2,12 @@ import "./style.css";
 import { createWebGpuRuntime, WebGpuRuntime } from "wasi-webgpu-runtime/host";
 import { getImportObject } from "wasi-webgpu-runtime/instantiation";
 import { WASIShim } from "@bytecodealliance/preview2-shim/instantiation";
-import { instantiate, type ImportObject, type Root } from "egui-renderer";
+import { instantiate, type ImportObject, type Root } from "pkg/egui-renderer";
 import type {
   Dispatcher,
   Event as DispatchEvent,
   RenderContext,
-} from "pkg/_transpiled/interfaces/local-immediate-renderer-render";
+} from "pkg/interfaces/local-immediate-renderer-demo-render";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
