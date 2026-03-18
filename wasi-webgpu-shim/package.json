@@ -22,6 +22,9 @@
       "default": "./src/host-api.js"
     }
   },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "packageManager": "pnpm@10.12.1",
   "devDependencies": {
     "@types/node": "^25.2.3",

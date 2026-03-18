@@ -5,6 +5,7 @@
   "engines": {
     "node": ">=22.12.0"
   },
+  "packageManager": "pnpm@10.12.1",
   "scripts": {
     "predev": "rm -rf public && ln -s ../dist public",
     "dev": "astro dev",

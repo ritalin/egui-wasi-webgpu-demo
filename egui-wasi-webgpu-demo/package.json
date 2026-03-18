@@ -2,6 +2,10 @@
   "name": "egui-wasi-webgpu-demo",
   "private": true,
   "version": "0.0.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "pnpm@10.12.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,6 +23,6 @@
   },
   "dependencies": {
     "@bytecodealliance/preview2-shim": "^0.17.8",
-    "wasi-webgpu-runtime": "link:../wasi-webgpu-runtime"
+    "wasi-webgpu-runtime": "workspace:*"
   }
 }
