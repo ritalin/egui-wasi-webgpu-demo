@@ -1,0 +1,24 @@
+{
+  "name": "landing-integration",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "predev": "rm -rf public && ln -s ../dist public",
+    "dev": "astro dev",
+    "prebuild": "rm -rf public && cp -al ../dist public",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^6.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "egui-wasi-webgpu-demo": "link:../egui-wasi-webgpu-demo",
+    "typescript": "~5.9.3"
+  }
+}

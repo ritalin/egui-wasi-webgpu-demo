@@ -13,7 +13,14 @@ export default defineConfig({
         __dirname,
         "./pkg/_transpiled/egui-renderer",
       ),
+<<<<<<< feature/compose-by-astro
+      "/pkg/interfaces": path.resolve(
+        __dirname,
+        "./pkg/_transpiled/interfaces",
+      ),
+=======
       "pkg/interfaces": path.resolve(__dirname, "./pkg/_transpiled/interfaces"),
+>>>>>>> main
     },
   },
 });

@@ -47,14 +47,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile -r
       - name: Build
-        run: pnpm run -F egui-wasi-webgpu-demo build
+        run: pnpm run -r build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
           # Upload dist folder
-          path: "./egui-wasi-webgpu-demo/dist"
+          path: "./egui-wasi-webgpu-demo/dist-final"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
