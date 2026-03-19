@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-final
 *.local
 
 # Editor directories and files
@@ -27,3 +28,6 @@ dist-ssr
 _transpiled
 target
 deps
+
+.astro
+.vscode

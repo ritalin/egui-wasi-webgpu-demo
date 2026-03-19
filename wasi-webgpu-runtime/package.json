@@ -10,6 +10,9 @@
   },
   "keywords": [],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "packageManager": "pnpm@10.12.1",
   "exports": {
     "./instantiation": "./src/instantiation.js",
@@ -17,7 +20,7 @@
   },
   "dependencies": {
     "@bytecodealliance/preview2-shim": "^0.17.8",
-    "wasi-webgpu-shim": "link:../wasi-webgpu-shim"
+    "wasi-webgpu-shim": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^25.2.3",

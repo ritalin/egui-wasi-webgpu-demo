@@ -1,6 +1,5 @@
 use egui::{Modifiers, PointerButton, Pos2};
-
-use crate::{bindings::immediate_renderer_world::local::immediate_renderer::types, widget_recorder::ScreenDescriptor};
+use wasi_renderer::{ScreenDescriptor, bindings::types};
 
 pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input: &mut egui::RawInput) {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();
@@ -27,10 +26,10 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
             types::Event::MouseDown(button) => {
-                input.events.push(egui::Event::PointerButton { pos: Pos2::new(cursor_x, cursor_y), button: button.into(), pressed: true, modifiers });
+                input.events.push(egui::Event::PointerButton { pos: Pos2::new(cursor_x, cursor_y), button: MouseButtonW(button).into(), pressed: true, modifiers });
             }
             types::Event::MouseUp(button) => {
-                input.events.push(egui::Event::PointerButton { pos: Pos2::new(cursor_x, cursor_y), button: button.into(), pressed: false, modifiers });
+                input.events.push(egui::Event::PointerButton { pos: Pos2::new(cursor_x, cursor_y), button: MouseButtonW(button).into(), pressed: false, modifiers });
             }
         }
     }
@@ -38,8 +37,10 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
     input.modifiers = modifiers;
 }
 
-impl From<&types::MouseButton> for PointerButton {
-    fn from(value: &types::MouseButton) -> Self {
+pub struct MouseButtonW<'a>(&'a types::MouseButton);
+
+impl<'a> From<MouseButtonW<'a>> for PointerButton {
+    fn from(MouseButtonW(value): MouseButtonW) -> Self {
         match value {
             types::MouseButton::Left => Self::Primary,
             types::MouseButton::Right => Self::Secondary,

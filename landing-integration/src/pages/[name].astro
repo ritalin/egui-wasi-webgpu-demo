@@ -1,0 +1,25 @@
+---
+import PageLayout from '../components/PageLayout.astro';
+import { getAssets, getPagesFromDist } from '../lib/asset-supports';
+import { buildPageTree, type TreeNode } from "../lib/page-tree";
+
+export async function getStaticPaths() {
+  const pages = await getPagesFromDist();
+  return pages.map(p => ({ params: { name: p.path } }));
+}
+
+const name = Astro.params.name;
+const base = import.meta.env.BASE_URL;
+
+const { js, css } = await getAssets(name);
+
+const pages = await getPagesFromDist();
+const tree = buildPageTree(pages);
+---
+<PageLayout {tree}>
+    <script type="module" crossorigin src={`${base}${name}/assets/${js}`}></script>
+    {css.map(f => (
+      <link rel="stylesheet" crossorigin href={`${base}${name}/assets/${f}`} />
+    ))}
+    <div id="app"></div>
+</PageLayout>

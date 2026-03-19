@@ -23,7 +23,8 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "egui-renderer": ["./pkg/_transpiled/egui-renderer"],
+      "pkg/egui-renderer": ["./pkg/_transpiled/egui-renderer"],
+      "pkg/interfaces/*": ["./pkg/_transpiled/interfaces/*"],
     },
   },
   "include": ["src"],

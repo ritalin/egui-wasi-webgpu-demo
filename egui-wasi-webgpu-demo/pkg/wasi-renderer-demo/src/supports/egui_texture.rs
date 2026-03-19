@@ -1,4 +1,5 @@
-use crate::{bindings::immediate_renderer_world::{local::{immediate_renderer::types, webgpu_runtime::surface}, wasi::webgpu::webgpu}, renderer, widget_recorder::{RecordOutput, ScreenDescriptor}};
+use wasi_renderer::{recorder_core::RecordOutput, ScreenDescriptor};
+use wasi_renderer::{render_core, bindings::{types, surface, webgpu}};
 
 pub struct EguiOutput {
     screen: ScreenDescriptor,
@@ -16,15 +17,15 @@ impl<'a> RecordOutput for EguiOutput {
     type ImageSpec<'s> = EguiTexture<'s>;
     type Textures<'s> = EguiTextureSet<'s>;
 
-    fn meshes<'s>(&'s self) -> Vec<Option<renderer::Mesh<'s>>> {
+    fn meshes<'s>(&'s self) -> Vec<Option<render_core::Mesh<'s>>> {
         self.shapes.iter()
-            .map(|p| -> Option<renderer::Mesh> {
+            .map(|p| -> Option<render_core::Mesh> {
                 match &p.primitive {
                     epaint::Primitive::Mesh(mesh) => {
-                        Some(renderer::Mesh {
+                        Some(render_core::Mesh {
                             key: match mesh.texture_id {
-                                egui::TextureId::Managed(id) => renderer::TextureKey::Managed(id),
-                                egui::TextureId::User(_) => renderer::TextureKey::Default,
+                                egui::TextureId::Managed(id) => render_core::TextureKey::Managed(id),
+                                egui::TextureId::User(_) => render_core::TextureKey::Default,
                             },
                             vertices: &mesh.vertices,
                             indices: &mesh.indices,
@@ -41,11 +42,11 @@ impl<'a> RecordOutput for EguiOutput {
         EguiTextureSet::new(self.textures.set.iter())
     }
 
-    fn removed_textures(&self) -> Vec<renderer::TextureKey> {
+    fn removed_textures(&self) -> Vec<render_core::TextureKey> {
         self.textures.free.iter()
             .map(|id| match id {
-                egui::TextureId::Managed(id) => renderer::TextureKey::Managed(*id),
-                egui::TextureId::User(_) => renderer::TextureKey::Default,
+                egui::TextureId::Managed(id) => render_core::TextureKey::Managed(*id),
+                egui::TextureId::User(_) => render_core::TextureKey::Default,
             })
             .collect()
     }
@@ -60,11 +61,11 @@ pub struct EguiTexture<'a> {
     image: &'a egui::epaint::ImageDelta,
 }
 
-impl<'a> renderer::ImageSpec for EguiTexture<'a> {
-    fn key(&self) -> renderer::TextureKey {
+impl<'a> render_core::ImageSpec for EguiTexture<'a> {
+    fn key(&self) -> render_core::TextureKey {
         match self.id {
-            egui::TextureId::Managed(id) => renderer::TextureKey::Managed(*id),
-            egui::TextureId::User(_) => renderer::TextureKey::Default,
+            egui::TextureId::Managed(id) => render_core::TextureKey::Managed(*id),
+            egui::TextureId::User(_) => render_core::TextureKey::Default,
         }
     }
 
@@ -85,7 +86,7 @@ impl<'a> renderer::ImageSpec for EguiTexture<'a> {
         }
     }
 
-    fn sampling(&self) -> renderer::SamplingOption {
+    fn sampling(&self) -> render_core::SamplingOption {
         let mag_filter = match self.image.options.magnification {
             egui::TextureFilter::Nearest => webgpu::GpuFilterMode::Nearest,
             egui::TextureFilter::Linear => webgpu::GpuFilterMode::Linear,
@@ -104,7 +105,7 @@ impl<'a> renderer::ImageSpec for EguiTexture<'a> {
             egui::TextureWrapMode::MirroredRepeat => webgpu::GpuAddressMode::MirrorRepeat,
         };
 
-        renderer::SamplingOption {
+        render_core::SamplingOption {
             mag_filter,
             min_filter,
             mipmap_filter,

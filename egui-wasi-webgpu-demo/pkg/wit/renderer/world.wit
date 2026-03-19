@@ -39,23 +39,8 @@ interface types {
     }
 }
 
-interface render {
-    use local:webgpu-runtime/surface.{render-context};
-    use types.{event, unhandle-event};
-
-    resource dispatcher {
-        push-event: func(event: event);
-        push-event-all: func(event: list<event>);
-        dispatch: func() -> list<unhandle-event>;
-    }
-
-    create-main-renderer: func(context: render-context) -> dispatcher;
-    create-triangle-renderer: func(context: render-context) -> dispatcher;
-    create-counter-renderer: func(context: render-context) -> dispatcher;
-}
-
 world immediate-renderer-world {
     import local:webgpu-runtime/surface;
-//    export local:webgpu-runtime/surface;
-    export render;
+    export local:webgpu-runtime/surface;
+    export types;
 }

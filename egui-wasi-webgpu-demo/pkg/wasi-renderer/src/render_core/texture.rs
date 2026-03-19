@@ -1,6 +1,6 @@
 use std::collections::hash_map;
 
-use crate::bindings::immediate_renderer_world::{local::webgpu_runtime::surface, wasi::webgpu::webgpu};
+use crate::bindings::{surface, webgpu};
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd)]
 pub struct SamplingOption {
