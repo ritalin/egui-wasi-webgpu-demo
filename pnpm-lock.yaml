@@ -6,9 +6,29 @@ settings:
 
 importers:
 
-  .: {}
-
   egui-wasi-webgpu-demo:
+    dependencies:
+      '@bytecodealliance/preview2-shim':
+        specifier: ^0.17.8
+        version: 0.17.8
+      wasi-webgpu-runtime:
+        specifier: workspace:*
+        version: link:../wasi-webgpu-runtime
+    devDependencies:
+      '@bytecodealliance/jco':
+        specifier: ^1.17.1
+        version: 1.17.1
+      '@types/node':
+        specifier: ^25.2.3
+        version: 25.5.0
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^7.3.1
+        version: 7.3.1(@types/node@25.5.0)(terser@5.46.1)
+
+  egui-wasi-webgpu-example:
     dependencies:
       '@bytecodealliance/preview2-shim':
         specifier: ^0.17.8
