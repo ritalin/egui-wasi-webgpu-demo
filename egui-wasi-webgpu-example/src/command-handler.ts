@@ -6,7 +6,7 @@ export type Route = "route://app/main";
 export type HostCommand =
   | { tag: "command://app/new-window" }
   | { tag: "command://app/open-window" }
-  | { tag: "command://app/load-image"; url: string };
+  | { tag: "command://app/load-image"; paths: string[] };
 
 export type AppEffect = "effect://app/image-data";
 
@@ -22,7 +22,7 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
       }
       case "request-image": {
         setTimeout(
-          async () => await handleHostCommand(engine, route, { tag: "command://app/load-image", url: cmd.val }),
+          async () => await handleHostCommand(engine, route, { tag: "command://app/load-image", paths: cmd.val }),
           0,
         );
         break;
@@ -62,15 +62,22 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
       break;
     }
     case "command://app/load-image": {
-      const url = new URL(
-        `${import.meta.env.BASE_URL}${cmd.url.startsWith("/") ? cmd.url.slice(1) : cmd.url}`,
-        window.location.origin,
-      );
-
-      const res = await fetch(url);
-      const buffer = await res.bytes();
-      console.log("image-data/len", buffer.byteLength);
-      engine.addEffects(route, [{ tag: "image-data", val: { source: cmd.url, bytes: buffer } }]);
+      cmd.paths.forEach((path) => {
+        const url = new URL(
+          `${import.meta.env.BASE_URL}${path.startsWith("/") ? path.slice(1) : path}`,
+          window.location.origin,
+        );
+        fetch(url)
+          .then(async (res) => {
+            if (!res.ok) {
+              return Promise.reject(`Image is not found: "${url}"`);
+            }
+            const buffer = await res.bytes();
+            console.log("image-data/len", buffer.byteLength);
+            engine.addEffects(route, [{ tag: "image-data", val: { source: path, bytes: buffer } }]);
+          })
+          .catch((err) => console.error(err));
+      });
       break;
     }
   }

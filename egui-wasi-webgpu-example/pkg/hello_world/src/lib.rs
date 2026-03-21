@@ -10,7 +10,7 @@ mod supports {
 #[derive(Debug, Clone)]
 pub enum ExampleCommand {
     OpenWindow(String),
-    RequestImage { path: String },
+    RequestImage { paths: Vec<String> },
     Cursor(egui::CursorIcon),
 }
 

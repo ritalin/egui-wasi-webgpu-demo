@@ -6,7 +6,7 @@ interface interaction {
 
     variant command {
         open-window(route),
-        request-image(url),
+        request-image(list<url>),
         cursor(cursor-style),
     }
 

@@ -4,7 +4,7 @@ impl From<ExampleCommand> for interaction::Command {
     fn from(value: ExampleCommand) -> Self {
         match value {
             ExampleCommand::OpenWindow(route) => interaction::Command::OpenWindow(route),
-            ExampleCommand::RequestImage { path } => interaction::Command::RequestImage(path),
+            ExampleCommand::RequestImage { paths } => interaction::Command::RequestImage(paths),
             ExampleCommand::Cursor(cursor) => interaction::Command::Cursor(cursor.into()),
         }
     }

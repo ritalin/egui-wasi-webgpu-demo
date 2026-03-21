@@ -247,7 +247,7 @@ pub mod local {
       #[derive(Clone)]
       pub enum Command {
         OpenWindow(Route),
-        RequestImage(Url),
+        RequestImage(_rt::Vec::<Url>),
         Cursor(CursorStyle),
       }
       impl ::core::fmt::Debug for Command {
@@ -15347,16 +15347,16 @@ pub mod wasi {
                                                                               }
                                                                               *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len12;
                                                                               *ptr1.add(0).cast::<*mut u8>() = result12;
-                                                                              let vec16 = t2_1;
-                                                                              let len16 = vec16.len();
-                                                                              let layout16 = _rt::alloc::Layout::from_size_align(vec16.len() * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                              let (result16, _cleanup16) = wit_bindgen::rt::Cleanup::new(layout16);if let Some(cleanup) = _cleanup16 { cleanup.forget(); }
-                                                                              for (i, e) in vec16.into_iter().enumerate() {
-                                                                                let base = result16.add(i * (3*::core::mem::size_of::<*const u8>()));
+                                                                              let vec17 = t2_1;
+                                                                              let len17 = vec17.len();
+                                                                              let layout17 = _rt::alloc::Layout::from_size_align(vec17.len() * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                              let (result17, _cleanup17) = wit_bindgen::rt::Cleanup::new(layout17);if let Some(cleanup) = _cleanup17 { cleanup.forget(); }
+                                                                              for (i, e) in vec17.into_iter().enumerate() {
+                                                                                let base = result17.add(i * (3*::core::mem::size_of::<*const u8>()));
                                                                                 {
-                                                                                  use super::super::super::super::local::immediate_renderer_example::interaction::Command as V15;
+                                                                                  use super::super::super::super::local::immediate_renderer_example::interaction::Command as V16;
                                                                                   match e {
-                                                                                    V15::OpenWindow(e) => {
+                                                                                    V16::OpenWindow(e) => {
                                                                                       *base.add(0).cast::<u8>() = (0i32) as u8;
                                                                                       let vec13 = (e.into_bytes()).into_boxed_slice();
                                                                                       let ptr13 = vec13.as_ptr().cast::<u8>();
@@ -15365,24 +15365,35 @@ pub mod wasi {
                                                                                       *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len13;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr13.cast_mut();
                                                                                     },
-                                                                                    V15::RequestImage(e) => {
+                                                                                    V16::RequestImage(e) => {
                                                                                       *base.add(0).cast::<u8>() = (1i32) as u8;
-                                                                                      let vec14 = (e.into_bytes()).into_boxed_slice();
-                                                                                      let ptr14 = vec14.as_ptr().cast::<u8>();
-                                                                                      let len14 = vec14.len();
-                                                                                      ::core::mem::forget(vec14);
-                                                                                      *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len14;
-                                                                                      *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr14.cast_mut();
+                                                                                      let vec15 = e;
+                                                                                      let len15 = vec15.len();
+                                                                                      let layout15 = _rt::alloc::Layout::from_size_align(vec15.len() * (2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                      let (result15, _cleanup15) = wit_bindgen::rt::Cleanup::new(layout15);if let Some(cleanup) = _cleanup15 { cleanup.forget(); }
+                                                                                      for (i, e) in vec15.into_iter().enumerate() {
+                                                                                        let base = result15.add(i * (2*::core::mem::size_of::<*const u8>()));
+                                                                                        {
+                                                                                          let vec14 = (e.into_bytes()).into_boxed_slice();
+                                                                                          let ptr14 = vec14.as_ptr().cast::<u8>();
+                                                                                          let len14 = vec14.len();
+                                                                                          ::core::mem::forget(vec14);
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len14;
+                                                                                          *base.add(0).cast::<*mut u8>() = ptr14.cast_mut();
+                                                                                        }
+                                                                                      }
+                                                                                      *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len15;
+                                                                                      *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result15;
                                                                                     },
-                                                                                    V15::Cursor(e) => {
+                                                                                    V16::Cursor(e) => {
                                                                                       *base.add(0).cast::<u8>() = (2i32) as u8;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                     },
                                                                                   }
                                                                                 }
                                                                               }
-                                                                              *ptr1.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len16;
-                                                                              *ptr1.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result16;
+                                                                              *ptr1.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len17;
+                                                                              *ptr1.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result17;
                                                                               ptr1
                                                                             } }
                                                                             #[doc(hidden)]
@@ -15409,10 +15420,10 @@ pub mod wasi {
                                                                               _rt::cabi_dealloc(base5, len5 * (8+2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                               let l6 = *arg0.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                               let l7 = *arg0.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                              let base13 = l6;
-                                                                              let len13 = l7;
-                                                                              for i in 0..len13 {
-                                                                                let base = base13.add(i * (3*::core::mem::size_of::<*const u8>()));
+                                                                              let base16 = l6;
+                                                                              let len16 = l7;
+                                                                              for i in 0..len16 {
+                                                                                let base = base16.add(i * (3*::core::mem::size_of::<*const u8>()));
                                                                                 {
                                                                                   let l8 = i32::from(*base.add(0).cast::<u8>());
                                                                                   match l8 {
@@ -15424,13 +15435,23 @@ pub mod wasi {
                                                                                     1 => {
                                                                                       let l11 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                       let l12 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                      _rt::cabi_dealloc(l11, l12, 1);
+                                                                                      let base15 = l11;
+                                                                                      let len15 = l12;
+                                                                                      for i in 0..len15 {
+                                                                                        let base = base15.add(i * (2*::core::mem::size_of::<*const u8>()));
+                                                                                        {
+                                                                                          let l13 = *base.add(0).cast::<*mut u8>();
+                                                                                          let l14 = *base.add(::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                          _rt::cabi_dealloc(l13, l14, 1);
+                                                                                        }
+                                                                                      }
+                                                                                      _rt::cabi_dealloc(base15, len15 * (2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                     },
                                                                                     _ => (),
                                                                                   }
                                                                                 }
                                                                               }
-                                                                              _rt::cabi_dealloc(base13, len13 * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                              _rt::cabi_dealloc(base16, len16 * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                             } }
                                                                             #[doc(hidden)]
                                                                             #[allow(non_snake_case, unused_unsafe)]
@@ -15983,8 +16004,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:encoded world")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30341] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x80\xec\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30344] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x83\xec\x01\x01A\x02\
 \x01A\x1a\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16542,7 +16563,7 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x0d\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
+B\x0e\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
 source\x03\x05bytes\x04\x04\0\x0aimage-data\x03\0\x05\x01q\x01\x0aimage-data\x01\
 \x06\0\x04\0\x06effect\x03\0\x07\x01m#\x07default\x04none\x0ccontext-menu\x04hel\
 p\x07pointer\x08progress\x04wait\x04cell\x09crosshair\x04text\x0dvertical-text\x05\
@@ -16550,32 +16571,32 @@ alias\x04copy\x04move\x07no-drop\x0bnot-allowed\x04grab\x08grabbing\x0aall-scrol
 l\x0acol-resize\x0arow-resize\x08n-resize\x08e-resize\x08s-resize\x08w-resize\x09\
 ne-resize\x09nw-resize\x09se-resize\x09sw-resize\x09ew-resize\x09ns-resize\x0bne\
 sw-resize\x0bnwse-resize\x07zoom-in\x08zoom-out\x04\0\x0ccursor-style\x03\0\x09\x01\
-q\x03\x0bopen-window\x01\x01\0\x0drequest-image\x01\x03\0\x06cursor\x01\x0a\0\x04\
-\0\x07command\x03\0\x0b\x03\0,local:immediate-renderer-example/interaction\x05\x0b\
-\x01B\x0c\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04\
-ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\
-\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\x05\x04left\x05right\x06\
-middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\x01q\x05\x09modifiers\x01\
-\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amou\
-se-move\0\0\x04\0\x05event\x03\0\x08\x01q\x02\x05event\x01\x09\0\x0bopen-window\x01\
-s\0\x04\0\x0eunhandle-event\x03\0\x0a\x03\0\x1elocal:immediate-renderer/types\x05\
-\x0c\x02\x03\0\x04\x07command\x02\x03\0\x04\x06effect\x02\x03\0\x03\x0erender-co\
-ntext\x02\x03\0\x05\x05event\x02\x03\0\x05\x0eunhandle-event\x01B%\x02\x03\x02\x01\
-\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\x0e\x04\0\x06effect\x03\0\x02\x02\x03\
-\x02\x01\x0f\x04\0\x0erender-context\x03\0\x04\x02\x03\x02\x01\x10\x04\0\x05even\
-t\x03\0\x06\x02\x03\x02\x01\x11\x04\0\x0eunhandle-event\x03\0\x08\x04\0\x0devent\
--channel\x03\x01\x04\0\x0fcommand-channel\x03\x01\x04\0\x0adispatcher\x03\x01\x01\
-h\x0a\x01p\x07\x01@\x02\x04self\x0d\x06events\x0e\x01\0\x04\0\x1a[method]event-c\
-hannel.post\x01\x0f\x01h\x0b\x01p\x03\x01@\x02\x04self\x10\x07effects\x11\x01\0\x04\
-\0\x1c[method]command-channel.post\x01\x12\x01h\x0c\x01i\x0a\x01@\x01\x04self\x13\
-\0\x14\x04\0\x20[method]dispatcher.event-channel\x01\x15\x01i\x0b\x01@\x01\x04se\
-lf\x13\0\x16\x04\0\"[method]dispatcher.command-channel\x01\x17\x01p\x09\x01p\x01\
-\x01o\x02\x18\x19\x01@\x01\x04self\x13\0\x1a\x04\0\x1b[method]dispatcher.dispatc\
-h\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\x07context\x1c\0\x1d\x04\0\x0fcreate-render\
-er\x01\x1e\x04\0'local:immediate-renderer-example/render\x05\x12\x04\0.local:imm\
-ediate-renderer-example/example-world\x04\0\x0b\x13\x01\0\x0dexample-world\x03\0\
-\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bi\
-ndgen-rust\x060.53.1";
+p\x03\x01q\x03\x0bopen-window\x01\x01\0\x0drequest-image\x01\x0b\0\x06cursor\x01\
+\x0a\0\x04\0\x07command\x03\0\x0c\x03\0,local:immediate-renderer-example/interac\
+tion\x05\x0b\x01B\x0c\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\
+\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier\
+-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\x05\x04\
+left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\x01q\x05\
+\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\
+\x01\x07\0\x0amouse-move\0\0\x04\0\x05event\x03\0\x08\x01q\x02\x05event\x01\x09\0\
+\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x0a\x03\0\x1elocal:immediat\
+e-renderer/types\x05\x0c\x02\x03\0\x04\x07command\x02\x03\0\x04\x06effect\x02\x03\
+\0\x03\x0erender-context\x02\x03\0\x05\x05event\x02\x03\0\x05\x0eunhandle-event\x01\
+B%\x02\x03\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\x0e\x04\0\x06eff\
+ect\x03\0\x02\x02\x03\x02\x01\x0f\x04\0\x0erender-context\x03\0\x04\x02\x03\x02\x01\
+\x10\x04\0\x05event\x03\0\x06\x02\x03\x02\x01\x11\x04\0\x0eunhandle-event\x03\0\x08\
+\x04\0\x0devent-channel\x03\x01\x04\0\x0fcommand-channel\x03\x01\x04\0\x0adispat\
+cher\x03\x01\x01h\x0a\x01p\x07\x01@\x02\x04self\x0d\x06events\x0e\x01\0\x04\0\x1a\
+[method]event-channel.post\x01\x0f\x01h\x0b\x01p\x03\x01@\x02\x04self\x10\x07eff\
+ects\x11\x01\0\x04\0\x1c[method]command-channel.post\x01\x12\x01h\x0c\x01i\x0a\x01\
+@\x01\x04self\x13\0\x14\x04\0\x20[method]dispatcher.event-channel\x01\x15\x01i\x0b\
+\x01@\x01\x04self\x13\0\x16\x04\0\"[method]dispatcher.command-channel\x01\x17\x01\
+p\x09\x01p\x01\x01o\x02\x18\x19\x01@\x01\x04self\x13\0\x1a\x04\0\x1b[method]disp\
+atcher.dispatch\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\x07context\x1c\0\x1d\x04\0\x0f\
+create-renderer\x01\x1e\x04\0'local:immediate-renderer-example/render\x05\x12\x04\
+\0.local:immediate-renderer-example/example-world\x04\0\x0b\x13\x01\0\x0dexample\
+-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245\
+.1\x10wit-bindgen-rust\x060.53.1";
 
                                                                   #[inline(never)]
                                                                   #[doc(hidden)]

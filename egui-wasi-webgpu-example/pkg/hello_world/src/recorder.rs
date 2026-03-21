@@ -75,6 +75,8 @@ impl recorder_core::Recorder for RecoderInner {
         let unhandled_event = vec![];
         let mut commands = vec![];
 
+        let mut request_img = None;
+
         self.apply_effects(effects.into_iter().map(|c| c.into()));
 
         let output = self.egui_context.run(input, |cx| {
@@ -94,7 +96,7 @@ impl recorder_core::Recorder for RecoderInner {
                 match self.state.logo.as_mut() {
                     None => {
                         let url = "/assets/ferris.png".to_string();
-                        commands.push(ExampleCommand::RequestImage{ path: url.clone() });
+                        request_img = Some(url.clone());
                         self.state.logo = Some((url, ImageStatus::Pending));
                     }
                     Some((url, ImageStatus::Ready)) => {
@@ -106,6 +108,9 @@ impl recorder_core::Recorder for RecoderInner {
         });
         let shapes = self.egui_context.tessellate(output.shapes, screen.scale_factor);
 
+        if let Some(url) = request_img {
+            commands.push(ExampleCommand::RequestImage{ paths: vec![url] });
+        }
         egui_supports::push_platform_output(output.platform_output, &mut commands);
 
         for (id, _delta) in &output.textures_delta.set {
