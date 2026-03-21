@@ -14630,10 +14630,13 @@ pub mod wasi {
                                                                                             let e0 = super::super::super::super::__with_name1::MouseButton::_lift(arg2 as u8);
                                                                                             V0::MouseDown(e0)
                                                                                           }
-                                                                                          n => {
-                                                                                            debug_assert_eq!(n, 3, "invalid enum discriminant");
+                                                                                          3 => {
                                                                                             let e0 = super::super::super::super::__with_name1::MouseButton::_lift(arg2 as u8);
                                                                                             V0::MouseUp(e0)
+                                                                                          }
+                                                                                          n => {
+                                                                                            debug_assert_eq!(n, 4, "invalid enum discriminant");
+                                                                                            V0::MouseMove
                                                                                           }
                                                                                         };
                                                                                         T_::push_event(DispatcherBorrow::lift(arg0 as u32 as usize).get(), v0)
@@ -14688,14 +14691,17 @@ pub mod wasi {
                                                                                               };
                                                                                               V9::MouseDown(e9)
                                                                                             }
-                                                                                            n => {
-                                                                                              debug_assert_eq!(n, 3, "invalid enum discriminant");
+                                                                                            3 => {
                                                                                               let e9 = {
                                                                                                 let l8 = i32::from(*base.add(4).cast::<u8>());
 
                                                                                                 super::super::super::super::__with_name1::MouseButton::_lift(l8 as u8)
                                                                                               };
                                                                                               V9::MouseUp(e9)
+                                                                                            }
+                                                                                            n => {
+                                                                                              debug_assert_eq!(n, 4, "invalid enum discriminant");
+                                                                                              V9::MouseMove
                                                                                             }
                                                                                           };
 
@@ -14753,6 +14759,11 @@ pub mod wasi {
                                                                                               *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
                                                                                               *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                             },
+                                                                                            V8::MouseMove=> {
+                                                                                              {
+                                                                                                *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (4i32) as u8;
+                                                                                              }
+                                                                                            }
                                                                                           }
                                                                                         },
                                                                                         V10::OpenWindow(e) => {
@@ -15251,8 +15262,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-demo:demo-world:encoded world")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 29638] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xc4\xe6\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 29651] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xd1\xe6\x01\x01A\x02\
 \x01A\x16\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -15813,22 +15824,22 @@ ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x
 B\x0c\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ct\
 rl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\x02\
 \x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\x05\x04left\x05right\x06m\
-iddle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\x01q\x04\x09modifiers\x01\
-\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x04\0\x05\
-event\x03\0\x08\x01q\x02\x05event\x01\x09\0\x0bopen-window\x01s\0\x04\0\x0eunhan\
-dle-event\x03\0\x0a\x03\0\x1elocal:immediate-renderer/types\x05\x0b\x02\x03\0\x03\
-\x0erender-context\x02\x03\0\x04\x05event\x02\x03\0\x04\x0eunhandle-event\x01B\x16\
-\x02\x03\x02\x01\x0c\x04\0\x0erender-context\x03\0\0\x02\x03\x02\x01\x0d\x04\0\x05\
-event\x03\0\x02\x02\x03\x02\x01\x0e\x04\0\x0eunhandle-event\x03\0\x04\x04\0\x0ad\
-ispatcher\x03\x01\x01h\x06\x01@\x02\x04self\x07\x05event\x03\x01\0\x04\0\x1d[met\
-hod]dispatcher.push-event\x01\x08\x01p\x03\x01@\x02\x04self\x07\x05event\x09\x01\
-\0\x04\0![method]dispatcher.push-event-all\x01\x0a\x01p\x05\x01@\x01\x04self\x07\
-\0\x0b\x04\0\x1b[method]dispatcher.dispatch\x01\x0c\x01i\x01\x01i\x06\x01@\x01\x07\
-context\x0d\0\x0e\x04\0\x14create-main-renderer\x01\x0f\x04\0\x18create-triangle\
--renderer\x01\x0f\x04\0\x17create-counter-renderer\x01\x0f\x04\0$local:immediate\
--renderer-demo/render\x05\x0f\x04\0(local:immediate-renderer-demo/demo-world\x04\
-\0\x0b\x10\x01\0\x0ademo-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0d\
-wit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+iddle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\x01q\x05\x09modifiers\x01\
+\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amou\
+se-move\0\0\x04\0\x05event\x03\0\x08\x01q\x02\x05event\x01\x09\0\x0bopen-window\x01\
+s\0\x04\0\x0eunhandle-event\x03\0\x0a\x03\0\x1elocal:immediate-renderer/types\x05\
+\x0b\x02\x03\0\x03\x0erender-context\x02\x03\0\x04\x05event\x02\x03\0\x04\x0eunh\
+andle-event\x01B\x16\x02\x03\x02\x01\x0c\x04\0\x0erender-context\x03\0\0\x02\x03\
+\x02\x01\x0d\x04\0\x05event\x03\0\x02\x02\x03\x02\x01\x0e\x04\0\x0eunhandle-even\
+t\x03\0\x04\x04\0\x0adispatcher\x03\x01\x01h\x06\x01@\x02\x04self\x07\x05event\x03\
+\x01\0\x04\0\x1d[method]dispatcher.push-event\x01\x08\x01p\x03\x01@\x02\x04self\x07\
+\x05event\x09\x01\0\x04\0![method]dispatcher.push-event-all\x01\x0a\x01p\x05\x01\
+@\x01\x04self\x07\0\x0b\x04\0\x1b[method]dispatcher.dispatch\x01\x0c\x01i\x01\x01\
+i\x06\x01@\x01\x07context\x0d\0\x0e\x04\0\x14create-main-renderer\x01\x0f\x04\0\x18\
+create-triangle-renderer\x01\x0f\x04\0\x17create-counter-renderer\x01\x0f\x04\0$\
+local:immediate-renderer-demo/render\x05\x0f\x04\0(local:immediate-renderer-demo\
+/demo-world\x04\0\x0b\x10\x01\0\x0ademo-world\x03\0\0\0G\x09producers\x01\x0cpro\
+cessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
 
                                                                   #[inline(never)]
                                                                   #[doc(hidden)]

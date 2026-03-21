@@ -1,4 +1,4 @@
-import type { Command } from "pkg/interfaces/local-immediate-renderer-example-interaction";
+import type { Command, CursorStyle } from "pkg/interfaces/local-immediate-renderer-example-interaction";
 import type { WasmEngine } from "./engine";
 import { DomEventBridge } from "./event-bridge";
 
@@ -25,6 +25,11 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
           async () => await handleHostCommand(engine, route, { tag: "command://app/load-image", url: cmd.val }),
           0,
         );
+        break;
+      }
+      case "cursor": {
+        changeCursor(route, cmd.val);
+        break;
       }
     }
   }
@@ -69,4 +74,11 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
       break;
     }
   }
+}
+
+function changeCursor(route: Route, cursorStyle: CursorStyle) {
+  const canvas = DomEventBridge.findCanvas(route);
+  if (!canvas) return;
+
+  canvas.style.cursor = cursorStyle;
 }

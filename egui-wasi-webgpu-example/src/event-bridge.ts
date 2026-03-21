@@ -20,7 +20,7 @@ export class DomEventBridge {
   }
 
   static bind(canvas: HTMLCanvasElement, callback: (events: DispatchEvent[]) => any) {
-    canvas.addEventListener("click", (ev) => {
+    canvas.addEventListener("pointerdown", (ev) => {
       const rect = canvas.getBoundingClientRect();
       callback([
         {
@@ -31,9 +31,30 @@ export class DomEventBridge {
           tag: "mouse-down",
           val: "left",
         },
+      ]);
+    });
+    canvas.addEventListener("pointerup", (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      callback([
+        {
+          tag: "pointer",
+          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+        },
         {
           tag: "mouse-up",
           val: "left",
+        },
+      ]);
+    });
+    canvas.addEventListener("pointermove", (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      callback([
+        {
+          tag: "pointer",
+          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+        },
+        {
+          tag: "mouse-move",
         },
       ]);
     });

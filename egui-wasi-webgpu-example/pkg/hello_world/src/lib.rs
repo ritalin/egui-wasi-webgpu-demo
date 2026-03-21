@@ -11,6 +11,7 @@ mod supports {
 pub enum ExampleCommand {
     OpenWindow(String),
     RequestImage { path: String },
+    Cursor(egui::CursorIcon),
 }
 
 #[derive(Debug, Clone)]

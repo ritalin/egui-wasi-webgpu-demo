@@ -106,6 +106,8 @@ impl recorder_core::Recorder for RecoderInner {
         });
         let shapes = self.egui_context.tessellate(output.shapes, screen.scale_factor);
 
+        egui_supports::push_platform_output(output.platform_output, &mut commands);
+
         for (id, _delta) in &output.textures_delta.set {
             println!("id: {:?}, ", id);
         }

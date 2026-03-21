@@ -31,6 +31,9 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::MouseUp(button) => {
                 input.events.push(egui::Event::PointerButton { pos: Pos2::new(cursor_x, cursor_y), button: MouseButtonW(button).into(), pressed: false, modifiers });
             }
+            types::Event::MouseMove => {
+                input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
+            }
         }
     }
 

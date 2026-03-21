@@ -1,6 +1,8 @@
 use egui::{Modifiers, PointerButton, Pos2};
 use wasi_renderer::{ScreenDescriptor, bindings::types};
 
+use crate::ExampleCommand;
+
 pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input: &mut egui::RawInput) {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();
     viewport.native_pixels_per_point = Some(screen.scale_factor);
@@ -31,6 +33,9 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::MouseUp(button) => {
                 input.events.push(egui::Event::PointerButton { pos: Pos2::new(cursor_x, cursor_y), button: MouseButtonW(button).into(), pressed: false, modifiers });
             }
+            types::Event::MouseMove => {
+                input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
+            }
         }
     }
 
@@ -49,4 +54,15 @@ impl<'a> From<MouseButtonW<'a>> for PointerButton {
             types::MouseButton::Forward => Self::Extra2,
         }
     }
+}
+
+pub fn push_platform_output(output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
+    let egui::PlatformOutput{ commands: output_cmds, cursor_icon, ime, .. } = output;
+    // println!("Platform output/cursor: {:?}, commands/len: {}, ime: {:?}",
+    //     &cursor_icon, output_cmds.len(), ime
+    // );
+
+    commands.push(ExampleCommand::Cursor(cursor_icon));
+
+
 }

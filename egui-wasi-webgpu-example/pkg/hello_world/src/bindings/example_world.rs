@@ -22,23 +22,6 @@ pub mod local {
       pub type Route = _rt::String;
       pub type Url = _rt::String;
       #[derive(Clone)]
-      pub enum Command {
-        OpenWindow(Route),
-        RequestImage(Url),
-      }
-      impl ::core::fmt::Debug for Command {
-        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-          match self {
-            Command::OpenWindow(e) => {
-              f.debug_tuple("Command::OpenWindow").field(e).finish()
-            }
-            Command::RequestImage(e) => {
-              f.debug_tuple("Command::RequestImage").field(e).finish()
-            }
-          }
-        }
-      }
-      #[derive(Clone)]
       pub struct ImageData {
         pub source: Url,
         pub bytes: _rt::Vec::<u8>,
@@ -57,6 +40,227 @@ pub mod local {
           match self {
             Effect::ImageData(e) => {
               f.debug_tuple("Effect::ImageData").field(e).finish()
+            }
+          }
+        }
+      }
+      #[repr(u8)]
+      #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+      pub enum CursorStyle {
+        Default,
+        None,
+        ContextMenu,
+        Help,
+        Pointer,
+        Progress,
+        Wait,
+        Cell,
+        Crosshair,
+        Text,
+        VerticalText,
+        Alias,
+        Copy,
+        Move,
+        NoDrop,
+        NotAllowed,
+        Grab,
+        Grabbing,
+        AllScroll,
+        ColResize,
+        RowResize,
+        NResize,
+        EResize,
+        SResize,
+        WResize,
+        NeResize,
+        NwResize,
+        SeResize,
+        SwResize,
+        EwResize,
+        NsResize,
+        NeswResize,
+        NwseResize,
+        ZoomIn,
+        ZoomOut,
+      }
+      impl ::core::fmt::Debug for CursorStyle {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          match self {
+            CursorStyle::Default => {
+              f.debug_tuple("CursorStyle::Default").finish()
+            }
+            CursorStyle::None => {
+              f.debug_tuple("CursorStyle::None").finish()
+            }
+            CursorStyle::ContextMenu => {
+              f.debug_tuple("CursorStyle::ContextMenu").finish()
+            }
+            CursorStyle::Help => {
+              f.debug_tuple("CursorStyle::Help").finish()
+            }
+            CursorStyle::Pointer => {
+              f.debug_tuple("CursorStyle::Pointer").finish()
+            }
+            CursorStyle::Progress => {
+              f.debug_tuple("CursorStyle::Progress").finish()
+            }
+            CursorStyle::Wait => {
+              f.debug_tuple("CursorStyle::Wait").finish()
+            }
+            CursorStyle::Cell => {
+              f.debug_tuple("CursorStyle::Cell").finish()
+            }
+            CursorStyle::Crosshair => {
+              f.debug_tuple("CursorStyle::Crosshair").finish()
+            }
+            CursorStyle::Text => {
+              f.debug_tuple("CursorStyle::Text").finish()
+            }
+            CursorStyle::VerticalText => {
+              f.debug_tuple("CursorStyle::VerticalText").finish()
+            }
+            CursorStyle::Alias => {
+              f.debug_tuple("CursorStyle::Alias").finish()
+            }
+            CursorStyle::Copy => {
+              f.debug_tuple("CursorStyle::Copy").finish()
+            }
+            CursorStyle::Move => {
+              f.debug_tuple("CursorStyle::Move").finish()
+            }
+            CursorStyle::NoDrop => {
+              f.debug_tuple("CursorStyle::NoDrop").finish()
+            }
+            CursorStyle::NotAllowed => {
+              f.debug_tuple("CursorStyle::NotAllowed").finish()
+            }
+            CursorStyle::Grab => {
+              f.debug_tuple("CursorStyle::Grab").finish()
+            }
+            CursorStyle::Grabbing => {
+              f.debug_tuple("CursorStyle::Grabbing").finish()
+            }
+            CursorStyle::AllScroll => {
+              f.debug_tuple("CursorStyle::AllScroll").finish()
+            }
+            CursorStyle::ColResize => {
+              f.debug_tuple("CursorStyle::ColResize").finish()
+            }
+            CursorStyle::RowResize => {
+              f.debug_tuple("CursorStyle::RowResize").finish()
+            }
+            CursorStyle::NResize => {
+              f.debug_tuple("CursorStyle::NResize").finish()
+            }
+            CursorStyle::EResize => {
+              f.debug_tuple("CursorStyle::EResize").finish()
+            }
+            CursorStyle::SResize => {
+              f.debug_tuple("CursorStyle::SResize").finish()
+            }
+            CursorStyle::WResize => {
+              f.debug_tuple("CursorStyle::WResize").finish()
+            }
+            CursorStyle::NeResize => {
+              f.debug_tuple("CursorStyle::NeResize").finish()
+            }
+            CursorStyle::NwResize => {
+              f.debug_tuple("CursorStyle::NwResize").finish()
+            }
+            CursorStyle::SeResize => {
+              f.debug_tuple("CursorStyle::SeResize").finish()
+            }
+            CursorStyle::SwResize => {
+              f.debug_tuple("CursorStyle::SwResize").finish()
+            }
+            CursorStyle::EwResize => {
+              f.debug_tuple("CursorStyle::EwResize").finish()
+            }
+            CursorStyle::NsResize => {
+              f.debug_tuple("CursorStyle::NsResize").finish()
+            }
+            CursorStyle::NeswResize => {
+              f.debug_tuple("CursorStyle::NeswResize").finish()
+            }
+            CursorStyle::NwseResize => {
+              f.debug_tuple("CursorStyle::NwseResize").finish()
+            }
+            CursorStyle::ZoomIn => {
+              f.debug_tuple("CursorStyle::ZoomIn").finish()
+            }
+            CursorStyle::ZoomOut => {
+              f.debug_tuple("CursorStyle::ZoomOut").finish()
+            }
+          }
+        }
+      }
+
+      impl CursorStyle{
+        #[doc(hidden)]
+        pub unsafe fn _lift(val: u8) -> CursorStyle{
+          if !cfg!(debug_assertions) {
+            return unsafe { ::core::mem::transmute(val) };
+          }
+
+          match val {
+            0 => CursorStyle::Default,
+            1 => CursorStyle::None,
+            2 => CursorStyle::ContextMenu,
+            3 => CursorStyle::Help,
+            4 => CursorStyle::Pointer,
+            5 => CursorStyle::Progress,
+            6 => CursorStyle::Wait,
+            7 => CursorStyle::Cell,
+            8 => CursorStyle::Crosshair,
+            9 => CursorStyle::Text,
+            10 => CursorStyle::VerticalText,
+            11 => CursorStyle::Alias,
+            12 => CursorStyle::Copy,
+            13 => CursorStyle::Move,
+            14 => CursorStyle::NoDrop,
+            15 => CursorStyle::NotAllowed,
+            16 => CursorStyle::Grab,
+            17 => CursorStyle::Grabbing,
+            18 => CursorStyle::AllScroll,
+            19 => CursorStyle::ColResize,
+            20 => CursorStyle::RowResize,
+            21 => CursorStyle::NResize,
+            22 => CursorStyle::EResize,
+            23 => CursorStyle::SResize,
+            24 => CursorStyle::WResize,
+            25 => CursorStyle::NeResize,
+            26 => CursorStyle::NwResize,
+            27 => CursorStyle::SeResize,
+            28 => CursorStyle::SwResize,
+            29 => CursorStyle::EwResize,
+            30 => CursorStyle::NsResize,
+            31 => CursorStyle::NeswResize,
+            32 => CursorStyle::NwseResize,
+            33 => CursorStyle::ZoomIn,
+            34 => CursorStyle::ZoomOut,
+
+            _ => panic!("invalid enum discriminant"),
+          }
+        }
+      }
+
+      #[derive(Clone)]
+      pub enum Command {
+        OpenWindow(Route),
+        RequestImage(Url),
+        Cursor(CursorStyle),
+      }
+      impl ::core::fmt::Debug for Command {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          match self {
+            Command::OpenWindow(e) => {
+              f.debug_tuple("Command::OpenWindow").field(e).finish()
+            }
+            Command::RequestImage(e) => {
+              f.debug_tuple("Command::RequestImage").field(e).finish()
+            }
+            Command::Cursor(e) => {
+              f.debug_tuple("Command::Cursor").field(e).finish()
             }
           }
         }
@@ -14996,14 +15200,17 @@ pub mod wasi {
                                                                                                 };
                                                                                                 V9::MouseDown(e9)
                                                                                               }
-                                                                                              n => {
-                                                                                                debug_assert_eq!(n, 3, "invalid enum discriminant");
+                                                                                              3 => {
                                                                                                 let e9 = {
                                                                                                   let l8 = i32::from(*base.add(4).cast::<u8>());
 
                                                                                                   super::super::super::super::__with_name1::MouseButton::_lift(l8 as u8)
                                                                                                 };
                                                                                                 V9::MouseUp(e9)
+                                                                                              }
+                                                                                              n => {
+                                                                                                debug_assert_eq!(n, 4, "invalid enum discriminant");
+                                                                                                V9::MouseMove
                                                                                               }
                                                                                             };
 
@@ -15119,6 +15326,11 @@ pub mod wasi {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
                                                                                           *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                         },
+                                                                                        V9::MouseMove=> {
+                                                                                          {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (4i32) as u8;
+                                                                                          }
+                                                                                        }
                                                                                       }
                                                                                     },
                                                                                     V11::OpenWindow(e) => {
@@ -15161,6 +15373,10 @@ pub mod wasi {
                                                                                       ::core::mem::forget(vec14);
                                                                                       *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len14;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr14.cast_mut();
+                                                                                    },
+                                                                                    V15::Cursor(e) => {
+                                                                                      *base.add(0).cast::<u8>() = (2i32) as u8;
+                                                                                      *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                     },
                                                                                   }
                                                                                 }
@@ -15205,11 +15421,12 @@ pub mod wasi {
                                                                                       let l10 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                       _rt::cabi_dealloc(l9, l10, 1);
                                                                                     },
-                                                                                    _ => {
+                                                                                    1 => {
                                                                                       let l11 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                       let l12 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                       _rt::cabi_dealloc(l11, l12, 1);
                                                                                     },
+                                                                                    _ => (),
                                                                                   }
                                                                                 }
                                                                               }
@@ -15766,8 +15983,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:encoded world")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 29990] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xa1\xe9\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30341] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x80\xec\x01\x01A\x02\
 \x01A\x1a\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16325,34 +16542,40 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x0b\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01q\x02\x0bopen-w\
-indow\x01\x01\0\x0drequest-image\x01\x03\0\x04\0\x07command\x03\0\x04\x01p}\x01r\
-\x02\x06source\x03\x05bytes\x06\x04\0\x0aimage-data\x03\0\x07\x01q\x01\x0aimage-\
-data\x01\x08\0\x04\0\x06effect\x03\0\x09\x03\0,local:immediate-renderer-example/\
-interaction\x05\x0b\x01B\x0c\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\
-\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10\
-modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\
-\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\
-\x01q\x04\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08\
-mouse-up\x01\x07\0\x04\0\x05event\x03\0\x08\x01q\x02\x05event\x01\x09\0\x0bopen-\
-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x0a\x03\0\x1elocal:immediate-rendere\
-r/types\x05\x0c\x02\x03\0\x04\x07command\x02\x03\0\x04\x06effect\x02\x03\0\x03\x0e\
-render-context\x02\x03\0\x05\x05event\x02\x03\0\x05\x0eunhandle-event\x01B%\x02\x03\
-\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\x0e\x04\0\x06effect\x03\0\x02\
-\x02\x03\x02\x01\x0f\x04\0\x0erender-context\x03\0\x04\x02\x03\x02\x01\x10\x04\0\
-\x05event\x03\0\x06\x02\x03\x02\x01\x11\x04\0\x0eunhandle-event\x03\0\x08\x04\0\x0d\
-event-channel\x03\x01\x04\0\x0fcommand-channel\x03\x01\x04\0\x0adispatcher\x03\x01\
-\x01h\x0a\x01p\x07\x01@\x02\x04self\x0d\x06events\x0e\x01\0\x04\0\x1a[method]eve\
-nt-channel.post\x01\x0f\x01h\x0b\x01p\x03\x01@\x02\x04self\x10\x07effects\x11\x01\
-\0\x04\0\x1c[method]command-channel.post\x01\x12\x01h\x0c\x01i\x0a\x01@\x01\x04s\
-elf\x13\0\x14\x04\0\x20[method]dispatcher.event-channel\x01\x15\x01i\x0b\x01@\x01\
-\x04self\x13\0\x16\x04\0\"[method]dispatcher.command-channel\x01\x17\x01p\x09\x01\
-p\x01\x01o\x02\x18\x19\x01@\x01\x04self\x13\0\x1a\x04\0\x1b[method]dispatcher.di\
-spatch\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\x07context\x1c\0\x1d\x04\0\x0fcreate-r\
-enderer\x01\x1e\x04\0'local:immediate-renderer-example/render\x05\x12\x04\0.loca\
-l:immediate-renderer-example/example-world\x04\0\x0b\x13\x01\0\x0dexample-world\x03\
-\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-\
-bindgen-rust\x060.53.1";
+B\x0d\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
+source\x03\x05bytes\x04\x04\0\x0aimage-data\x03\0\x05\x01q\x01\x0aimage-data\x01\
+\x06\0\x04\0\x06effect\x03\0\x07\x01m#\x07default\x04none\x0ccontext-menu\x04hel\
+p\x07pointer\x08progress\x04wait\x04cell\x09crosshair\x04text\x0dvertical-text\x05\
+alias\x04copy\x04move\x07no-drop\x0bnot-allowed\x04grab\x08grabbing\x0aall-scrol\
+l\x0acol-resize\x0arow-resize\x08n-resize\x08e-resize\x08s-resize\x08w-resize\x09\
+ne-resize\x09nw-resize\x09se-resize\x09sw-resize\x09ew-resize\x09ns-resize\x0bne\
+sw-resize\x0bnwse-resize\x07zoom-in\x08zoom-out\x04\0\x0ccursor-style\x03\0\x09\x01\
+q\x03\x0bopen-window\x01\x01\0\x0drequest-image\x01\x03\0\x06cursor\x01\x0a\0\x04\
+\0\x07command\x03\0\x0b\x03\0,local:immediate-renderer-example/interaction\x05\x0b\
+\x01B\x0c\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04\
+ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\
+\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\x05\x04left\x05right\x06\
+middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\x01q\x05\x09modifiers\x01\
+\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amou\
+se-move\0\0\x04\0\x05event\x03\0\x08\x01q\x02\x05event\x01\x09\0\x0bopen-window\x01\
+s\0\x04\0\x0eunhandle-event\x03\0\x0a\x03\0\x1elocal:immediate-renderer/types\x05\
+\x0c\x02\x03\0\x04\x07command\x02\x03\0\x04\x06effect\x02\x03\0\x03\x0erender-co\
+ntext\x02\x03\0\x05\x05event\x02\x03\0\x05\x0eunhandle-event\x01B%\x02\x03\x02\x01\
+\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\x0e\x04\0\x06effect\x03\0\x02\x02\x03\
+\x02\x01\x0f\x04\0\x0erender-context\x03\0\x04\x02\x03\x02\x01\x10\x04\0\x05even\
+t\x03\0\x06\x02\x03\x02\x01\x11\x04\0\x0eunhandle-event\x03\0\x08\x04\0\x0devent\
+-channel\x03\x01\x04\0\x0fcommand-channel\x03\x01\x04\0\x0adispatcher\x03\x01\x01\
+h\x0a\x01p\x07\x01@\x02\x04self\x0d\x06events\x0e\x01\0\x04\0\x1a[method]event-c\
+hannel.post\x01\x0f\x01h\x0b\x01p\x03\x01@\x02\x04self\x10\x07effects\x11\x01\0\x04\
+\0\x1c[method]command-channel.post\x01\x12\x01h\x0c\x01i\x0a\x01@\x01\x04self\x13\
+\0\x14\x04\0\x20[method]dispatcher.event-channel\x01\x15\x01i\x0b\x01@\x01\x04se\
+lf\x13\0\x16\x04\0\"[method]dispatcher.command-channel\x01\x17\x01p\x09\x01p\x01\
+\x01o\x02\x18\x19\x01@\x01\x04self\x13\0\x1a\x04\0\x1b[method]dispatcher.dispatc\
+h\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\x07context\x1c\0\x1d\x04\0\x0fcreate-render\
+er\x01\x1e\x04\0'local:immediate-renderer-example/render\x05\x12\x04\0.local:imm\
+ediate-renderer-example/example-world\x04\0\x0b\x13\x01\0\x0dexample-world\x03\0\
+\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bi\
+ndgen-rust\x060.53.1";
 
                                                                   #[inline(never)]
                                                                   #[doc(hidden)]

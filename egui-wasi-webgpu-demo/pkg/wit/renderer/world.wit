@@ -6,6 +6,7 @@ interface types {
         pointer(location),
         mouse-down(mouse-button),
         mouse-up(mouse-button),
+        mouse-move,
     }
 
     variant unhandle-event {

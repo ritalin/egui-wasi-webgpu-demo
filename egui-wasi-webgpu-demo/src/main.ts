@@ -53,11 +53,8 @@ class DomEventBridge {
     return undefined;
   }
 
-  static bind(
-    canvas: HTMLCanvasElement,
-    callback: (events: DispatchEvent[]) => any,
-  ) {
-    canvas.addEventListener("click", (ev) => {
+  static bind(canvas: HTMLCanvasElement, callback: (events: DispatchEvent[]) => any) {
+    canvas.addEventListener("pointerdown", (ev) => {
       const rect = canvas.getBoundingClientRect();
       callback([
         {
@@ -68,9 +65,30 @@ class DomEventBridge {
           tag: "mouse-down",
           val: "left",
         },
+      ]);
+    });
+    canvas.addEventListener("pointerup", (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      callback([
+        {
+          tag: "pointer",
+          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+        },
         {
           tag: "mouse-up",
           val: "left",
+        },
+      ]);
+    });
+    canvas.addEventListener("pointermove", (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      callback([
+        {
+          tag: "pointer",
+          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+        },
+        {
+          tag: "mouse-move",
         },
       ]);
     });
@@ -105,9 +123,7 @@ class WasmEngine {
   launch(route: Route, canvas: HTMLCanvasElement): boolean {
     if (this.dispatchers.has(route)) return false;
 
-    const surface = this.runtime.createRenderContext(
-      canvas,
-    ) as unknown as RenderContext;
+    const surface = this.runtime.createRenderContext(canvas) as unknown as RenderContext;
 
     let dispatcher;
     switch (route) {
@@ -182,9 +198,7 @@ class AppLoop {
           if (canvas === undefined) continue;
 
           if (this.engine.launch(route, canvas)) {
-            DomEventBridge.bind(canvas, (events) =>
-              this.addEvent(route, events),
-            );
+            DomEventBridge.bind(canvas, (events) => this.addEvent(route, events));
           }
           break;
         }
@@ -195,9 +209,7 @@ class AppLoop {
           DomEventBridge.show(canvas);
 
           if (this.engine.launch(route, canvas)) {
-            DomEventBridge.bind(canvas, (events) =>
-              this.addEvent(route, events),
-            );
+            DomEventBridge.bind(canvas, (events) => this.addEvent(route, events));
           }
           break;
         }
@@ -213,14 +225,9 @@ class AppLoop {
 }
 
 const imports = { ...getImportObject(), ...new WASIShim().getImportObject() };
-const defaultLoader = undefined as unknown as (
-  path: string,
-) => Promise<WebAssembly.Module>;
+const defaultLoader = undefined as unknown as (path: string) => Promise<WebAssembly.Module>;
 
-const instance = await instantiate(
-  defaultLoader,
-  imports as unknown as ImportObject,
-);
+const instance = await instantiate(defaultLoader, imports as unknown as ImportObject);
 
 const runtime = await createWebGpuRuntime();
 const engine = new WasmEngine(runtime, instance);
