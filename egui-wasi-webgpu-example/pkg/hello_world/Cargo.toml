@@ -1,0 +1,17 @@
+[package]
+name = "hello_world"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasi-renderer.workspace = true
+wit-bindgen.workspace = true
+anyhow.workspace = true
+bytemuck.workspace = true
+egui.workspace = true
+epaint.workspace = true
+image.workspace = true
+egui_extras.workspace = true

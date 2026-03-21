@@ -1,0 +1,20 @@
+package local:immediate-renderer-example;
+
+interface interaction {
+    type route = string;
+    type url = string;
+
+    variant command {
+        open-window(route),
+        request-image(url),
+    }
+
+    variant effect {
+        image-data(image-data),
+    }
+
+    record image-data {
+        source: url,
+        bytes: list<u8>,
+    }
+}

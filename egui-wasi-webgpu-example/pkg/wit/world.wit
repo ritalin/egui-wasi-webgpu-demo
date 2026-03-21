@@ -1,0 +1,27 @@
+package local:immediate-renderer-example;
+
+interface render {
+    use interaction.{command, effect};
+    use local:webgpu-runtime/surface.{render-context};
+    use local:immediate-renderer/types.{event, unhandle-event};
+
+    resource event-channel {
+        post: func(events: list<event>);
+    }
+    resource command-channel {
+        post: func(effects: list<effect>);
+    }
+
+    resource dispatcher {
+        event-channel: func() -> event-channel;
+        command-channel: func() -> command-channel;
+        dispatch: func() -> tuple<list<unhandle-event>, list<command>>;
+    }
+
+    create-renderer: func(context: render-context) -> dispatcher;
+}
+
+world example-world {
+    import local:webgpu-runtime/surface;
+    export render;
+}
