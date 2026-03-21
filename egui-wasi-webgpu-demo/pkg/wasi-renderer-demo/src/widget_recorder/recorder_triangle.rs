@@ -12,11 +12,12 @@ const SAMPLE_IAMGE: &'static [u8] = include_bytes!("../../assets/img/happy-tree.
 pub struct TriangleRecorder;
 
 impl recorder_core::Recorder for TriangleRecorder {
-    type ImageSpec = BitmapImage;
-    type ImageSpecs = std::vec::IntoIter<Self::ImageSpec>;
-    type Output = TriangleOutput;
+    type ImageSpec<'s> = BitmapImage;
+    type ImageSpecs<'s> = std::vec::IntoIter<Self::ImageSpec<'s>>;
+    type Effect = ();
+    type Output<'s> = TriangleOutput;
 
-    fn preset_textures(&self) -> Self::ImageSpecs {
+    fn preset_textures<'s>(&'s self) -> Self::ImageSpecs<'s> {
         let image = image::load_from_memory(SAMPLE_IAMGE).context("fauld to load sample image").unwrap().to_rgba8();
         let (width, height) = image.dimensions();
 
@@ -26,7 +27,11 @@ impl recorder_core::Recorder for TriangleRecorder {
         }].into_iter()
     }
 
-    fn record(&mut self, screen: ScreenDescriptor, _events: &[types::Event]) -> Result<Self::Output, recorder_core::RecorderError> {
+    fn record<'s, I>(&'s mut self, screen: ScreenDescriptor, _events: &[types::Event], _effects: I) -> Result<Self::Output<'s>, recorder_core::RecorderError>
+    where
+        I: IntoIterator,
+        I::Item: Into<()>,
+    {
         Ok(TriangleOutput::new(screen))
     }
 }
@@ -67,6 +72,7 @@ impl TriangleOutput {
 impl recorder_core::RecordOutput for TriangleOutput {
     type ImageSpec<'s> = BitmapImage;
     type Textures<'s> = std::vec::IntoIter<BitmapImage>;
+    type RequestCommand = ();
 
     fn meshes<'s>(&'s self) -> Vec<Option<render_core::Mesh<'s>>> {
         let mesh = render_core::Mesh{
@@ -88,6 +94,10 @@ impl recorder_core::RecordOutput for TriangleOutput {
     }
 
     fn unhandle_events(&self) -> Vec<types::UnhandleEvent> {
+        vec![]
+    }
+
+    fn command_requests(&self) -> Vec<Self::RequestCommand> {
         vec![]
     }
 }

@@ -3,19 +3,18 @@ pub mod demo_world;
 use std::{cell::RefCell, marker::PhantomData};
 use anyhow::Context;
 
-use wasi_renderer::{ScreenDescriptor, recorder_core, render_core, bindings::{surface, types, webgpu}};
+use wasi_renderer::{EngineCore, ScreenDescriptor, bindings::{surface, types, webgpu}, recorder_core, render_core};
 use wasi_renderer::recorder_core::RecordOutput;
 
 use crate::{bindings::demo_world::exports::local::immediate_renderer_demo::render, widget_recorder};
 
-struct DispatcherEngine<'a, Recorder: recorder_core::Recorder> {
+struct DispatcherEngine<'a, Recorder: recorder_core::Recorder<Effect = ()>> {
     events: Vec<types::Event>,
     recorder: Recorder,
     renderer: render_core::Renderer,
     _marker: PhantomData<&'a ()>,
-
 }
-impl<'a, Recorder: recorder_core::Recorder> DispatcherEngine<'a, Recorder> {
+impl<'a, Recorder: recorder_core::Recorder<Effect = ()>> DispatcherEngine<'a, Recorder> {
     fn new(recorder: Recorder, mut renderer: render_core::Renderer) -> Self {
         renderer.send_texture(recorder.preset_textures());
 
@@ -23,13 +22,15 @@ impl<'a, Recorder: recorder_core::Recorder> DispatcherEngine<'a, Recorder> {
     }
 }
 
-trait Engine {
-    fn push_event(&mut self, events: types::Event);
-    fn push_event_all(&mut self, events: Vec<types::Event>);
-    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, anyhow::Error>;
+#[derive(Debug, thiserror::Error)]
+enum EguiEngineError {
+    #[error(transparent)]
+    RenderError(#[from] render_core::error::RenderError),
+    #[error(transparent)]
+    RecorderError(#[from] recorder_core::RecorderError),
 }
 
-impl<'a, Recorder: recorder_core::Recorder + 'a> Engine for DispatcherEngine<'a, Recorder> {
+impl<'a, Recorder: recorder_core::Recorder<Effect = ()> + 'a, > EngineCore<EguiEngineError> for DispatcherEngine<'a, Recorder> {
     fn push_event(&mut self, event: types::Event) {
         self.events.push(event);
     }
@@ -38,12 +39,14 @@ impl<'a, Recorder: recorder_core::Recorder + 'a> Engine for DispatcherEngine<'a,
         self.events.extend(events);
     }
 
-    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, anyhow::Error> {
-        self.renderer.send_uniform(
-            render_core::UniformInfo::from_size(screen.size, screen.scale_factor)
-        ).context("Failed to send uniform")?;
+    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, EguiEngineError> {
+        self.renderer
+            .send_uniform(
+                render_core::UniformInfo::from_size(screen.size, screen.scale_factor)
+            )?
+        ;
 
-        let output = self.recorder.record(screen, &self.events.split_off(0))?;
+        let output = self.recorder.record(screen, &self.events.split_off(0), std::iter::empty::<()>())?;
         self.renderer.send_texture(output.textures());
         let resolved = self.renderer.update_mesh(render_core::MeshVectorIter::new(&output.meshes()))?;
         self.renderer.render(canvas.get_current_texture(), resolved)?;
@@ -57,10 +60,10 @@ impl<'a, Recorder: recorder_core::Recorder + 'a> Engine for DispatcherEngine<'a,
 struct DispatcherImpl {
     context: surface::RenderContext,
     canvas: webgpu::GpuCanvasContext,
-    engine: RefCell<Box<dyn Engine>>,
+    engine: RefCell<Box<dyn EngineCore<EguiEngineError>>>,
 }
 impl DispatcherImpl {
-    fn new<Recorder: for<'a> recorder_core::Recorder + 'static>(context: surface::RenderContext, recorder: Recorder) -> Self {
+    fn new<Recorder: for<'a> recorder_core::Recorder<Effect = ()> + 'static>(context: surface::RenderContext, recorder: Recorder) -> Self {
         let renderer = render_core::Renderer::new(&context);
         let inner = DispatcherEngine::new(recorder, renderer);
 
@@ -76,7 +79,7 @@ impl DispatcherImpl {
         let scale_factor = self.context.scale_factor();
 
         let mut engine = self.engine.borrow_mut();
-        engine.render(&self.canvas, ScreenDescriptor { size: screen_size, scale_factor })
+        engine.render(&self.canvas, ScreenDescriptor { size: screen_size, scale_factor }).context("render failed")
     }
 }
 

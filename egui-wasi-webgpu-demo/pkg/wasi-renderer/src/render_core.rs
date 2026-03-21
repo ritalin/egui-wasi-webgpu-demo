@@ -8,7 +8,7 @@ pub use mesh::{Mesh, ScissorRect, MeshVectorIter, ResolvedMeshSet};
 mod texture;
 pub use texture::{ImageSpec, TextureKey, SamplingOption};
 
-mod error;
+pub mod error;
 
 pub struct Renderer {
     device: webgpu::GpuDevice,

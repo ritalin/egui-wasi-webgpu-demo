@@ -700,6 +700,7 @@ dependencies = [
  "egui",
  "epaint",
  "image",
+ "thiserror",
  "wasi-renderer",
  "wit-bindgen 0.50.0",
 ]

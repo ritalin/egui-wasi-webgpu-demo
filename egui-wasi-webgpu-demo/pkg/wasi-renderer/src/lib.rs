@@ -23,4 +23,12 @@ impl ScreenDescriptor {
     }
 }
 
+pub trait EngineCore<EngineError: std::error::Error> {
+    fn push_event(&mut self, events: types::Event);
+    fn push_event_all(&mut self, events: Vec<types::Event>);
+    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, EngineError>;
+}
+
 pub use bindings::export as _unused_export;
+
+use crate::bindings::webgpu;

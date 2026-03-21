@@ -1,34 +1,36 @@
-use std::marker::PhantomData;
-
 use egui::{RawInput, Vec2};
 use wasi_renderer::{ScreenDescriptor, recorder_core, bindings::types};
 
 use crate::supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}};
 
-pub struct CounterWidgetRecorder<'a> {
+pub struct CounterWidgetRecorder {
     egui_context: egui::Context,
     values: Vec<usize>,
-    _marker: PhantomData<&'a ()>
 }
 
-impl<'a> CounterWidgetRecorder<'a> {
+impl CounterWidgetRecorder {
     pub fn new() -> Self {
         let egui_context = egui::Context::default();
 
-        Self { egui_context, values: vec![0], _marker: PhantomData }
+        Self { egui_context, values: vec![0] }
     }
 }
 
-impl<'a> recorder_core::Recorder for CounterWidgetRecorder<'a> {
-    type ImageSpec = EguiTexture<'a>;
-    type ImageSpecs = EguiTextureSet<'a>;
-    type Output = EguiOutput;
+impl recorder_core::Recorder for CounterWidgetRecorder {
+    type ImageSpec<'s> = EguiTexture<'s>;
+    type ImageSpecs<'s> = EguiTextureSet<'s>;
+    type Effect = ();
+    type Output<'s> = EguiOutput;
 
-    fn preset_textures(&self) -> Self::ImageSpecs {
+    fn preset_textures<'s>(&'s self) -> Self::ImageSpecs<'s> {
         EguiTextureSet::default()
     }
 
-    fn record(&mut self, screen: ScreenDescriptor, events: &[types::Event]) -> Result<Self::Output, recorder_core::RecorderError> {
+    fn record<'s, I>(&'s mut self, screen: ScreenDescriptor, events: &[types::Event], _effects: I) -> Result<Self::Output<'s>, recorder_core::RecorderError>
+    where
+        I: IntoIterator,
+        I::Item: Into<()>,
+    {
         let mut input = RawInput::default();
         egui_supports::populate_events(events, &screen, &mut input);
 

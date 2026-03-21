@@ -16,6 +16,7 @@ impl EguiOutput {
 impl<'a> RecordOutput for EguiOutput {
     type ImageSpec<'s> = EguiTexture<'s>;
     type Textures<'s> = EguiTextureSet<'s>;
+    type RequestCommand = ();
 
     fn meshes<'s>(&'s self) -> Vec<Option<render_core::Mesh<'s>>> {
         self.shapes.iter()
@@ -53,6 +54,10 @@ impl<'a> RecordOutput for EguiOutput {
 
     fn unhandle_events(&self) -> Vec<types::UnhandleEvent> {
         self.events.clone()
+    }
+
+    fn command_requests(&self) -> Vec<Self::RequestCommand> {
+        vec![]
     }
 }
 
