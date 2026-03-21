@@ -1,5 +1,6 @@
 packages:
   - "./landing-integration"
   - "./egui-wasi-webgpu-demo"
+  - "./egui-wasi-webgpu-example"
   - "./wasi-webgpu-shim"
   - "./wasi-webgpu-runtime"
