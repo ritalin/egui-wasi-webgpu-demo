@@ -12,6 +12,12 @@ pub enum ExampleCommand {
     OpenWindow(String),
     RequestImage { paths: Vec<String> },
     Cursor(egui::CursorIcon),
+    Clipboard(ClipboardData),
+}
+
+#[derive(Debug, Clone)]
+pub enum ClipboardData {
+    Text(String),
 }
 
 #[derive(Debug, Clone)]

@@ -1,4 +1,4 @@
-import type { Command, CursorStyle } from "pkg/interfaces/local-immediate-renderer-example-interaction";
+import type { ClipboardData, Command, CursorStyle } from "pkg/interfaces/local-immediate-renderer-example-interaction";
 import type { WasmEngine } from "./engine";
 import { DomEventBridge } from "./event-bridge";
 
@@ -6,7 +6,8 @@ export type Route = "route://app/main";
 export type HostCommand =
   | { tag: "command://app/new-window" }
   | { tag: "command://app/open-window" }
-  | { tag: "command://app/load-image"; paths: string[] };
+  | { tag: "command://app/load-image"; paths: string[] }
+  | { tag: "command://app/write-clipboard"; data: ClipboardData };
 
 export type AppEffect = "effect://app/image-data";
 
@@ -29,6 +30,12 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
       }
       case "cursor": {
         changeCursor(route, cmd.val);
+        break;
+      }
+      case "clipboard": {
+        setTimeout(
+          async () => await handleHostCommand(engine, route, { tag: "command://app/write-clipboard", data: cmd.val }),
+        );
         break;
       }
     }
@@ -78,6 +85,14 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
           })
           .catch((err) => console.error(err));
       });
+      break;
+    }
+    case "command://app/write-clipboard": {
+      switch (cmd.data.tag) {
+        case "text":
+          await window.navigator.clipboard.writeText(cmd.data.val);
+          break;
+      }
       break;
     }
   }

@@ -34,6 +34,9 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::MouseMove => {
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
+            types::Event::Cut => input.events.push(egui::Event::Cut),
+            types::Event::Copy => input.events.push(egui::Event::Copy),
+            types::Event::Paste(text) => input.events.push(egui::Event::Paste(text.clone())),
         }
     }
 

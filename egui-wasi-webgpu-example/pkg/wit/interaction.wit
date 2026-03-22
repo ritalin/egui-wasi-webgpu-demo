@@ -8,6 +8,7 @@ interface interaction {
         open-window(route),
         request-image(list<url>),
         cursor(cursor-style),
+        clipboard(clipboard-data),
     }
 
     variant effect {
@@ -55,5 +56,9 @@ interface interaction {
         nwse-resize,
         zoom-in,
         zoom-out,
+    }
+
+    variant clipboard-data {
+        text(string),
     }
 }

@@ -1,4 +1,4 @@
-use crate::{ExampleCommand, ExampleEffect, bindings::interaction};
+use crate::{ClipboardData, ExampleCommand, ExampleEffect, bindings::interaction};
 
 impl From<ExampleCommand> for interaction::Command {
     fn from(value: ExampleCommand) -> Self {
@@ -6,6 +6,7 @@ impl From<ExampleCommand> for interaction::Command {
             ExampleCommand::OpenWindow(route) => interaction::Command::OpenWindow(route),
             ExampleCommand::RequestImage { paths } => interaction::Command::RequestImage(paths),
             ExampleCommand::Cursor(cursor) => interaction::Command::Cursor(cursor.into()),
+            ExampleCommand::Clipboard(data) => interaction::Command::Clipboard(data.into()),
         }
     }
 }
@@ -68,6 +69,14 @@ impl From<egui::CursorIcon> for interaction::CursorStyle {
             egui::CursorIcon::ResizeRow => interaction::CursorStyle::RowResize,
             egui::CursorIcon::ZoomIn => interaction::CursorStyle::ZoomIn,
             egui::CursorIcon::ZoomOut => interaction::CursorStyle::ZoomOut,
+        }
+    }
+}
+
+impl From<ClipboardData> for interaction::ClipboardData {
+    fn from(value: ClipboardData) -> Self {
+        match value {
+            ClipboardData::Text(text) => interaction::ClipboardData::Text(text),
         }
     }
 }

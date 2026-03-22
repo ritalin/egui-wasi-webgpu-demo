@@ -7,6 +7,9 @@ interface types {
         mouse-down(mouse-button),
         mouse-up(mouse-button),
         mouse-move,
+        cut,
+        copy,
+        paste(string),
     }
 
     variant unhandle-event {

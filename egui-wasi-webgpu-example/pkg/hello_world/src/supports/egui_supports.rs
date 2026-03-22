@@ -1,7 +1,7 @@
 use egui::{Modifiers, PointerButton, Pos2};
 use wasi_renderer::{ScreenDescriptor, bindings::types};
 
-use crate::ExampleCommand;
+use crate::{ClipboardData, ExampleCommand};
 
 pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input: &mut egui::RawInput) {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();
@@ -36,6 +36,9 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::MouseMove => {
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
+            types::Event::Cut => input.events.push(egui::Event::Cut),
+            types::Event::Copy => input.events.push(egui::Event::Copy),
+            types::Event::Paste(text) => input.events.push(egui::Event::Paste(text.clone())),
         }
     }
 
@@ -57,12 +60,20 @@ impl<'a> From<MouseButtonW<'a>> for PointerButton {
 }
 
 pub fn push_platform_output(output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
-    let egui::PlatformOutput{ commands: output_cmds, cursor_icon, ime, .. } = output;
-    // println!("Platform output/cursor: {:?}, commands/len: {}, ime: {:?}",
+    let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, .. } = output;
+    // println!("Platform output/ime: {:?}",
     //     &cursor_icon, output_cmds.len(), ime
     // );
 
     commands.push(ExampleCommand::Cursor(cursor_icon));
 
-
+    for cmd in clipboard_cmds {
+        match cmd {
+            egui::OutputCommand::CopyText(text) => {
+                commands.push(ExampleCommand::Clipboard(ClipboardData::Text(text)));
+            }
+            egui::OutputCommand::CopyImage(_image) => todo!(),
+            egui::OutputCommand::OpenUrl(_url) => (),
+        }
+    }
 }

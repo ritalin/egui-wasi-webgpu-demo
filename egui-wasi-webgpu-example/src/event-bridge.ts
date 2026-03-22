@@ -58,6 +58,34 @@ export class DomEventBridge {
         },
       ]);
     });
+    canvas.addEventListener("copy", (ev) => {
+      ev.preventDefault();
+      callback([
+        {
+          tag: "copy",
+        },
+      ]);
+    });
+    canvas.addEventListener("cut", (ev) => {
+      ev.preventDefault();
+      callback([
+        {
+          tag: "cut",
+        },
+      ]);
+    });
+    canvas.addEventListener("paste", (ev) => {
+      ev.preventDefault();
+      const data = ev.clipboardData?.getData("text/plain");
+      if (data == undefined) return;
+
+      callback([
+        {
+          tag: "paste",
+          val: data,
+        },
+      ]);
+    });
   }
 
   static show(canvas: HTMLCanvasElement) {
