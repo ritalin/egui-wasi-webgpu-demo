@@ -1,4 +1,6 @@
-use crate::{ClipboardData, ExampleCommand, ExampleEffect, bindings::interaction};
+use wasi_renderer::bindings::types;
+
+use crate::{ClipboardData, ExampleCommand, ExampleEffect, bindings::interaction, supports::KeyWrapper};
 
 impl From<ExampleCommand> for interaction::Command {
     fn from(value: ExampleCommand) -> Self {
@@ -77,6 +79,23 @@ impl From<ClipboardData> for interaction::ClipboardData {
     fn from(value: ClipboardData) -> Self {
         match value {
             ClipboardData::Text(text) => interaction::ClipboardData::Text(text),
+        }
+    }
+}
+
+impl<'a> From<KeyWrapper<'a>> for egui::Key {
+    fn from(KeyWrapper(value): KeyWrapper) -> Self {
+        match value {
+            types::Keys::Whitespace(types::WhitespaceKey::Enter) => egui::Key::Enter,
+            types::Keys::Whitespace(types::WhitespaceKey::Space) => egui::Key::Space,
+            types::Keys::Whitespace(types::WhitespaceKey::Tab) => egui::Key::Tab,
+            types::Keys::Edit(types::EditKey::Backspace) => egui::Key::Backspace,
+            types::Keys::Edit(types::EditKey::Delete) => egui::Key::Delete,
+            types::Keys::Ui(types::UiKey::Escape) => egui::Key::Escape,
+            types::Keys::Navi(types::NaviKey::ArrowDown) => egui::Key::ArrowDown,
+            types::Keys::Navi(types::NaviKey::ArrowLeft) => egui::Key::ArrowLeft,
+            types::Keys::Navi(types::NaviKey::ArrowRight) => egui::Key::ArrowRight,
+            types::Keys::Navi(types::NaviKey::ArrowUp) => egui::Key::ArrowUp,
         }
     }
 }

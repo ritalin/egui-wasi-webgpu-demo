@@ -7,6 +7,8 @@ interface types {
         mouse-down(mouse-button),
         mouse-up(mouse-button),
         mouse-move,
+        key-down(tuple<keys, key-options>),
+        key-up(keys),
         cut,
         copy,
         paste(string),
@@ -40,6 +42,48 @@ interface types {
         middle,
         back,
         forward,
+    }
+
+    flags key-options {
+        repeat,
+    }
+
+    variant keys {
+        whitespace(whitespace-key),
+        edit(edit-key),
+        ui(ui-key),
+        navi(navi-key),
+    }
+
+    enum whitespace-key {
+        enter,
+        tab,
+        space,
+    }
+
+    enum edit-key {
+        backspace,
+        delete,
+    }
+
+    enum ui-key {
+        escape,
+    }
+
+    enum navi-key {
+        arrow-down,
+        arrow-left,
+        arrow-right,
+        arrow-up,
+        // end,
+        // home,
+        // page-down,
+        // page-up,
+    }
+
+    enum history-ops {
+        undo,
+        redo,
     }
 }
 

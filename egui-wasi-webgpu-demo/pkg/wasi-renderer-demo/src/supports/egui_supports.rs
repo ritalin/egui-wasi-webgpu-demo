@@ -1,6 +1,8 @@
 use egui::{Modifiers, PointerButton, Pos2};
 use wasi_renderer::{ScreenDescriptor, bindings::types};
 
+use crate::supports;
+
 pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input: &mut egui::RawInput) {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();
     viewport.native_pixels_per_point = Some(screen.scale_factor);
@@ -33,6 +35,24 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             }
             types::Event::MouseMove => {
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
+            }
+            types::Event::KeyDown((key, opts)) => {
+                input.events.push(egui::Event::Key {
+                    key: supports::KeyWrapper(key).into(),
+                    physical_key: None,
+                    pressed: true,
+                    repeat: opts.contains(types::KeyOptions::REPEAT),
+                    modifiers
+                });
+            }
+            types::Event::KeyUp(key) => {
+                input.events.push(egui::Event::Key {
+                    key: supports::KeyWrapper(key).into(),
+                    physical_key: None,
+                    pressed: false,
+                    repeat: false,
+                    modifiers
+                });
             }
             types::Event::Cut => input.events.push(egui::Event::Cut),
             types::Event::Copy => input.events.push(egui::Event::Copy),

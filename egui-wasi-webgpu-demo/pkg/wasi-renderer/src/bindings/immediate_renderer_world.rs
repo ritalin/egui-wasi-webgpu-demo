@@ -14784,6 +14784,187 @@ pub mod wasi {
                                                                                         }
                                                                                       }
 
+                                                                                      wit_bindgen::rt::bitflags::bitflags! {
+                                                                                        #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Clone, Copy)]
+                                                                                        pub struct KeyOptions: u8 {
+                                                                                          const REPEAT = 1 << 0;
+                                                                                        }
+                                                                                      }
+                                                                                      #[repr(u8)]
+                                                                                      #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+                                                                                      pub enum WhitespaceKey {
+                                                                                        Enter,
+                                                                                        Tab,
+                                                                                        Space,
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for WhitespaceKey {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            WhitespaceKey::Enter => {
+                                                                                              f.debug_tuple("WhitespaceKey::Enter").finish()
+                                                                                            }
+                                                                                            WhitespaceKey::Tab => {
+                                                                                              f.debug_tuple("WhitespaceKey::Tab").finish()
+                                                                                            }
+                                                                                            WhitespaceKey::Space => {
+                                                                                              f.debug_tuple("WhitespaceKey::Space").finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      impl WhitespaceKey{
+                                                                                        #[doc(hidden)]
+                                                                                        pub unsafe fn _lift(val: u8) -> WhitespaceKey{
+                                                                                          if !cfg!(debug_assertions) {
+                                                                                            return unsafe { ::core::mem::transmute(val) };
+                                                                                          }
+
+                                                                                          match val {
+                                                                                            0 => WhitespaceKey::Enter,
+                                                                                            1 => WhitespaceKey::Tab,
+                                                                                            2 => WhitespaceKey::Space,
+
+                                                                                            _ => panic!("invalid enum discriminant"),
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      #[repr(u8)]
+                                                                                      #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+                                                                                      pub enum EditKey {
+                                                                                        Backspace,
+                                                                                        Delete,
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for EditKey {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            EditKey::Backspace => {
+                                                                                              f.debug_tuple("EditKey::Backspace").finish()
+                                                                                            }
+                                                                                            EditKey::Delete => {
+                                                                                              f.debug_tuple("EditKey::Delete").finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      impl EditKey{
+                                                                                        #[doc(hidden)]
+                                                                                        pub unsafe fn _lift(val: u8) -> EditKey{
+                                                                                          if !cfg!(debug_assertions) {
+                                                                                            return unsafe { ::core::mem::transmute(val) };
+                                                                                          }
+
+                                                                                          match val {
+                                                                                            0 => EditKey::Backspace,
+                                                                                            1 => EditKey::Delete,
+
+                                                                                            _ => panic!("invalid enum discriminant"),
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      #[repr(u8)]
+                                                                                      #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+                                                                                      pub enum UiKey {
+                                                                                        Escape,
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for UiKey {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            UiKey::Escape => {
+                                                                                              f.debug_tuple("UiKey::Escape").finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      impl UiKey{
+                                                                                        #[doc(hidden)]
+                                                                                        pub unsafe fn _lift(val: u8) -> UiKey{
+                                                                                          if !cfg!(debug_assertions) {
+                                                                                            return unsafe { ::core::mem::transmute(val) };
+                                                                                          }
+
+                                                                                          match val {
+                                                                                            0 => UiKey::Escape,
+
+                                                                                            _ => panic!("invalid enum discriminant"),
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      #[repr(u8)]
+                                                                                      #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+                                                                                      pub enum NaviKey {
+                                                                                        ArrowDown,
+                                                                                        ArrowLeft,
+                                                                                        ArrowRight,
+                                                                                        ArrowUp,
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for NaviKey {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            NaviKey::ArrowDown => {
+                                                                                              f.debug_tuple("NaviKey::ArrowDown").finish()
+                                                                                            }
+                                                                                            NaviKey::ArrowLeft => {
+                                                                                              f.debug_tuple("NaviKey::ArrowLeft").finish()
+                                                                                            }
+                                                                                            NaviKey::ArrowRight => {
+                                                                                              f.debug_tuple("NaviKey::ArrowRight").finish()
+                                                                                            }
+                                                                                            NaviKey::ArrowUp => {
+                                                                                              f.debug_tuple("NaviKey::ArrowUp").finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      impl NaviKey{
+                                                                                        #[doc(hidden)]
+                                                                                        pub unsafe fn _lift(val: u8) -> NaviKey{
+                                                                                          if !cfg!(debug_assertions) {
+                                                                                            return unsafe { ::core::mem::transmute(val) };
+                                                                                          }
+
+                                                                                          match val {
+                                                                                            0 => NaviKey::ArrowDown,
+                                                                                            1 => NaviKey::ArrowLeft,
+                                                                                            2 => NaviKey::ArrowRight,
+                                                                                            3 => NaviKey::ArrowUp,
+
+                                                                                            _ => panic!("invalid enum discriminant"),
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      #[derive(Clone, Copy)]
+                                                                                      pub enum Keys {
+                                                                                        Whitespace(WhitespaceKey),
+                                                                                        Edit(EditKey),
+                                                                                        Ui(UiKey),
+                                                                                        Navi(NaviKey),
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for Keys {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            Keys::Whitespace(e) => {
+                                                                                              f.debug_tuple("Keys::Whitespace").field(e).finish()
+                                                                                            }
+                                                                                            Keys::Edit(e) => {
+                                                                                              f.debug_tuple("Keys::Edit").field(e).finish()
+                                                                                            }
+                                                                                            Keys::Ui(e) => {
+                                                                                              f.debug_tuple("Keys::Ui").field(e).finish()
+                                                                                            }
+                                                                                            Keys::Navi(e) => {
+                                                                                              f.debug_tuple("Keys::Navi").field(e).finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
                                                                                       #[derive(Clone)]
                                                                                       pub enum Event {
                                                                                         Modifiers(ModifierOptions),
@@ -14791,6 +14972,8 @@ pub mod wasi {
                                                                                         MouseDown(MouseButton),
                                                                                         MouseUp(MouseButton),
                                                                                         MouseMove,
+                                                                                        KeyDown((Keys,KeyOptions,)),
+                                                                                        KeyUp(Keys),
                                                                                         Cut,
                                                                                         Copy,
                                                                                         Paste(_rt::String),
@@ -14812,6 +14995,12 @@ pub mod wasi {
                                                                                             }
                                                                                             Event::MouseMove => {
                                                                                               f.debug_tuple("Event::MouseMove").finish()
+                                                                                            }
+                                                                                            Event::KeyDown(e) => {
+                                                                                              f.debug_tuple("Event::KeyDown").field(e).finish()
+                                                                                            }
+                                                                                            Event::KeyUp(e) => {
+                                                                                              f.debug_tuple("Event::KeyUp").field(e).finish()
                                                                                             }
                                                                                             Event::Cut => {
                                                                                               f.debug_tuple("Event::Cut").finish()
@@ -14842,6 +15031,41 @@ pub mod wasi {
                                                                                           }
                                                                                         }
                                                                                       }
+                                                                                      #[repr(u8)]
+                                                                                      #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+                                                                                      pub enum HistoryOps {
+                                                                                        Undo,
+                                                                                        Redo,
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for HistoryOps {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            HistoryOps::Undo => {
+                                                                                              f.debug_tuple("HistoryOps::Undo").finish()
+                                                                                            }
+                                                                                            HistoryOps::Redo => {
+                                                                                              f.debug_tuple("HistoryOps::Redo").finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
+                                                                                      impl HistoryOps{
+                                                                                        #[doc(hidden)]
+                                                                                        pub unsafe fn _lift(val: u8) -> HistoryOps{
+                                                                                          if !cfg!(debug_assertions) {
+                                                                                            return unsafe { ::core::mem::transmute(val) };
+                                                                                          }
+
+                                                                                          match val {
+                                                                                            0 => HistoryOps::Undo,
+                                                                                            1 => HistoryOps::Redo,
+
+                                                                                            _ => panic!("invalid enum discriminant"),
+                                                                                          }
+                                                                                        }
+                                                                                      }
+
                                                                                       #[doc(hidden)]
                                                                                       #[macro_export]
                                                                                       macro_rules! __export_local_immediate_renderer_types_cabi{
@@ -15529,8 +15753,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer:immediate-renderer-world:imports and exports")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 29884] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xac\xe8\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30172] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xcc\xea\x01\x01A\x02\
 \x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16100,17 +16324,24 @@ self\x0b\x04size\x09\x01\0\x04\0'[method]render-context.request-set-size\x01\x0e
 \x01\x12\x01i\x05\x01@\x01\x04self\x0b\0\x13\x04\0#[method]render-context.get-pi\
 peline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\x04\0)[method]render-context.\
 get-uniform-layout\x01\x16\x04\0)[method]render-context.get-texture-layout\x01\x16\
-\x04\0\x1clocal:webgpu-runtime/surface\x05\x0b\x01B\x0c\x01n\x02\x04left\x05righ\
+\x04\0\x1clocal:webgpu-runtime/surface\x05\x0b\x01B\x1b\x01n\x02\x04left\x05righ\
 t\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\
 \x09super-key\x01\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\
 \x08location\x03\0\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\
-\0\x0cmouse-button\x03\0\x06\x01q\x08\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\
-\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-move\0\0\x03cut\0\0\x04c\
-opy\0\0\x05paste\x01s\0\x04\0\x05event\x03\0\x08\x01q\x02\x05event\x01\x09\0\x0b\
-open-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x0a\x04\0\x1elocal:immediate-re\
-nderer/types\x05\x0c\x04\01local:immediate-renderer/immediate-renderer-world\x04\
-\0\x0b\x1e\x01\0\x18immediate-renderer-world\x03\0\0\0G\x09producers\x01\x0cproc\
-essed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+\0\x0cmouse-button\x03\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01\
+m\x03\x05enter\x03tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09bac\
+kspace\x06delete\x04\0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\
+\0\x0e\x01m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08\
+navi-key\x03\0\x10\x01q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\
+\0\x04navi\x01\x11\0\x04\0\x04keys\x03\0\x12\x01o\x02\x13\x09\x01q\x0a\x09modifi\
+ers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\
+\x0amouse-move\0\0\x08key-down\x01\x14\0\x06key-up\x01\x13\0\x03cut\0\0\x04copy\0\
+\0\x05paste\x01s\0\x04\0\x05event\x03\0\x15\x01q\x02\x05event\x01\x16\0\x0bopen-\
+window\x01s\0\x04\0\x0eunhandle-event\x03\0\x17\x01m\x02\x04undo\x04redo\x04\0\x0b\
+history-ops\x03\0\x19\x04\0\x1elocal:immediate-renderer/types\x05\x0c\x04\01loca\
+l:immediate-renderer/immediate-renderer-world\x04\0\x0b\x1e\x01\0\x18immediate-r\
+enderer-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x07\
+0.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                 };
                                                                 )
                                                               }

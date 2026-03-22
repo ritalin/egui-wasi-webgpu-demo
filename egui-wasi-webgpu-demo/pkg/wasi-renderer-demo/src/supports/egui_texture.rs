@@ -1,6 +1,8 @@
 use wasi_renderer::{recorder_core::RecordOutput, ScreenDescriptor};
 use wasi_renderer::{render_core, bindings::{types, surface, webgpu}};
 
+use crate::supports::KeyWrapper;
+
 pub struct EguiOutput {
     screen: ScreenDescriptor,
     shapes: Vec<egui::ClippedPrimitive>,
@@ -140,5 +142,22 @@ impl<'a> Iterator for EguiTextureSet<'a> {
 impl<'a> Default for EguiTextureSet<'a> {
     fn default() -> Self {
         Self { textures: [].iter() }
+    }
+}
+
+impl<'a> From<KeyWrapper<'a>> for egui::Key {
+    fn from(KeyWrapper(value): KeyWrapper) -> Self {
+        match value {
+            types::Keys::Whitespace(types::WhitespaceKey::Enter) => egui::Key::Enter,
+            types::Keys::Whitespace(types::WhitespaceKey::Space) => egui::Key::Space,
+            types::Keys::Whitespace(types::WhitespaceKey::Tab) => egui::Key::Tab,
+            types::Keys::Edit(types::EditKey::Backspace) => egui::Key::Backspace,
+            types::Keys::Edit(types::EditKey::Delete) => egui::Key::Delete,
+            types::Keys::Ui(types::UiKey::Escape) => egui::Key::Escape,
+            types::Keys::Navi(types::NaviKey::ArrowDown) => egui::Key::ArrowDown,
+            types::Keys::Navi(types::NaviKey::ArrowLeft) => egui::Key::ArrowLeft,
+            types::Keys::Navi(types::NaviKey::ArrowRight) => egui::Key::ArrowRight,
+            types::Keys::Navi(types::NaviKey::ArrowUp) => egui::Key::ArrowUp,
+        }
     }
 }
