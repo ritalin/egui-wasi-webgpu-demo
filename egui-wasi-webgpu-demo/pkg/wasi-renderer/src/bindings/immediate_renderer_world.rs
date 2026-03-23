@@ -14965,72 +14965,6 @@ pub mod wasi {
                                                                                           }
                                                                                         }
                                                                                       }
-                                                                                      #[derive(Clone)]
-                                                                                      pub enum Event {
-                                                                                        Modifiers(ModifierOptions),
-                                                                                        Pointer(Location),
-                                                                                        MouseDown(MouseButton),
-                                                                                        MouseUp(MouseButton),
-                                                                                        MouseMove,
-                                                                                        KeyDown((Keys,KeyOptions,)),
-                                                                                        KeyUp(Keys),
-                                                                                        Cut,
-                                                                                        Copy,
-                                                                                        Paste(_rt::String),
-                                                                                      }
-                                                                                      impl ::core::fmt::Debug for Event {
-                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                                                                                          match self {
-                                                                                            Event::Modifiers(e) => {
-                                                                                              f.debug_tuple("Event::Modifiers").field(e).finish()
-                                                                                            }
-                                                                                            Event::Pointer(e) => {
-                                                                                              f.debug_tuple("Event::Pointer").field(e).finish()
-                                                                                            }
-                                                                                            Event::MouseDown(e) => {
-                                                                                              f.debug_tuple("Event::MouseDown").field(e).finish()
-                                                                                            }
-                                                                                            Event::MouseUp(e) => {
-                                                                                              f.debug_tuple("Event::MouseUp").field(e).finish()
-                                                                                            }
-                                                                                            Event::MouseMove => {
-                                                                                              f.debug_tuple("Event::MouseMove").finish()
-                                                                                            }
-                                                                                            Event::KeyDown(e) => {
-                                                                                              f.debug_tuple("Event::KeyDown").field(e).finish()
-                                                                                            }
-                                                                                            Event::KeyUp(e) => {
-                                                                                              f.debug_tuple("Event::KeyUp").field(e).finish()
-                                                                                            }
-                                                                                            Event::Cut => {
-                                                                                              f.debug_tuple("Event::Cut").finish()
-                                                                                            }
-                                                                                            Event::Copy => {
-                                                                                              f.debug_tuple("Event::Copy").finish()
-                                                                                            }
-                                                                                            Event::Paste(e) => {
-                                                                                              f.debug_tuple("Event::Paste").field(e).finish()
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
-                                                                                      #[derive(Clone)]
-                                                                                      pub enum UnhandleEvent {
-                                                                                        Event(Event),
-                                                                                        OpenWindow(_rt::String),
-                                                                                      }
-                                                                                      impl ::core::fmt::Debug for UnhandleEvent {
-                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                                                                                          match self {
-                                                                                            UnhandleEvent::Event(e) => {
-                                                                                              f.debug_tuple("UnhandleEvent::Event").field(e).finish()
-                                                                                            }
-                                                                                            UnhandleEvent::OpenWindow(e) => {
-                                                                                              f.debug_tuple("UnhandleEvent::OpenWindow").field(e).finish()
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
                                                                                       #[repr(u8)]
                                                                                       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
                                                                                       pub enum HistoryOps {
@@ -15066,6 +15000,76 @@ pub mod wasi {
                                                                                         }
                                                                                       }
 
+                                                                                      #[derive(Clone)]
+                                                                                      pub enum Event {
+                                                                                        Modifiers(ModifierOptions),
+                                                                                        Pointer(Location),
+                                                                                        MouseDown(MouseButton),
+                                                                                        MouseUp(MouseButton),
+                                                                                        MouseMove,
+                                                                                        KeyDown((Keys,KeyOptions,)),
+                                                                                        KeyUp(Keys),
+                                                                                        History(HistoryOps),
+                                                                                        Cut,
+                                                                                        Copy,
+                                                                                        Paste(_rt::String),
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for Event {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            Event::Modifiers(e) => {
+                                                                                              f.debug_tuple("Event::Modifiers").field(e).finish()
+                                                                                            }
+                                                                                            Event::Pointer(e) => {
+                                                                                              f.debug_tuple("Event::Pointer").field(e).finish()
+                                                                                            }
+                                                                                            Event::MouseDown(e) => {
+                                                                                              f.debug_tuple("Event::MouseDown").field(e).finish()
+                                                                                            }
+                                                                                            Event::MouseUp(e) => {
+                                                                                              f.debug_tuple("Event::MouseUp").field(e).finish()
+                                                                                            }
+                                                                                            Event::MouseMove => {
+                                                                                              f.debug_tuple("Event::MouseMove").finish()
+                                                                                            }
+                                                                                            Event::KeyDown(e) => {
+                                                                                              f.debug_tuple("Event::KeyDown").field(e).finish()
+                                                                                            }
+                                                                                            Event::KeyUp(e) => {
+                                                                                              f.debug_tuple("Event::KeyUp").field(e).finish()
+                                                                                            }
+                                                                                            Event::History(e) => {
+                                                                                              f.debug_tuple("Event::History").field(e).finish()
+                                                                                            }
+                                                                                            Event::Cut => {
+                                                                                              f.debug_tuple("Event::Cut").finish()
+                                                                                            }
+                                                                                            Event::Copy => {
+                                                                                              f.debug_tuple("Event::Copy").finish()
+                                                                                            }
+                                                                                            Event::Paste(e) => {
+                                                                                              f.debug_tuple("Event::Paste").field(e).finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                      #[derive(Clone)]
+                                                                                      pub enum UnhandleEvent {
+                                                                                        Event(Event),
+                                                                                        OpenWindow(_rt::String),
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for UnhandleEvent {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            UnhandleEvent::Event(e) => {
+                                                                                              f.debug_tuple("UnhandleEvent::Event").field(e).finish()
+                                                                                            }
+                                                                                            UnhandleEvent::OpenWindow(e) => {
+                                                                                              f.debug_tuple("UnhandleEvent::OpenWindow").field(e).finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
                                                                                       #[doc(hidden)]
                                                                                       #[macro_export]
                                                                                       macro_rules! __export_local_immediate_renderer_types_cabi{
@@ -15753,8 +15757,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer:immediate-renderer-world:imports and exports")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30172] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xcc\xea\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30183] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xd7\xea\x01\x01A\x02\
 \x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16333,15 +16337,15 @@ m\x03\x05enter\x03tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09bac
 kspace\x06delete\x04\0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\
 \0\x0e\x01m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08\
 navi-key\x03\0\x10\x01q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\
-\0\x04navi\x01\x11\0\x04\0\x04keys\x03\0\x12\x01o\x02\x13\x09\x01q\x0a\x09modifi\
-ers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\
-\x0amouse-move\0\0\x08key-down\x01\x14\0\x06key-up\x01\x13\0\x03cut\0\0\x04copy\0\
-\0\x05paste\x01s\0\x04\0\x05event\x03\0\x15\x01q\x02\x05event\x01\x16\0\x0bopen-\
-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x17\x01m\x02\x04undo\x04redo\x04\0\x0b\
-history-ops\x03\0\x19\x04\0\x1elocal:immediate-renderer/types\x05\x0c\x04\01loca\
-l:immediate-renderer/immediate-renderer-world\x04\0\x0b\x1e\x01\0\x18immediate-r\
-enderer-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x07\
-0.245.1\x10wit-bindgen-rust\x060.53.1";
+\0\x04navi\x01\x11\0\x04\0\x04keys\x03\0\x12\x01m\x02\x04undo\x04redo\x04\0\x0bh\
+istory-ops\x03\0\x14\x01o\x02\x13\x09\x01q\x0b\x09modifiers\x01\x03\0\x07pointer\
+\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-move\0\0\x08ke\
+y-down\x01\x16\0\x06key-up\x01\x13\0\x07history\x01\x15\0\x03cut\0\0\x04copy\0\0\
+\x05paste\x01s\0\x04\0\x05event\x03\0\x17\x01q\x02\x05event\x01\x18\0\x0bopen-wi\
+ndow\x01s\0\x04\0\x0eunhandle-event\x03\0\x19\x04\0\x1elocal:immediate-renderer/\
+types\x05\x0c\x04\01local:immediate-renderer/immediate-renderer-world\x04\0\x0b\x1e\
+\x01\0\x18immediate-renderer-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\
+\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                 };
                                                                 )
                                                               }

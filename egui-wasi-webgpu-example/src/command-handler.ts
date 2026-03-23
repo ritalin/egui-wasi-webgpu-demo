@@ -50,8 +50,11 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
         return Promise.reject(`Canvas of the route is not found: (${route})`);
       }
 
-      if (engine.launch(route, canvas)) {
-        DomEventBridge.bind(canvas, (events) => engine.addEvent(route, events));
+      const { editHost, editContext } = createEditHost(canvas);
+      editHost.focus();
+
+      if (engine.launch(route, canvas, editContext)) {
+        DomEventBridge.bind(canvas, editHost, (events) => engine.addEvent(route, events));
       }
       break;
     }
@@ -61,10 +64,12 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
         return Promise.reject(`Canvas of the route is not found: (${route})`);
       }
 
+      const { editHost, editContext } = createEditHost(canvas);
+
       DomEventBridge.show(canvas);
 
-      if (engine.launch(route, canvas)) {
-        DomEventBridge.bind(canvas, (events) => engine.addEvent(route, events));
+      if (engine.launch(route, canvas, editContext)) {
+        DomEventBridge.bind(canvas, editHost, (events) => engine.addEvent(route, events));
       }
       break;
     }
@@ -90,6 +95,7 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
     case "command://app/write-clipboard": {
       switch (cmd.data.tag) {
         case "text":
+          console.info(`clipboard/write: ${cmd.data.val}`);
           await window.navigator.clipboard.writeText(cmd.data.val);
           break;
       }
@@ -103,4 +109,15 @@ function changeCursor(route: Route, cursorStyle: CursorStyle) {
   if (!canvas) return;
 
   canvas.style.cursor = cursorStyle;
+}
+
+function createEditHost(canvas: HTMLElement): { editHost: HTMLElement; editContext: EditContext } {
+  const editContext = new EditContext();
+  canvas.contentEditable = "true";
+  canvas.tabIndex = 0;
+
+  canvas.editContext = editContext;
+  canvas.editContext.updateText(0, 0, "Arthur");
+
+  return { editHost: canvas, editContext };
 }

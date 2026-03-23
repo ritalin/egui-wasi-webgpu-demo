@@ -84,8 +84,12 @@ impl recorder_core::Recorder for RecoderInner {
                 ui.heading("My egui Application");
                 ui.horizontal(|ui| {
                     let name_label = ui.label("Your name: ");
-                    ui.text_edit_singleline(&mut self.state.name)
-                        .labelled_by(name_label.id);
+                    let res = ui.text_edit_singleline(&mut self.state.name)
+                        .labelled_by(name_label.id)
+                    ;
+                    if res.changed() {
+
+                    }
                 });
                 ui.add(egui::Slider::new(&mut self.state.age, 0..=120).text("age"));
                 if ui.button("Increment").clicked() {

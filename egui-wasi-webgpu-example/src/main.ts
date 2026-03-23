@@ -11,7 +11,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
     <h1>egui + wasi:webgpu example</h1>
     <div class="main">
-      <canvas id="main-window" tabindex="0"></canvas>
+      <canvas id="main-window"></canvas>
     </div>
   </div>
 `;

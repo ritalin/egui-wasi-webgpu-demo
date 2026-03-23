@@ -27,5 +27,5 @@
       "pkg/interfaces/*": ["./pkg/hello_world/_transpiled/interfaces/*"],
     },
   },
-  "include": ["src"],
+  "include": ["src", "src/types/*.d.ts"],
 }

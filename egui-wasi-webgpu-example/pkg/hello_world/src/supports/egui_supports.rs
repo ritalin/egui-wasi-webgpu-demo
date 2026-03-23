@@ -54,6 +54,25 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                     modifiers
                 });
             }
+            types::Event::History(ops) => {
+                println!("Event::History: {:?}", ops);
+                input.events.extend([
+                    egui::Event::Key {
+                        key: egui::Key::Z,
+                        physical_key: None,
+                        pressed: true,
+                        repeat: false,
+                        modifiers: egui::Modifiers{ command: true, shift: ops == &types::HistoryOps::Redo, ..Default::default() }
+                    },
+                    egui::Event::Key {
+                        key: egui::Key::Z,
+                        physical_key: None,
+                        pressed: false,
+                        repeat: false,
+                        modifiers: egui::Modifiers{ command: true, shift: ops == &types::HistoryOps::Redo, ..Default::default() }
+                    }
+                ]);
+            }
             types::Event::Cut => input.events.push(egui::Event::Cut),
             types::Event::Copy => input.events.push(egui::Event::Copy),
             types::Event::Paste(text) => input.events.push(egui::Event::Paste(text.clone())),
@@ -78,10 +97,11 @@ impl<'a> From<MouseButtonW<'a>> for PointerButton {
 }
 
 pub fn push_platform_output(output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
-    let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, .. } = output;
-    // println!("Platform output/ime: {:?}",
-    //     &cursor_icon, output_cmds.len(), ime
-    // );
+    let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, events, .. } = output;
+
+    if !events.is_empty() {
+        println!("Platform output/ime: {:?}, events: {:?}", ime, events);
+    }
 
     commands.push(ExampleCommand::Cursor(cursor_icon));
 

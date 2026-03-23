@@ -9,6 +9,7 @@ interface types {
         mouse-move,
         key-down(tuple<keys, key-options>),
         key-up(keys),
+        history(history-ops),
         cut,
         copy,
         paste(string),

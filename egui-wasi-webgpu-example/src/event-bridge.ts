@@ -1,4 +1,8 @@
 import type {
+  EventCopy,
+  EventCut,
+  EventPaste,
+  HistoryOps,
   Keys as KeyEventPayload,
   KeyOptions,
   ModifierOptions,
@@ -24,7 +28,7 @@ export class DomEventBridge {
     return undefined;
   }
 
-  static bind(canvas: HTMLCanvasElement, callback: (events: DispatchEvent[]) => any) {
+  static bind(canvas: HTMLCanvasElement, editHost: HTMLElement, callback: (events: DispatchEvent[]) => any) {
     canvas.addEventListener("pointerdown", (ev) => {
       const rect = canvas.getBoundingClientRect();
       callback([
@@ -66,14 +70,37 @@ export class DomEventBridge {
         },
       ]);
     });
-    canvas.addEventListener("keydown", (ev) => {
+
+    const editContext = editHost.editContext;
+
+    canvas.addEventListener("keydown", async (ev) => {
       if (ev.isComposing) return;
-      if (isClipboardOperation(ev)) return;
+
+      const combo = keyCombinationType(ev);
+      console.log("DOM-event/keydown", combo);
+
+      if (combo) {
+        switch (combo.tag) {
+          case "clipboard": {
+            enterDOMOnputMode(editHost);
+            return;
+          }
+          case "history": {
+            ev.preventDefault();
+            callback([{ tag: combo.tag, val: combo.type }]);
+            return;
+          }
+        }
+      }
+
+      restoreEditMode(editHost, editContext);
+      console.log("DOM-event/keydown - edditable?", editHost.contentEditable);
 
       const modifiers = makeModifierOptions(ev);
       const payload = makeKeyEvent(ev);
       if (!payload) return;
 
+      console.log("DOM-event/keydown - special-keys");
       const options: KeyOptions = { repeat: ev.repeat };
 
       if (ev.key == "Escape") {
@@ -85,12 +112,15 @@ export class DomEventBridge {
       callback([modifiers, { tag: "key-down", val: [payload, options] }]);
     });
     canvas.addEventListener("keyup", (ev) => {
+      console.log("DOM-event/keyup");
       if (ev.isComposing) return;
-      if (isClipboardOperation(ev)) return;
+      if (keyCombinationType(ev)) return;
 
       const modifiers = makeModifierOptions(ev);
       const payload = makeKeyEvent(ev);
       if (!payload) return;
+
+      console.log("DOM-event/keyup - special-keys");
 
       if (ev.key == "Escape") {
         callback([modifiers, { tag: "key-up", val: payload }]);
@@ -100,15 +130,37 @@ export class DomEventBridge {
       ev.preventDefault();
       callback([modifiers, { tag: "key-up", val: payload }]);
     });
-    canvas.addEventListener("copy", (ev) => {
-      ev.preventDefault();
-      callback([
-        {
-          tag: "copy",
-        },
-      ]);
+
+    canvas.addEventListener("beforeinput", (ev) => {
+      console.info("beforeinput", ev.inputType);
+      switch (ev.inputType) {
+        case "historyUndo": {
+          ev.preventDefault();
+          callback([{ tag: "history", val: "undo" }]);
+          break;
+        }
+        case "historyRedo": {
+          ev.preventDefault();
+          callback([{ tag: "history", val: "redo" }]);
+          break;
+        }
+      }
     });
+
+    canvas.addEventListener(
+      "copy",
+      (ev) => {
+        ev.preventDefault();
+        callback([
+          {
+            tag: "copy",
+          },
+        ]);
+      },
+      { capture: true },
+    );
     canvas.addEventListener("cut", (ev) => {
+      console.log("DOM-event/cut");
       ev.preventDefault();
       callback([
         {
@@ -116,18 +168,23 @@ export class DomEventBridge {
         },
       ]);
     });
-    canvas.addEventListener("paste", (ev) => {
-      ev.preventDefault();
-      const data = ev.clipboardData?.getData("text/plain");
-      if (data == undefined) return;
+    canvas.addEventListener(
+      "paste",
+      (ev) => {
+        console.log("DOM-event/paste#2");
+        ev.preventDefault();
+        const data = ev.clipboardData?.getData("text/plain");
+        if (data == undefined) return;
 
-      callback([
-        {
-          tag: "paste",
-          val: data,
-        },
-      ]);
-    });
+        callback([
+          {
+            tag: "paste",
+            val: data,
+          },
+        ]);
+      },
+      { capture: true },
+    );
   }
 
   static show(canvas: HTMLCanvasElement) {
@@ -149,16 +206,27 @@ function makeModifierOptions(ev: ModifierKeys): DispatchEvent {
   return { tag: "modifiers", val: modifiers };
 }
 
-function isClipboardOperation(ev: KeyboardEvent): boolean {
-  if (!ev.ctrlKey) return false;
+type ClipboardEventType = (EventCut | EventCopy | EventPaste)["tag"];
+type KeyCombinationType = { tag: "clipboard"; type: ClipboardEventType } | { tag: "history"; type: HistoryOps };
+
+const isMac = /Mac|iPhone|iPod|iPad/.test(navigator.platform);
+
+function keyCombinationType(ev: KeyboardEvent): KeyCombinationType | undefined {
+  const hasModifier = isMac ? ev.metaKey : ev.ctrlKey;
+  if (!hasModifier) return undefined;
 
   switch (ev.key.toLowerCase()) {
     case "x":
+      return { tag: "clipboard", type: "cut" };
     case "c":
+      return { tag: "clipboard", type: "copy" };
     case "v":
-      return true;
+      return { tag: "clipboard", type: "paste" };
+    case "z": {
+      return { tag: "history", type: ev.shiftKey ? "redo" : "undo" };
+    }
     default:
-      return false;
+      return undefined;
   }
 }
 
@@ -186,5 +254,19 @@ function makeKeyEvent(ev: KeyboardEvent): KeyEventPayload | undefined {
       return { tag: "navi", val: "arrow-up" };
     default:
       return undefined;
+  }
+}
+
+function enterDOMOnputMode(editHost: HTMLElement) {
+  if (editHost.editContext) {
+    editHost.editContext = undefined;
+    editHost.removeAttribute("contentEditable");
+  }
+}
+
+function restoreEditMode(editHost: HTMLElement, editContext: EditContext | undefined) {
+  if (!editHost.editContext) {
+    editHost.editContext = editContext;
+    editHost.contentEditable = "true";
   }
 }

@@ -54,6 +54,24 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                     modifiers
                 });
             }
+            types::Event::History(ops) => {
+                input.events.extend([
+                    egui::Event::Key {
+                        key: egui::Key::Z,
+                        physical_key: None,
+                        pressed: true,
+                        repeat: false,
+                        modifiers: egui::Modifiers{ command: true, shift: ops == &types::HistoryOps::Redo, ..Default::default() }
+                    },
+                    egui::Event::Key {
+                        key: egui::Key::Z,
+                        physical_key: None,
+                        pressed: false,
+                        repeat: false,
+                        modifiers: egui::Modifiers{ command: true, shift: ops == &types::HistoryOps::Redo, ..Default::default() }
+                    }
+                ]);
+            }
             types::Event::Cut => input.events.push(egui::Event::Cut),
             types::Event::Copy => input.events.push(egui::Event::Copy),
             types::Event::Paste(text) => input.events.push(egui::Event::Paste(text.clone())),
