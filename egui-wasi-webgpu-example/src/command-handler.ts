@@ -5,7 +5,7 @@ import type {
   CursorStyle,
 } from "pkg/interfaces/local-immediate-renderer-example-interaction";
 import type { WasmEngine } from "./engine";
-import { DomEventBridge } from "./event-bridge";
+import { DomEventBridge, restoreEditMode } from "./event-bridge";
 
 export type Route = "route://app/main";
 export type HostCommand =
@@ -135,9 +135,11 @@ function updateEditContext(engine: WasmEngine, route: Route, changeSpecs: Change
   const entry = engine.entry(route);
   if (!entry) return;
 
+  restoreEditMode(entry.canvas, entry.editContext);
+
   for (const c of changeSpecs.reverse()) {
-    entry.canvas.editContext = entry.editContext;
-    entry.canvas.editContext.updateText(c.offset, c.offset + c.len, c.newValue);
-    console.debug(`Active edit changed/current: "${entry.canvas.editContext.text}"`);
+    console.debug("ChangeSpec", c.offset, c.len, c.newValue);
+    entry.editContext.updateText(c.offset, c.offset + c.len, c.newValue);
+    console.debug(`Active edit changed/current: "${entry.editContext.text}"`);
   }
 }

@@ -9,6 +9,7 @@ interface types {
         mouse-move,
         key-down(tuple<keys, key-options>),
         key-up(keys),
+        update-composition-state(composition-state),
         history(history-ops),
         cut,
         copy,
@@ -86,6 +87,11 @@ interface types {
     enum history-ops {
         undo,
         redo,
+    }
+
+    variant composition-state {
+        pre-edit(string),
+        commit(string),
     }
 }
 

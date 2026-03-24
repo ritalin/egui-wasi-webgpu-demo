@@ -13,3 +13,4 @@ egui = "0.33.3"
 epaint = { version = "0.33.3", default-features = false, features = ["bytemuck"] }
 egui_extras = { version = "0.33.3", features = ["image"] }
 image = { version = "0.25.10", default-features = false, features = ["png"] }
+similar = { version = "2.7.0", default-features = false, features = ["inline", "unicode"] }

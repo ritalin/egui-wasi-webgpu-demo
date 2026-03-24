@@ -8,8 +8,8 @@ sha512 = "fd3fdd9d6b0df1ee8846aaaba469942e110c6ffc935d331651e338ff9c75b453748d62
 
 [renderer]
 path = "../../../egui-wasi-webgpu-demo/pkg/wit/renderer"
-sha256 = "41971e078601b4cf5f90af59b48745c736adaea7a858c0123cc743ac03f7f1c5"
-sha512 = "55684fb60c6f9d60410e99a20bcdfacef95d2d1448cb0c647b36429d1e77decb087e4b2dc51548033df77ba36bbdb3f63505644f6169df5749dab2f55ba0d219"
+sha256 = "8a14437835a3ca7bd7f8a3f3705c872858da2c9a25bcbd314a79bb7c8da7472e"
+sha512 = "8c8b2c8b39b15277b18d873270f64bd92ed97e7f8eacc7d7faef331878637f5075f8227a0925e60f528aea0107b1f1a766e5e2db5fe797e1d0cf6dcc3005c827"
 deps = ["graphics-context", "io", "surface", "webgpu"]
 
 [surface]

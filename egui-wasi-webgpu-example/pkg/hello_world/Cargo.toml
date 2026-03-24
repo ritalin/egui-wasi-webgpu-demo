@@ -15,3 +15,4 @@ egui.workspace = true
 epaint.workspace = true
 image.workspace = true
 egui_extras.workspace = true
+similar.workspace = true

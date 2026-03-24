@@ -54,6 +54,18 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                     modifiers
                 });
             }
+            types::Event::UpdateCompositionState(types::CompositionState::PreEdit(text)) => {
+                input.events.extend([
+                    egui::Event::Ime(egui::ImeEvent::Enabled),
+                    egui::Event::Ime(egui::ImeEvent::Preedit(text.clone()))
+                ]);
+            }
+            types::Event::UpdateCompositionState(types::CompositionState::Commit(text)) => {
+                input.events.extend([
+                    egui::Event::Ime(egui::ImeEvent::Enabled),
+                    egui::Event::Ime(egui::ImeEvent::Commit(text.clone()))
+                ]);
+            }
             types::Event::History(ops) => {
                 input.events.extend([
                     egui::Event::Key {
@@ -75,6 +87,7 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::Cut => input.events.push(egui::Event::Cut),
             types::Event::Copy => input.events.push(egui::Event::Copy),
             types::Event::Paste(text) => input.events.push(egui::Event::Paste(text.clone())),
+            types::Event::Activate => todo!(),
         }
     }
 

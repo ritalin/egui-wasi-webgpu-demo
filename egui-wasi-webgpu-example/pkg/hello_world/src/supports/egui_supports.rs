@@ -1,7 +1,7 @@
 use egui::{Modifiers, PointerButton, Pos2};
 use wasi_renderer::{ScreenDescriptor, bindings::types};
 
-use crate::{ClipboardData, ExampleCommand, UnhandledEvent, supports};
+use crate::{ChangeSpec, ClipboardData, ExampleCommand, UnhandledEvent, supports};
 
 pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input: &mut egui::RawInput) -> UnhandledEvent {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();
@@ -56,6 +56,18 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                     modifiers
                 });
             }
+            types::Event::UpdateCompositionState(types::CompositionState::PreEdit(text)) => {
+                input.events.extend([
+                    egui::Event::Ime(egui::ImeEvent::Enabled),
+                    egui::Event::Ime(egui::ImeEvent::Preedit(text.clone()))
+                ]);
+            }
+            types::Event::UpdateCompositionState(types::CompositionState::Commit(text)) => {
+                input.events.extend([
+                    egui::Event::Ime(egui::ImeEvent::Enabled),
+                    egui::Event::Ime(egui::ImeEvent::Commit(text.clone()))
+                ]);
+            }
             types::Event::History(ops) => {
                 println!("Event::History: {:?}", ops);
                 input.events.extend([
@@ -106,9 +118,21 @@ pub fn push_platform_output(output: egui::PlatformOutput, commands: &mut Vec<cra
     let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, events, .. } = output;
 
     // println!("Platform output/ime: {:?}", ime);
+    if !events.is_empty() { println!("Platform output/platform-events/len: {}", events.len()); }
     for event in events {
         let info = event.widget_info();
-        println!("Platform output/prev: {:?}, new: {:?}, sel: {:?}", info.prev_text_value, info.current_text_value, info.text_selection);
+        println!("Platform output/prev: {:?}, new: {:?}, sel: {:?}", info.prev_text_value.as_ref(), info.current_text_value.as_ref(), info.text_selection);
+
+        match (info.prev_text_value.as_ref(), info.current_text_value.as_ref()) {
+            (None, _) => (),
+            (Some(old_text), None) => {
+                let len = old_text.chars().map(|c| c.len_utf16() as u32).sum::<u32>();
+                commands.push(ExampleCommand::ChangeSet(vec![ChangeSpec{ offset: 0, len, new_value: "".into() }]));
+            },
+            (Some(old_text), Some(new_text)) => {
+                commands.push(ExampleCommand::ChangeSet(create_text_change_set(&old_text, &new_text)));
+            }
+        }
     }
 
     commands.push(ExampleCommand::Cursor(cursor_icon));
@@ -122,4 +146,55 @@ pub fn push_platform_output(output: egui::PlatformOutput, commands: &mut Vec<cra
             egui::OutputCommand::OpenUrl(_url) => (),
         }
     }
+}
+
+pub fn create_text_change_set(old_text: &str, new_text: &str) -> Vec<crate::ChangeSpec> {
+    let mut old_indexes = std::iter::once(0)
+        .chain(
+            old_text.chars()
+                .map(|c| c.len_utf16() as u32)
+                .scan(0, |state, len| {
+                    *state += len;
+                    Some(*state)
+                })
+        )
+    ;
+    let mut new_chars = new_text.chars();
+
+    let diff = similar::TextDiff::from_chars(old_text, new_text);
+
+    let mut current_old_index = 0;
+    let mut current_new_index = 0;
+
+    diff.ops().iter()
+        .filter_map(|op| match op {
+            &similar::DiffOp::Delete { old_index, old_len, .. } => {
+                let start = old_indexes.nth(old_index - current_old_index);
+                let end = old_indexes.by_ref().take(old_len).last();
+                current_old_index = old_index + old_len + 1;
+
+                start.zip(end).map(|(s, e)| crate::ChangeSpec{ offset: s, len: e - s, new_value: "".into() })
+            }
+            &similar::DiffOp::Insert { old_index, new_index, new_len  } => {
+                let start = old_indexes.nth(old_index - current_old_index);
+                current_old_index = old_index + 1;
+
+                for _ in 0..(new_index - current_new_index) { new_chars.next(); }
+                current_new_index = new_index + new_len;
+
+                start.map(|s| crate::ChangeSpec{ offset: s, len: 0, new_value: new_chars.by_ref().take(new_len).collect() })
+            }
+            &similar::DiffOp::Replace { old_index, old_len, new_index, new_len } => {
+                let start = old_indexes.nth(old_index - current_old_index);
+                let end = old_indexes.by_ref().take(old_len).last();
+                current_old_index = old_index + old_len + 1;
+
+                for _ in 0..(new_index - current_new_index) { new_chars.next(); }
+                current_new_index = new_index + new_len;
+
+                start.zip(end).map(|(s, e)| crate::ChangeSpec{ offset: s, len: e - s, new_value: new_chars.by_ref().take(new_len).collect() })
+            }
+            similar::DiffOp::Equal { .. } => None,
+        })
+        .collect()
 }

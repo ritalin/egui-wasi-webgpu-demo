@@ -144,6 +144,13 @@ export class DomEventBridge {
           callback([{ tag: "history", val: "redo" }]);
           break;
         }
+        case "insertText": {
+          if (ev.data) {
+            ev.preventDefault();
+            callback([{ tag: "update-composition-state", val: { tag: "commit", val: ev.data } }]);
+          }
+          break;
+        }
       }
     });
 
@@ -264,7 +271,7 @@ function enterDOMOnputMode(editHost: HTMLElement) {
   }
 }
 
-function restoreEditMode(editHost: HTMLElement, editContext: EditContext | undefined) {
+export function restoreEditMode(editHost: HTMLElement, editContext: EditContext | undefined) {
   if (!editHost.editContext) {
     editHost.editContext = editContext;
     editHost.contentEditable = "true";
