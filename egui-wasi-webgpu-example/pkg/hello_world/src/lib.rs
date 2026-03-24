@@ -15,6 +15,7 @@ pub enum ExampleCommand {
     RequestImage { paths: Vec<String> },
     Cursor(egui::CursorIcon),
     Clipboard(ClipboardData),
+    ChangeSet(Vec<ChangeSpec>),
 }
 
 #[derive(Debug, Clone)]
@@ -25,4 +26,16 @@ pub enum ClipboardData {
 #[derive(Debug, Clone)]
 pub enum ExampleEffect {
     ImageData{ url: String, bytes: Vec<u8> },
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct UnhandledEvent {
+    pub activate: Option<()>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ChangeSpec {
+    offset: u32,
+    len: u32,
+    new_value: String,
 }

@@ -9,6 +9,7 @@ interface interaction {
         request-image(list<url>),
         cursor(cursor-style),
         clipboard(clipboard-data),
+        change-set(list<change-spec>),
     }
 
     variant effect {
@@ -60,5 +61,11 @@ interface interaction {
 
     variant clipboard-data {
         text(string),
+    }
+
+    record change-spec {
+        offset: u32,
+        len: u32,
+        new-value: string,
     }
 }

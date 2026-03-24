@@ -1,9 +1,9 @@
 use egui::{Modifiers, PointerButton, Pos2};
 use wasi_renderer::{ScreenDescriptor, bindings::types};
 
-use crate::{ClipboardData, ExampleCommand, supports};
+use crate::{ClipboardData, ExampleCommand, UnhandledEvent, supports};
 
-pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input: &mut egui::RawInput) {
+pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input: &mut egui::RawInput) -> UnhandledEvent {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();
     viewport.native_pixels_per_point = Some(screen.scale_factor);
 
@@ -12,6 +12,8 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
 
     let (mut cursor_x, mut cursor_y) = (0.0, 0.0);
     let mut modifiers = Modifiers::default();
+
+    let mut unhandled_events = UnhandledEvent::default();
 
     for event in events {
         match event {
@@ -76,10 +78,14 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::Cut => input.events.push(egui::Event::Cut),
             types::Event::Copy => input.events.push(egui::Event::Copy),
             types::Event::Paste(text) => input.events.push(egui::Event::Paste(text.clone())),
+            types::Event::Activate => {
+                unhandled_events.activate = Some(());
+            }
         }
     }
-
     input.modifiers = modifiers;
+
+    unhandled_events
 }
 
 pub struct MouseButtonW<'a>(&'a types::MouseButton);
@@ -99,8 +105,10 @@ impl<'a> From<MouseButtonW<'a>> for PointerButton {
 pub fn push_platform_output(output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
     let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, events, .. } = output;
 
-    if !events.is_empty() {
-        println!("Platform output/ime: {:?}, events: {:?}", ime, events);
+    // println!("Platform output/ime: {:?}", ime);
+    for event in events {
+        let info = event.widget_info();
+        println!("Platform output/prev: {:?}, new: {:?}, sel: {:?}", info.prev_text_value, info.current_text_value, info.text_selection);
     }
 
     commands.push(ExampleCommand::Cursor(cursor_icon));

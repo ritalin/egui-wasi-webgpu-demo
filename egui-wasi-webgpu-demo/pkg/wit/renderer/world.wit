@@ -13,6 +13,7 @@ interface types {
         cut,
         copy,
         paste(string),
+        activate,
     }
 
     variant unhandle-event {

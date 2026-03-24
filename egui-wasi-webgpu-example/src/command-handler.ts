@@ -1,4 +1,9 @@
-import type { ClipboardData, Command, CursorStyle } from "pkg/interfaces/local-immediate-renderer-example-interaction";
+import type {
+  ChangeSpec,
+  ClipboardData,
+  Command,
+  CursorStyle,
+} from "pkg/interfaces/local-immediate-renderer-example-interaction";
 import type { WasmEngine } from "./engine";
 import { DomEventBridge } from "./event-bridge";
 
@@ -38,6 +43,10 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
         );
         break;
       }
+      case "change-set": {
+        updateEditContext(engine, route, cmd.val);
+        break;
+      }
     }
   }
 }
@@ -54,6 +63,7 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
       editHost.focus();
 
       if (engine.launch(route, canvas, editContext)) {
+        engine.addEvent(route, [{ tag: "activate" }]);
         DomEventBridge.bind(canvas, editHost, (events) => engine.addEvent(route, events));
       }
       break;
@@ -117,7 +127,17 @@ function createEditHost(canvas: HTMLElement): { editHost: HTMLElement; editConte
   canvas.tabIndex = 0;
 
   canvas.editContext = editContext;
-  canvas.editContext.updateText(0, 0, "Arthur");
 
   return { editHost: canvas, editContext };
+}
+
+function updateEditContext(engine: WasmEngine, route: Route, changeSpecs: ChangeSpec[]) {
+  const entry = engine.entry(route);
+  if (!entry) return;
+
+  for (const c of changeSpecs.reverse()) {
+    entry.canvas.editContext = entry.editContext;
+    entry.canvas.editContext.updateText(c.offset, c.offset + c.len, c.newValue);
+    console.debug(`Active edit changed/current: "${entry.canvas.editContext.text}"`);
+  }
 }

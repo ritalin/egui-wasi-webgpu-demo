@@ -10,6 +10,7 @@ import type { WebGpuRuntime } from "wasi-webgpu-runtime/host";
 import { queueCommand, type Route } from "./command-handler";
 
 export interface RouteEntry {
+  canvas: HTMLCanvasElement;
   editContext: EditContext;
   surface: RenderContext;
   dispatcher: Dispatcher;
@@ -34,6 +35,7 @@ export class WasmEngine {
   addEffects(route: Route, effects: Effect[]) {
     this.dispatchers.get(route)?.effects.push(...effects);
   }
+
   launch(route: Route, canvas: HTMLCanvasElement, editContext: EditContext): boolean {
     if (this.dispatchers.has(route)) return false;
 
@@ -50,9 +52,13 @@ export class WasmEngine {
       }
     }
 
-    this.dispatchers.set(route, { editContext, surface, dispatcher, events: [], effects: [] });
+    this.dispatchers.set(route, { canvas, editContext, surface, dispatcher, events: [], effects: [] });
 
     return true;
+  }
+
+  entry(route: Route): RouteEntry | undefined {
+    return this.dispatchers.get(route);
   }
 
   dispatch() {

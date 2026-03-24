@@ -9,6 +9,9 @@ impl From<ExampleCommand> for interaction::Command {
             ExampleCommand::RequestImage { paths } => interaction::Command::RequestImage(paths),
             ExampleCommand::Cursor(cursor) => interaction::Command::Cursor(cursor.into()),
             ExampleCommand::Clipboard(data) => interaction::Command::Clipboard(data.into()),
+            ExampleCommand::ChangeSet(change_specs) => {
+                interaction::Command::ChangeSet(change_specs.into_iter().map(Into::into).collect::<Vec<_>>())
+            }
         }
     }
 }
@@ -96,6 +99,16 @@ impl<'a> From<KeyWrapper<'a>> for egui::Key {
             types::Keys::Navi(types::NaviKey::ArrowLeft) => egui::Key::ArrowLeft,
             types::Keys::Navi(types::NaviKey::ArrowRight) => egui::Key::ArrowRight,
             types::Keys::Navi(types::NaviKey::ArrowUp) => egui::Key::ArrowUp,
+        }
+    }
+}
+
+impl From<crate::ChangeSpec> for interaction::ChangeSpec {
+    fn from(value: crate::ChangeSpec) -> Self {
+        Self {
+            offset: value.offset,
+            len: value.len,
+            new_value: value.new_value,
         }
     }
 }

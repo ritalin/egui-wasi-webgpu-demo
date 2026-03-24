@@ -9,7 +9,9 @@ declare global {
     // Update IME window position
     updateSelectionBounds(selectionBounds: DOMRect): void;
     // Handle event
-    // addEventListener(type: "textupdate", listener: (ev: TextUpdateEvent) => void): void;
+    addEventListener(type: "textupdate", listener: (ev: TextUpdateEvent) => void): void;
+    // current text
+    text: string;
   }
 
   interface EditContextInit {

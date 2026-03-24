@@ -1,7 +1,7 @@
 use egui::{RawInput};
 use wasi_renderer::{ScreenDescriptor, bindings::types, recorder_core};
 
-use crate::{ExampleCommand, ExampleEffect, supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}}};
+use crate::{ChangeSpec, ExampleCommand, ExampleEffect, supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}}};
 
 pub struct RecoderInner {
     egui_context: egui::Context,
@@ -70,9 +70,8 @@ impl recorder_core::Recorder for RecoderInner {
         I::Item: Into<Self::Effect>,
     {
         let mut input = RawInput::default();
-        egui_supports::populate_events(events, &screen, &mut input);
+        let unhandled_event = egui_supports::populate_events(events, &screen, &mut input);
 
-        let unhandled_event = vec![];
         let mut commands = vec![];
 
         let mut request_img = None;
@@ -87,15 +86,15 @@ impl recorder_core::Recorder for RecoderInner {
                     let res = ui.text_edit_singleline(&mut self.state.name)
                         .labelled_by(name_label.id)
                     ;
-                    if res.changed() {
-
+                    if res.changed() && res.has_focus() {
+                        // if let Some() = res.
                     }
                 });
                 ui.add(egui::Slider::new(&mut self.state.age, 0..=120).text("age"));
                 if ui.button("Increment").clicked() {
                     self.state.age += 1;
                 }
-                ui.label(format!("Hello '{}', age {}", self.state.name, self.state.age));
+                ui.colored_label(egui::Color32::LIGHT_GREEN, format!("Hello '{}', age {}", self.state.name, self.state.age));
 
                 match self.state.logo.as_mut() {
                     None => {
@@ -121,11 +120,17 @@ impl recorder_core::Recorder for RecoderInner {
             println!("id: {:?}, ", id);
         }
 
+        if let Some(_) = unhandled_event.activate {
+            commands.push(ExampleCommand::ChangeSet(vec![
+                ChangeSpec { offset: 0, len: 0, new_value: self.state.name.clone() }
+            ]));
+        }
+
         Ok(EguiOutput::new(
             screen,
             shapes,
             output.textures_delta,
-            unhandled_event,
+            vec![],
             commands
         ))
     }
