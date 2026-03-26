@@ -137,9 +137,11 @@ function updateEditContext(engine: WasmEngine, route: Route, changeSpecs: Change
 
   restoreEditMode(entry.canvas, entry.editContext);
 
+  console.log("change-spec", `len: ${changeSpecs.length}`, `prev-state: ${entry.editContext.text}`);
+
   for (const c of changeSpecs.reverse()) {
     console.debug("ChangeSpec", c.offset, c.len, c.newValue);
-    entry.editContext.updateText(c.offset, c.offset + c.len, c.newValue);
+    entry.editContext.updateText(c.offset, c.offset + c.len, c.newValue!);
     console.debug(`Active edit changed/current: "${entry.editContext.text}"`);
   }
 }

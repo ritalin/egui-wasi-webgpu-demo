@@ -22,24 +22,39 @@ pub mod local {
       pub type Route = _rt::String;
       pub type Url = _rt::String;
       #[derive(Clone)]
-      pub struct ImageData {
+      pub struct ExternalAsset {
         pub source: Url,
         pub bytes: _rt::Vec::<u8>,
       }
-      impl ::core::fmt::Debug for ImageData {
+      impl ::core::fmt::Debug for ExternalAsset {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-          f.debug_struct("ImageData").field("source", &self.source).field("bytes", &self.bytes).finish()
+          f.debug_struct("ExternalAsset").field("source", &self.source).field("bytes", &self.bytes).finish()
+        }
+      }
+      #[derive(Clone)]
+      pub struct ExternalFont {
+        pub source: Url,
+        pub name: _rt::String,
+        pub bytes: _rt::Vec::<u8>,
+      }
+      impl ::core::fmt::Debug for ExternalFont {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          f.debug_struct("ExternalFont").field("source", &self.source).field("name", &self.name).field("bytes", &self.bytes).finish()
         }
       }
       #[derive(Clone)]
       pub enum Effect {
-        ImageData(ImageData),
+        ImageData(ExternalAsset),
+        FontData(ExternalFont),
       }
       impl ::core::fmt::Debug for Effect {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
           match self {
             Effect::ImageData(e) => {
               f.debug_tuple("Effect::ImageData").field(e).finish()
+            }
+            Effect::FontData(e) => {
+              f.debug_tuple("Effect::FontData").field(e).finish()
             }
           }
         }
@@ -261,11 +276,28 @@ pub mod local {
       pub struct ChangeSpec {
         pub offset: u32,
         pub len: u32,
-        pub new_value: _rt::String,
+        pub new_value: Option<_rt::String>,
       }
       impl ::core::fmt::Debug for ChangeSpec {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
           f.debug_struct("ChangeSpec").field("offset", &self.offset).field("len", &self.len).field("new-value", &self.new_value).finish()
+        }
+      }
+      #[derive(Clone, Copy)]
+      pub enum CompositionBounds {
+        SelectionBounds,
+        CharacterBounds,
+      }
+      impl ::core::fmt::Debug for CompositionBounds {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          match self {
+            CompositionBounds::SelectionBounds => {
+              f.debug_tuple("CompositionBounds::SelectionBounds").finish()
+            }
+            CompositionBounds::CharacterBounds => {
+              f.debug_tuple("CompositionBounds::CharacterBounds").finish()
+            }
+          }
         }
       }
       #[derive(Clone)]
@@ -275,6 +307,7 @@ pub mod local {
         Cursor(CursorStyle),
         Clipboard(ClipboardData),
         ChangeSet(_rt::Vec::<ChangeSpec>),
+        CompositionBounds(CompositionBounds),
       }
       impl ::core::fmt::Debug for Command {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
@@ -293,6 +326,9 @@ pub mod local {
             }
             Command::ChangeSet(e) => {
               f.debug_tuple("Command::ChangeSet").field(e).finish()
+            }
+            Command::CompositionBounds(e) => {
+              f.debug_tuple("Command::CompositionBounds").field(e).finish()
             }
           }
         }
@@ -15187,17 +15223,17 @@ pub mod wasi {
                                                                                       #[allow(non_snake_case, unused_unsafe)]
                                                                                       pub unsafe fn _export_method_event_channel_post_cabi<T_: GuestEventChannel>(arg0: *mut u8,arg1: *mut u8,arg2: usize,) { unsafe {#[cfg(target_arch="wasm32")]
                                                                                       _rt::run_ctors_once();{
-                                                                                        let base35 = arg1;
-                                                                                        let len35 = arg2;
-                                                                                        let mut result35 = _rt::Vec::with_capacity(len35);
-                                                                                        for i in 0..len35 {
-                                                                                          let base = base35.add(i * (4*::core::mem::size_of::<*const u8>()));
-                                                                                          let e35 = {
+                                                                                        let base42 = arg1;
+                                                                                        let len42 = arg2;
+                                                                                        let mut result42 = _rt::Vec::with_capacity(len42);
+                                                                                        for i in 0..len42 {
+                                                                                          let base = base42.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                          let e42 = {
                                                                                             let l0 = i32::from(*base.add(0).cast::<u8>());
-                                                                                            use super::super::super::super::__with_name1::Event as V34;
-                                                                                            let v34 = match l0 {
+                                                                                            use super::super::super::super::__with_name1::Event as V41;
+                                                                                            let v41 = match l0 {
                                                                                               0 => {
-                                                                                                let e34 = {
+                                                                                                let e41 = {
                                                                                                   let l1 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                   let l2 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                   let l3 = i32::from(*base.add(2+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
@@ -15210,10 +15246,10 @@ pub mod wasi {
                                                                                                     super_key: super::super::super::super::__with_name1::ModifierPressed::empty() | super::super::super::super::__with_name1::ModifierPressed::from_bits_retain(((l4 as u8) << 0) as _),
                                                                                                   }
                                                                                                 };
-                                                                                                V34::Modifiers(e34)
+                                                                                                V41::Modifiers(e41)
                                                                                               }
                                                                                               1 => {
-                                                                                                let e34 = {
+                                                                                                let e41 = {
                                                                                                   let l5 = *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>();
                                                                                                   let l6 = *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
 
@@ -15222,29 +15258,29 @@ pub mod wasi {
                                                                                                     y: l6,
                                                                                                   }
                                                                                                 };
-                                                                                                V34::Pointer(e34)
+                                                                                                V41::Pointer(e41)
                                                                                               }
                                                                                               2 => {
-                                                                                                let e34 = {
+                                                                                                let e41 = {
                                                                                                   let l7 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
 
                                                                                                   super::super::super::super::__with_name1::MouseButton::_lift(l7 as u8)
                                                                                                 };
-                                                                                                V34::MouseDown(e34)
+                                                                                                V41::MouseDown(e41)
                                                                                               }
                                                                                               3 => {
-                                                                                                let e34 = {
+                                                                                                let e41 = {
                                                                                                   let l8 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
 
                                                                                                   super::super::super::super::__with_name1::MouseButton::_lift(l8 as u8)
                                                                                                 };
-                                                                                                V34::MouseUp(e34)
+                                                                                                V41::MouseUp(e41)
                                                                                               }
                                                                                               4 => {
-                                                                                                V34::MouseMove
+                                                                                                V41::MouseMove
                                                                                               }
                                                                                               5 => {
-                                                                                                let e34 = {
+                                                                                                let e41 = {
                                                                                                   let l9 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                   use super::super::super::super::__with_name1::Keys as V14;
                                                                                                   let v14 = match l9 {
@@ -15286,10 +15322,10 @@ pub mod wasi {
 
                                                                                                   (v14, super::super::super::super::__with_name1::KeyOptions::empty() | super::super::super::super::__with_name1::KeyOptions::from_bits_retain(((l15 as u8) << 0) as _))
                                                                                                 };
-                                                                                                V34::KeyDown(e34)
+                                                                                                V41::KeyDown(e41)
                                                                                               }
                                                                                               6 => {
-                                                                                                let e34 = {
+                                                                                                let e41 = {
                                                                                                   let l16 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                   use super::super::super::super::__with_name1::Keys as V21;
                                                                                                   let v21 = match l16 {
@@ -15330,97 +15366,143 @@ pub mod wasi {
 
                                                                                                   v21
                                                                                                 };
-                                                                                                V34::KeyUp(e34)
+                                                                                                V41::KeyUp(e41)
                                                                                               }
                                                                                               7 => {
-                                                                                                let e34 = {
+                                                                                                let e41 = {
                                                                                                   let l22 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::CompositionState as V29;
-                                                                                                  let v29 = match l22 {
-                                                                                                    0 => {
-                                                                                                      let e29 = {
-                                                                                                        let l23 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                        let l24 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                        let len25 = l24;
-                                                                                                        let bytes25 = _rt::Vec::from_raw_parts(l23.cast(), len25, len25);
-
-                                                                                                        _rt::string_lift(bytes25)
-                                                                                                      };
-                                                                                                      V29::PreEdit(e29)
-                                                                                                    }
+                                                                                                  use super::super::super::super::__with_name1::CompositionBoundsReq as V26;
+                                                                                                  let v26 = match l22 {
                                                                                                     n => {
-                                                                                                      debug_assert_eq!(n, 1, "invalid enum discriminant");
-                                                                                                      let e29 = {
-                                                                                                        let l26 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                        let l27 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                        let len28 = l27;
-                                                                                                        let bytes28 = _rt::Vec::from_raw_parts(l26.cast(), len28, len28);
+                                                                                                      debug_assert_eq!(n, 0, "invalid enum discriminant");
+                                                                                                      let e26 = {
+                                                                                                        let l23 = i32::from(*base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        _rt::string_lift(bytes28)
+                                                                                                        match l23 {
+                                                                                                          0 => None,
+                                                                                                          1 => {
+                                                                                                            let e = {
+                                                                                                              let l24 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                              let l25 = *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
+
+                                                                                                              super::super::super::super::__with_name1::CompositionRange{
+                                                                                                                offset: l24 as u32,
+                                                                                                                len: l25 as u32,
+                                                                                                              }
+                                                                                                            };
+                                                                                                            Some(e)
+                                                                                                          }
+                                                                                                          _ => _rt::invalid_enum_discriminant(),
+                                                                                                        }
                                                                                                       };
-                                                                                                      V29::Commit(e29)
+                                                                                                      V26::CharacterBounds(e26)
                                                                                                     }
                                                                                                   };
 
-                                                                                                  v29
+                                                                                                  v26
                                                                                                 };
-                                                                                                V34::UpdateCompositionState(e34)
+                                                                                                V41::RequestCompositionBounds(e41)
                                                                                               }
                                                                                               8 => {
-                                                                                                let e34 = {
-                                                                                                  let l30 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                let e41 = {
+                                                                                                  let l27 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::CompositionState as V36;
+                                                                                                  let v36 = match l27 {
+                                                                                                    0 => {
+                                                                                                      let e36 = {
+                                                                                                        let l28 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                        let l29 = *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<i32>();
 
-                                                                                                  super::super::super::super::__with_name1::HistoryOps::_lift(l30 as u8)
+                                                                                                        super::super::super::super::__with_name1::CompositionRange{
+                                                                                                          offset: l28 as u32,
+                                                                                                          len: l29 as u32,
+                                                                                                        }
+                                                                                                      };
+                                                                                                      V36::SelectionRange(e36)
+                                                                                                    }
+                                                                                                    1 => {
+                                                                                                      let e36 = {
+                                                                                                        let l30 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                        let l31 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                        let len32 = l31;
+                                                                                                        let bytes32 = _rt::Vec::from_raw_parts(l30.cast(), len32, len32);
+
+                                                                                                        _rt::string_lift(bytes32)
+                                                                                                      };
+                                                                                                      V36::PreEdit(e36)
+                                                                                                    }
+                                                                                                    n => {
+                                                                                                      debug_assert_eq!(n, 2, "invalid enum discriminant");
+                                                                                                      let e36 = {
+                                                                                                        let l33 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                        let l34 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                        let len35 = l34;
+                                                                                                        let bytes35 = _rt::Vec::from_raw_parts(l33.cast(), len35, len35);
+
+                                                                                                        _rt::string_lift(bytes35)
+                                                                                                      };
+                                                                                                      V36::Commit(e36)
+                                                                                                    }
+                                                                                                  };
+
+                                                                                                  v36
                                                                                                 };
-                                                                                                V34::History(e34)
+                                                                                                V41::UpdateCompositionState(e41)
                                                                                               }
                                                                                               9 => {
-                                                                                                V34::Cut
+                                                                                                let e41 = {
+                                                                                                  let l37 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                  super::super::super::super::__with_name1::HistoryOps::_lift(l37 as u8)
+                                                                                                };
+                                                                                                V41::History(e41)
                                                                                               }
                                                                                               10 => {
-                                                                                                V34::Copy
+                                                                                                V41::Cut
                                                                                               }
                                                                                               11 => {
-                                                                                                let e34 = {
-                                                                                                  let l31 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                  let l32 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                  let len33 = l32;
-                                                                                                  let bytes33 = _rt::Vec::from_raw_parts(l31.cast(), len33, len33);
+                                                                                                V41::Copy
+                                                                                              }
+                                                                                              12 => {
+                                                                                                let e41 = {
+                                                                                                  let l38 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                  let l39 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                  let len40 = l39;
+                                                                                                  let bytes40 = _rt::Vec::from_raw_parts(l38.cast(), len40, len40);
 
-                                                                                                  _rt::string_lift(bytes33)
+                                                                                                  _rt::string_lift(bytes40)
                                                                                                 };
-                                                                                                V34::Paste(e34)
+                                                                                                V41::Paste(e41)
                                                                                               }
                                                                                               n => {
-                                                                                                debug_assert_eq!(n, 12, "invalid enum discriminant");
-                                                                                                V34::Activate
+                                                                                                debug_assert_eq!(n, 13, "invalid enum discriminant");
+                                                                                                V41::Activate
                                                                                               }
                                                                                             };
 
-                                                                                            v34
+                                                                                            v41
                                                                                           };
-                                                                                          result35.push(e35);
+                                                                                          result42.push(e42);
                                                                                         }
-                                                                                        _rt::cabi_dealloc(base35, len35 * (4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                                        T_::post(EventChannelBorrow::lift(arg0 as u32 as usize).get(), result35)
+                                                                                        _rt::cabi_dealloc(base42, len42 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                        T_::post(EventChannelBorrow::lift(arg0 as u32 as usize).get(), result42)
                                                                                       };
                                                                                     } }
                                                                                     #[doc(hidden)]
                                                                                     #[allow(non_snake_case, unused_unsafe)]
                                                                                     pub unsafe fn _export_method_command_channel_post_cabi<T_: GuestCommandChannel>(arg0: *mut u8,arg1: *mut u8,arg2: usize,) { unsafe {#[cfg(target_arch="wasm32")]
                                                                                     _rt::run_ctors_once();{
-                                                                                      let base8 = arg1;
-                                                                                      let len8 = arg2;
-                                                                                      let mut result8 = _rt::Vec::with_capacity(len8);
-                                                                                      for i in 0..len8 {
-                                                                                        let base = base8.add(i * (5*::core::mem::size_of::<*const u8>()));
-                                                                                        let e8 = {
+                                                                                      let base17 = arg1;
+                                                                                      let len17 = arg2;
+                                                                                      let mut result17 = _rt::Vec::with_capacity(len17);
+                                                                                      for i in 0..len17 {
+                                                                                        let base = base17.add(i * (7*::core::mem::size_of::<*const u8>()));
+                                                                                        let e17 = {
                                                                                           let l0 = i32::from(*base.add(0).cast::<u8>());
-                                                                                          use super::super::super::super::local::immediate_renderer_example::interaction::Effect as V7;
-                                                                                          let v7 = match l0 {
-                                                                                            n => {
-                                                                                              debug_assert_eq!(n, 0, "invalid enum discriminant");
-                                                                                              let e7 = {
+                                                                                          use super::super::super::super::local::immediate_renderer_example::interaction::Effect as V16;
+                                                                                          let v16 = match l0 {
+                                                                                            0 => {
+                                                                                              let e16 = {
                                                                                                 let l1 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                                 let l2 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                                 let len3 = l2;
@@ -15429,21 +15511,44 @@ pub mod wasi {
                                                                                                 let l5 = *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                                 let len6 = l5;
 
-                                                                                                super::super::super::super::local::immediate_renderer_example::interaction::ImageData{
+                                                                                                super::super::super::super::local::immediate_renderer_example::interaction::ExternalAsset{
                                                                                                   source: _rt::string_lift(bytes3),
                                                                                                   bytes: <_ as From<_rt::Vec<_>>>::from(_rt::Vec::from_raw_parts(l4.cast(), len6, len6)),
                                                                                                 }
                                                                                               };
-                                                                                              V7::ImageData(e7)
+                                                                                              V16::ImageData(e16)
+                                                                                            }
+                                                                                            n => {
+                                                                                              debug_assert_eq!(n, 1, "invalid enum discriminant");
+                                                                                              let e16 = {
+                                                                                                let l7 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                let l8 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                let len9 = l8;
+                                                                                                let bytes9 = _rt::Vec::from_raw_parts(l7.cast(), len9, len9);
+                                                                                                let l10 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                let l11 = *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                let len12 = l11;
+                                                                                                let bytes12 = _rt::Vec::from_raw_parts(l10.cast(), len12, len12);
+                                                                                                let l13 = *base.add(5*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                let l14 = *base.add(6*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                let len15 = l14;
+
+                                                                                                super::super::super::super::local::immediate_renderer_example::interaction::ExternalFont{
+                                                                                                  source: _rt::string_lift(bytes9),
+                                                                                                  name: _rt::string_lift(bytes12),
+                                                                                                  bytes: <_ as From<_rt::Vec<_>>>::from(_rt::Vec::from_raw_parts(l13.cast(), len15, len15)),
+                                                                                                }
+                                                                                              };
+                                                                                              V16::FontData(e16)
                                                                                             }
                                                                                           };
 
-                                                                                          v7
+                                                                                          v16
                                                                                         };
-                                                                                        result8.push(e8);
+                                                                                        result17.push(e17);
                                                                                       }
-                                                                                      _rt::cabi_dealloc(base8, len8 * (5*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                                      T_::post(CommandChannelBorrow::lift(arg0 as u32 as usize).get(), result8)
+                                                                                      _rt::cabi_dealloc(base17, len17 * (7*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                      T_::post(CommandChannelBorrow::lift(arg0 as u32 as usize).get(), result17)
                                                                                     };
                                                                                   } }
                                                                                   #[doc(hidden)]
@@ -15470,20 +15575,20 @@ pub mod wasi {
                                                                               };
                                                                               let ptr1 = (&raw mut _RET_AREA.0).cast::<u8>();
                                                                               let (t2_0, t2_1, ) = result0;
-                                                                              let vec20 = t2_0;
-                                                                              let len20 = vec20.len();
-                                                                              let layout20 = _rt::alloc::Layout::from_size_align(vec20.len() * (5*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                              let (result20, _cleanup20) = wit_bindgen::rt::Cleanup::new(layout20);if let Some(cleanup) = _cleanup20 { cleanup.forget(); }
-                                                                              for (i, e) in vec20.into_iter().enumerate() {
-                                                                                let base = result20.add(i * (5*::core::mem::size_of::<*const u8>()));
+                                                                              let vec23 = t2_0;
+                                                                              let len23 = vec23.len();
+                                                                              let layout23 = _rt::alloc::Layout::from_size_align(vec23.len() * (8+4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                              let (result23, _cleanup23) = wit_bindgen::rt::Cleanup::new(layout23);if let Some(cleanup) = _cleanup23 { cleanup.forget(); }
+                                                                              for (i, e) in vec23.into_iter().enumerate() {
+                                                                                let base = result23.add(i * (8+4*::core::mem::size_of::<*const u8>()));
                                                                                 {
-                                                                                  use super::super::super::super::__with_name1::UnhandleEvent as V19;
+                                                                                  use super::super::super::super::__with_name1::UnhandleEvent as V22;
                                                                                   match e {
-                                                                                    V19::Event(e) => {
+                                                                                    V22::Event(e) => {
                                                                                       *base.add(0).cast::<u8>() = (0i32) as u8;
-                                                                                      use super::super::super::super::__with_name1::Event as V17;
+                                                                                      use super::super::super::super::__with_name1::Event as V20;
                                                                                       match e {
-                                                                                        V17::Modifiers(e) => {
+                                                                                        V20::Modifiers(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
                                                                                           let super::super::super::super::__with_name1::ModifierOptions{ ctrl:ctrl3, shift:shift3, alt:alt3, super_key:super_key3, } = e;
                                                                                           let flags4 = ctrl3;
@@ -15495,26 +15600,26 @@ pub mod wasi {
                                                                                           let flags7 = super_key3;
                                                                                           *base.add(3+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags7.bits() >> 0) as i32) as u8;
                                                                                         },
-                                                                                        V17::Pointer(e) => {
+                                                                                        V20::Pointer(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
                                                                                           let super::super::super::super::__with_name1::Location{ x:x8, y:y8, } = e;
                                                                                           *base.add(2*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(x8);
                                                                                           *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(y8);
                                                                                         },
-                                                                                        V17::MouseDown(e) => {
+                                                                                        V20::MouseDown(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
                                                                                           *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                         },
-                                                                                        V17::MouseUp(e) => {
+                                                                                        V20::MouseUp(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
                                                                                           *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                         },
-                                                                                        V17::MouseMove=> {
+                                                                                        V20::MouseMove=> {
                                                                                           {
                                                                                             *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (4i32) as u8;
                                                                                           }
                                                                                         }
-                                                                                        V17::KeyDown(e) => {
+                                                                                        V20::KeyDown(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (5i32) as u8;
                                                                                           let (t9_0, t9_1, ) = e;
                                                                                           use super::super::super::super::__with_name1::Keys as V10;
@@ -15539,7 +15644,7 @@ pub mod wasi {
                                                                                           let flags11 = t9_1;
                                                                                           *base.add(2+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags11.bits() >> 0) as i32) as u8;
                                                                                         },
-                                                                                        V17::KeyUp(e) => {
+                                                                                        V20::KeyUp(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (6i32) as u8;
                                                                                           use super::super::super::super::__with_name1::Keys as V12;
                                                                                           match e {
@@ -15561,831 +15666,892 @@ pub mod wasi {
                                                                                             },
                                                                                           }
                                                                                         },
-                                                                                        V17::UpdateCompositionState(e) => {
+                                                                                        V20::RequestCompositionBounds(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (7i32) as u8;
-                                                                                          use super::super::super::super::__with_name1::CompositionState as V15;
+                                                                                          use super::super::super::super::__with_name1::CompositionBoundsReq as V14;
                                                                                           match e {
-                                                                                            V15::PreEdit(e) => {
+                                                                                            V14::CharacterBounds(e) => {
                                                                                               *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
-                                                                                              let vec13 = (e.into_bytes()).into_boxed_slice();
-                                                                                              let ptr13 = vec13.as_ptr().cast::<u8>();
-                                                                                              let len13 = vec13.len();
-                                                                                              ::core::mem::forget(vec13);
-                                                                                              *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>() = len13;
-                                                                                              *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr13.cast_mut();
-                                                                                            },
-                                                                                            V15::Commit(e) => {
-                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
-                                                                                              let vec14 = (e.into_bytes()).into_boxed_slice();
-                                                                                              let ptr14 = vec14.as_ptr().cast::<u8>();
-                                                                                              let len14 = vec14.len();
-                                                                                              ::core::mem::forget(vec14);
-                                                                                              *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>() = len14;
-                                                                                              *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr14.cast_mut();
-                                                                                            },
-                                                                                          }
-                                                                                        },
-                                                                                        V17::History(e) => {
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (8i32) as u8;
-                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
-                                                                                        },
-                                                                                        V17::Cut=> {
-                                                                                          {
+                                                                                              match e {
+                                                                                                Some(e) => {
+                                                                                                  *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
+                                                                                                  let super::super::super::super::__with_name1::CompositionRange{ offset:offset13, len:len13, } = e;
+                                                                                                  *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(offset13);
+                                                                                                  *base.add(12+2*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(len13);
+                                                                                                },
+                                                                                                None => {
+                                                                                                  {
+                                                                                                    *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
+                                                                                                  }
+                                                                                                },
+                                                                                              };},
+                                                                                            }
+                                                                                          },
+                                                                                          V20::UpdateCompositionState(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (8i32) as u8;
+                                                                                            use super::super::super::super::__with_name1::CompositionState as V18;
+                                                                                            match e {
+                                                                                              V18::SelectionRange(e) => {
+                                                                                                *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
+                                                                                                let super::super::super::super::__with_name1::CompositionRange{ offset:offset15, len:len15, } = e;
+                                                                                                *base.add(3*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(offset15);
+                                                                                                *base.add(4+3*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(len15);
+                                                                                              },
+                                                                                              V18::PreEdit(e) => {
+                                                                                                *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
+                                                                                                let vec16 = (e.into_bytes()).into_boxed_slice();
+                                                                                                let ptr16 = vec16.as_ptr().cast::<u8>();
+                                                                                                let len16 = vec16.len();
+                                                                                                ::core::mem::forget(vec16);
+                                                                                                *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>() = len16;
+                                                                                                *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr16.cast_mut();
+                                                                                              },
+                                                                                              V18::Commit(e) => {
+                                                                                                *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
+                                                                                                let vec17 = (e.into_bytes()).into_boxed_slice();
+                                                                                                let ptr17 = vec17.as_ptr().cast::<u8>();
+                                                                                                let len17 = vec17.len();
+                                                                                                ::core::mem::forget(vec17);
+                                                                                                *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>() = len17;
+                                                                                                *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr17.cast_mut();
+                                                                                              },
+                                                                                            }
+                                                                                          },
+                                                                                          V20::History(e) => {
                                                                                             *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (9i32) as u8;
+                                                                                            *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
+                                                                                          },
+                                                                                          V20::Cut=> {
+                                                                                            {
+                                                                                              *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (10i32) as u8;
+                                                                                            }
                                                                                           }
-                                                                                        }
-                                                                                        V17::Copy=> {
-                                                                                          {
-                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (10i32) as u8;
+                                                                                          V20::Copy=> {
+                                                                                            {
+                                                                                              *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (11i32) as u8;
+                                                                                            }
                                                                                           }
-                                                                                        }
-                                                                                        V17::Paste(e) => {
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (11i32) as u8;
-                                                                                          let vec16 = (e.into_bytes()).into_boxed_slice();
-                                                                                          let ptr16 = vec16.as_ptr().cast::<u8>();
-                                                                                          let len16 = vec16.len();
-                                                                                          ::core::mem::forget(vec16);
-                                                                                          *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len16;
-                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr16.cast_mut();
-                                                                                        },
-                                                                                        V17::Activate=> {
-                                                                                          {
+                                                                                          V20::Paste(e) => {
                                                                                             *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (12i32) as u8;
+                                                                                            let vec19 = (e.into_bytes()).into_boxed_slice();
+                                                                                            let ptr19 = vec19.as_ptr().cast::<u8>();
+                                                                                            let len19 = vec19.len();
+                                                                                            ::core::mem::forget(vec19);
+                                                                                            *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len19;
+                                                                                            *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr19.cast_mut();
+                                                                                          },
+                                                                                          V20::Activate=> {
+                                                                                            {
+                                                                                              *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (13i32) as u8;
+                                                                                            }
                                                                                           }
                                                                                         }
-                                                                                      }
-                                                                                    },
-                                                                                    V19::OpenWindow(e) => {
-                                                                                      *base.add(0).cast::<u8>() = (1i32) as u8;
-                                                                                      let vec18 = (e.into_bytes()).into_boxed_slice();
-                                                                                      let ptr18 = vec18.as_ptr().cast::<u8>();
-                                                                                      let len18 = vec18.len();
-                                                                                      ::core::mem::forget(vec18);
-                                                                                      *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len18;
-                                                                                      *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr18.cast_mut();
-                                                                                    },
+                                                                                      },
+                                                                                      V22::OpenWindow(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (1i32) as u8;
+                                                                                        let vec21 = (e.into_bytes()).into_boxed_slice();
+                                                                                        let ptr21 = vec21.as_ptr().cast::<u8>();
+                                                                                        let len21 = vec21.len();
+                                                                                        ::core::mem::forget(vec21);
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len21;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr21.cast_mut();
+                                                                                      },
+                                                                                    }
                                                                                   }
                                                                                 }
-                                                                              }
-                                                                              *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len20;
-                                                                              *ptr1.add(0).cast::<*mut u8>() = result20;
-                                                                              let vec30 = t2_1;
-                                                                              let len30 = vec30.len();
-                                                                              let layout30 = _rt::alloc::Layout::from_size_align(vec30.len() * (4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                              let (result30, _cleanup30) = wit_bindgen::rt::Cleanup::new(layout30);if let Some(cleanup) = _cleanup30 { cleanup.forget(); }
-                                                                              for (i, e) in vec30.into_iter().enumerate() {
-                                                                                let base = result30.add(i * (4*::core::mem::size_of::<*const u8>()));
-                                                                                {
-                                                                                  use super::super::super::super::local::immediate_renderer_example::interaction::Command as V29;
-                                                                                  match e {
-                                                                                    V29::OpenWindow(e) => {
-                                                                                      *base.add(0).cast::<u8>() = (0i32) as u8;
-                                                                                      let vec21 = (e.into_bytes()).into_boxed_slice();
-                                                                                      let ptr21 = vec21.as_ptr().cast::<u8>();
-                                                                                      let len21 = vec21.len();
-                                                                                      ::core::mem::forget(vec21);
-                                                                                      *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len21;
-                                                                                      *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr21.cast_mut();
-                                                                                    },
-                                                                                    V29::RequestImage(e) => {
-                                                                                      *base.add(0).cast::<u8>() = (1i32) as u8;
-                                                                                      let vec23 = e;
-                                                                                      let len23 = vec23.len();
-                                                                                      let layout23 = _rt::alloc::Layout::from_size_align(vec23.len() * (2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                      let (result23, _cleanup23) = wit_bindgen::rt::Cleanup::new(layout23);if let Some(cleanup) = _cleanup23 { cleanup.forget(); }
-                                                                                      for (i, e) in vec23.into_iter().enumerate() {
-                                                                                        let base = result23.add(i * (2*::core::mem::size_of::<*const u8>()));
-                                                                                        {
-                                                                                          let vec22 = (e.into_bytes()).into_boxed_slice();
-                                                                                          let ptr22 = vec22.as_ptr().cast::<u8>();
-                                                                                          let len22 = vec22.len();
-                                                                                          ::core::mem::forget(vec22);
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len22;
-                                                                                          *base.add(0).cast::<*mut u8>() = ptr22.cast_mut();
+                                                                                *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len23;
+                                                                                *ptr1.add(0).cast::<*mut u8>() = result23;
+                                                                                let vec34 = t2_1;
+                                                                                let len34 = vec34.len();
+                                                                                let layout34 = _rt::alloc::Layout::from_size_align(vec34.len() * (4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                let (result34, _cleanup34) = wit_bindgen::rt::Cleanup::new(layout34);if let Some(cleanup) = _cleanup34 { cleanup.forget(); }
+                                                                                for (i, e) in vec34.into_iter().enumerate() {
+                                                                                  let base = result34.add(i * (4*::core::mem::size_of::<*const u8>()));
+                                                                                  {
+                                                                                    use super::super::super::super::local::immediate_renderer_example::interaction::Command as V33;
+                                                                                    match e {
+                                                                                      V33::OpenWindow(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (0i32) as u8;
+                                                                                        let vec24 = (e.into_bytes()).into_boxed_slice();
+                                                                                        let ptr24 = vec24.as_ptr().cast::<u8>();
+                                                                                        let len24 = vec24.len();
+                                                                                        ::core::mem::forget(vec24);
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len24;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr24.cast_mut();
+                                                                                      },
+                                                                                      V33::RequestImage(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (1i32) as u8;
+                                                                                        let vec26 = e;
+                                                                                        let len26 = vec26.len();
+                                                                                        let layout26 = _rt::alloc::Layout::from_size_align(vec26.len() * (2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                        let (result26, _cleanup26) = wit_bindgen::rt::Cleanup::new(layout26);if let Some(cleanup) = _cleanup26 { cleanup.forget(); }
+                                                                                        for (i, e) in vec26.into_iter().enumerate() {
+                                                                                          let base = result26.add(i * (2*::core::mem::size_of::<*const u8>()));
+                                                                                          {
+                                                                                            let vec25 = (e.into_bytes()).into_boxed_slice();
+                                                                                            let ptr25 = vec25.as_ptr().cast::<u8>();
+                                                                                            let len25 = vec25.len();
+                                                                                            ::core::mem::forget(vec25);
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len25;
+                                                                                            *base.add(0).cast::<*mut u8>() = ptr25.cast_mut();
+                                                                                          }
                                                                                         }
-                                                                                      }
-                                                                                      *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len23;
-                                                                                      *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result23;
-                                                                                    },
-                                                                                    V29::Cursor(e) => {
-                                                                                      *base.add(0).cast::<u8>() = (2i32) as u8;
-                                                                                      *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
-                                                                                    },
-                                                                                    V29::Clipboard(e) => {
-                                                                                      *base.add(0).cast::<u8>() = (3i32) as u8;
-                                                                                      use super::super::super::super::local::immediate_renderer_example::interaction::ClipboardData as V25;
-                                                                                      match e {
-                                                                                        V25::Text(e) => {
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
-                                                                                          let vec24 = (e.into_bytes()).into_boxed_slice();
-                                                                                          let ptr24 = vec24.as_ptr().cast::<u8>();
-                                                                                          let len24 = vec24.len();
-                                                                                          ::core::mem::forget(vec24);
-                                                                                          *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len24;
-                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr24.cast_mut();
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len26;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result26;
+                                                                                      },
+                                                                                      V33::Cursor(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (2i32) as u8;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
+                                                                                      },
+                                                                                      V33::Clipboard(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (3i32) as u8;
+                                                                                        use super::super::super::super::local::immediate_renderer_example::interaction::ClipboardData as V28;
+                                                                                        match e {
+                                                                                          V28::Text(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
+                                                                                            let vec27 = (e.into_bytes()).into_boxed_slice();
+                                                                                            let ptr27 = vec27.as_ptr().cast::<u8>();
+                                                                                            let len27 = vec27.len();
+                                                                                            ::core::mem::forget(vec27);
+                                                                                            *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len27;
+                                                                                            *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr27.cast_mut();
+                                                                                          },
+                                                                                        }
+                                                                                      },
+                                                                                      V33::ChangeSet(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (4i32) as u8;
+                                                                                        let vec31 = e;
+                                                                                        let len31 = vec31.len();
+                                                                                        let layout31 = _rt::alloc::Layout::from_size_align(vec31.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                        let (result31, _cleanup31) = wit_bindgen::rt::Cleanup::new(layout31);if let Some(cleanup) = _cleanup31 { cleanup.forget(); }
+                                                                                        for (i, e) in vec31.into_iter().enumerate() {
+                                                                                          let base = result31.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                          {
+                                                                                            let super::super::super::super::local::immediate_renderer_example::interaction::ChangeSpec{ offset:offset29, len:len29, new_value:new_value29, } = e;
+                                                                                            *base.add(0).cast::<i32>() = _rt::as_i32(offset29);
+                                                                                            *base.add(4).cast::<i32>() = _rt::as_i32(len29);
+                                                                                            match new_value29 {
+                                                                                              Some(e) => {
+                                                                                                *base.add(8).cast::<u8>() = (1i32) as u8;
+                                                                                                let vec30 = (e.into_bytes()).into_boxed_slice();
+                                                                                                let ptr30 = vec30.as_ptr().cast::<u8>();
+                                                                                                let len30 = vec30.len();
+                                                                                                ::core::mem::forget(vec30);
+                                                                                                *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len30;
+                                                                                                *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr30.cast_mut();
+                                                                                              },
+                                                                                              None => {
+                                                                                                {
+                                                                                                  *base.add(8).cast::<u8>() = (0i32) as u8;
+                                                                                                }
+                                                                                              },
+                                                                                            };}
+                                                                                          }
+                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len31;
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result31;
+                                                                                        },
+                                                                                        V33::CompositionBounds(e) => {
+                                                                                          *base.add(0).cast::<u8>() = (5i32) as u8;
+                                                                                          use super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds as V32;
+                                                                                          match e {
+                                                                                            V32::SelectionBounds=> {
+                                                                                              {
+                                                                                                *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
+                                                                                              }
+                                                                                            }
+                                                                                            V32::CharacterBounds=> {
+                                                                                              {
+                                                                                                *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
+                                                                                              }
+                                                                                            }
+                                                                                          }
                                                                                         },
                                                                                       }
-                                                                                    },
-                                                                                    V29::ChangeSet(e) => {
-                                                                                      *base.add(0).cast::<u8>() = (4i32) as u8;
-                                                                                      let vec28 = e;
-                                                                                      let len28 = vec28.len();
-                                                                                      let layout28 = _rt::alloc::Layout::from_size_align(vec28.len() * (8+2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                      let (result28, _cleanup28) = wit_bindgen::rt::Cleanup::new(layout28);if let Some(cleanup) = _cleanup28 { cleanup.forget(); }
-                                                                                      for (i, e) in vec28.into_iter().enumerate() {
-                                                                                        let base = result28.add(i * (8+2*::core::mem::size_of::<*const u8>()));
-                                                                                        {
-                                                                                          let super::super::super::super::local::immediate_renderer_example::interaction::ChangeSpec{ offset:offset26, len:len26, new_value:new_value26, } = e;
-                                                                                          *base.add(0).cast::<i32>() = _rt::as_i32(offset26);
-                                                                                          *base.add(4).cast::<i32>() = _rt::as_i32(len26);
-                                                                                          let vec27 = (new_value26.into_bytes()).into_boxed_slice();
-                                                                                          let ptr27 = vec27.as_ptr().cast::<u8>();
-                                                                                          let len27 = vec27.len();
-                                                                                          ::core::mem::forget(vec27);
-                                                                                          *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<usize>() = len27;
-                                                                                          *base.add(8).cast::<*mut u8>() = ptr27.cast_mut();
-                                                                                        }
-                                                                                      }
-                                                                                      *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len28;
-                                                                                      *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result28;
-                                                                                    },
+                                                                                    }
                                                                                   }
-                                                                                }
-                                                                              }
-                                                                              *ptr1.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len30;
-                                                                              *ptr1.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result30;
-                                                                              ptr1
-                                                                            } }
-                                                                            #[doc(hidden)]
-                                                                            #[allow(non_snake_case)]
-                                                                            pub unsafe fn __post_return_method_dispatcher_dispatch<T_: GuestDispatcher>(arg0: *mut u8,) { unsafe {
-                                                                              let l0 = *arg0.add(0).cast::<*mut u8>();
-                                                                              let l1 = *arg0.add(::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                              let base13 = l0;
-                                                                              let len13 = l1;
-                                                                              for i in 0..len13 {
-                                                                                let base = base13.add(i * (5*::core::mem::size_of::<*const u8>()));
-                                                                                {
-                                                                                  let l2 = i32::from(*base.add(0).cast::<u8>());
-                                                                                  match l2 {
-                                                                                    0 => {
-                                                                                      let l3 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                      match l3 {
-                                                                                        0 => (),
-                                                                                        1 => (),
+                                                                                  *ptr1.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len34;
+                                                                                  *ptr1.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result34;
+                                                                                  ptr1
+                                                                                } }
+                                                                                #[doc(hidden)]
+                                                                                #[allow(non_snake_case)]
+                                                                                pub unsafe fn __post_return_method_dispatcher_dispatch<T_: GuestDispatcher>(arg0: *mut u8,) { unsafe {
+                                                                                  let l0 = *arg0.add(0).cast::<*mut u8>();
+                                                                                  let l1 = *arg0.add(::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                  let base13 = l0;
+                                                                                  let len13 = l1;
+                                                                                  for i in 0..len13 {
+                                                                                    let base = base13.add(i * (8+4*::core::mem::size_of::<*const u8>()));
+                                                                                    {
+                                                                                      let l2 = i32::from(*base.add(0).cast::<u8>());
+                                                                                      match l2 {
+                                                                                        0 => {
+                                                                                          let l3 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                          match l3 {
+                                                                                            0 => (),
+                                                                                            1 => (),
+                                                                                            2 => (),
+                                                                                            3 => (),
+                                                                                            4 => (),
+                                                                                            5 => (),
+                                                                                            6 => (),
+                                                                                            7 => (),
+                                                                                            8 => {
+                                                                                              let l4 = i32::from(*base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                              match l4 {
+                                                                                                0 => (),
+                                                                                                1 => {
+                                                                                                  let l5 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                  let l6 = *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                  _rt::cabi_dealloc(l5, l6, 1);
+                                                                                                },
+                                                                                                _ => {
+                                                                                                  let l7 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                  let l8 = *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                  _rt::cabi_dealloc(l7, l8, 1);
+                                                                                                },
+                                                                                              }
+                                                                                            },
+                                                                                            9 => (),
+                                                                                            10 => (),
+                                                                                            11 => (),
+                                                                                            12 => {
+                                                                                              let l9 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                              let l10 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                              _rt::cabi_dealloc(l9, l10, 1);
+                                                                                            },
+                                                                                            _ => (),
+                                                                                          }
+                                                                                        },
+                                                                                        _ => {
+                                                                                          let l11 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                          let l12 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                          _rt::cabi_dealloc(l11, l12, 1);
+                                                                                        },
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                  _rt::cabi_dealloc(base13, len13 * (8+4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                  let l14 = *arg0.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                  let l15 = *arg0.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                  let base33 = l14;
+                                                                                  let len33 = l15;
+                                                                                  for i in 0..len33 {
+                                                                                    let base = base33.add(i * (4*::core::mem::size_of::<*const u8>()));
+                                                                                    {
+                                                                                      let l16 = i32::from(*base.add(0).cast::<u8>());
+                                                                                      match l16 {
+                                                                                        0 => {
+                                                                                          let l17 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                          let l18 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                          _rt::cabi_dealloc(l17, l18, 1);
+                                                                                        },
+                                                                                        1 => {
+                                                                                          let l19 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                          let l20 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                          let base23 = l19;
+                                                                                          let len23 = l20;
+                                                                                          for i in 0..len23 {
+                                                                                            let base = base23.add(i * (2*::core::mem::size_of::<*const u8>()));
+                                                                                            {
+                                                                                              let l21 = *base.add(0).cast::<*mut u8>();
+                                                                                              let l22 = *base.add(::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                              _rt::cabi_dealloc(l21, l22, 1);
+                                                                                            }
+                                                                                          }
+                                                                                          _rt::cabi_dealloc(base23, len23 * (2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                        },
                                                                                         2 => (),
-                                                                                        3 => (),
-                                                                                        4 => (),
-                                                                                        5 => (),
-                                                                                        6 => (),
-                                                                                        7 => {
-                                                                                          let l4 = i32::from(*base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                          match l4 {
-                                                                                            0 => {
-                                                                                              let l5 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                              let l6 = *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                              _rt::cabi_dealloc(l5, l6, 1);
-                                                                                            },
+                                                                                        3 => {
+                                                                                          let l24 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                          match l24 {
                                                                                             _ => {
-                                                                                              let l7 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                              let l8 = *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                              _rt::cabi_dealloc(l7, l8, 1);
+                                                                                              let l25 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                              let l26 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                              _rt::cabi_dealloc(l25, l26, 1);
                                                                                             },
                                                                                           }
                                                                                         },
-                                                                                        8 => (),
-                                                                                        9 => (),
-                                                                                        10 => (),
-                                                                                        11 => {
-                                                                                          let l9 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                          let l10 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                          _rt::cabi_dealloc(l9, l10, 1);
+                                                                                        4 => {
+                                                                                          let l27 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                          let l28 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                          let base32 = l27;
+                                                                                          let len32 = l28;
+                                                                                          for i in 0..len32 {
+                                                                                            let base = base32.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                            {
+                                                                                              let l29 = i32::from(*base.add(8).cast::<u8>());
+                                                                                              match l29 {
+                                                                                                0 => (),
+                                                                                                _ => {
+                                                                                                  let l30 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                  let l31 = *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                  _rt::cabi_dealloc(l30, l31, 1);
+                                                                                                },
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                          _rt::cabi_dealloc(base32, len32 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                         },
                                                                                         _ => (),
                                                                                       }
-                                                                                    },
-                                                                                    _ => {
-                                                                                      let l11 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                      let l12 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                      _rt::cabi_dealloc(l11, l12, 1);
-                                                                                    },
+                                                                                    }
                                                                                   }
-                                                                                }
+                                                                                  _rt::cabi_dealloc(base33, len33 * (4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                } }
+                                                                                #[doc(hidden)]
+                                                                                #[allow(non_snake_case, unused_unsafe)]
+                                                                                pub unsafe fn _export_create_renderer_cabi<T_: Guest>(arg0: i32,) -> i32 { unsafe {#[cfg(target_arch="wasm32")]
+                                                                                _rt::run_ctors_once();let result0 = {
+                                                                                  T_::create_renderer(super::super::super::super::__with_name0::RenderContext::from_handle(arg0 as u32))
+                                                                                };
+                                                                                (result0).take_handle() as i32
+                                                                              } }
+                                                                              pub trait Guest {
+                                                                                type EventChannel: GuestEventChannel;
+                                                                                type CommandChannel: GuestCommandChannel;
+                                                                                type Dispatcher: GuestDispatcher;
+                                                                                #[allow(async_fn_in_trait)]
+                                                                                fn create_renderer(context: RenderContext,) -> Dispatcher;
                                                                               }
-                                                                              _rt::cabi_dealloc(base13, len13 * (5*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                              let l14 = *arg0.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                              let l15 = *arg0.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                              let base32 = l14;
-                                                                              let len32 = l15;
-                                                                              for i in 0..len32 {
-                                                                                let base = base32.add(i * (4*::core::mem::size_of::<*const u8>()));
+                                                                              pub trait GuestEventChannel: 'static {
+
+                                                                                #[doc(hidden)]
+                                                                                unsafe fn _resource_new(val: *mut u8) -> u32
+                                                                                where Self: Sized
                                                                                 {
-                                                                                  let l16 = i32::from(*base.add(0).cast::<u8>());
-                                                                                  match l16 {
-                                                                                    0 => {
-                                                                                      let l17 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                      let l18 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                      _rt::cabi_dealloc(l17, l18, 1);
-                                                                                    },
-                                                                                    1 => {
-                                                                                      let l19 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                      let l20 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                      let base23 = l19;
-                                                                                      let len23 = l20;
-                                                                                      for i in 0..len23 {
-                                                                                        let base = base23.add(i * (2*::core::mem::size_of::<*const u8>()));
-                                                                                        {
-                                                                                          let l21 = *base.add(0).cast::<*mut u8>();
-                                                                                          let l22 = *base.add(::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                          _rt::cabi_dealloc(l21, l22, 1);
-                                                                                        }
-                                                                                      }
-                                                                                      _rt::cabi_dealloc(base23, len23 * (2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                                    },
-                                                                                    2 => (),
-                                                                                    3 => {
-                                                                                      let l24 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                      match l24 {
-                                                                                        _ => {
-                                                                                          let l25 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                          let l26 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                          _rt::cabi_dealloc(l25, l26, 1);
-                                                                                        },
-                                                                                      }
-                                                                                    },
-                                                                                    _ => {
-                                                                                      let l27 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                      let l28 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                      let base31 = l27;
-                                                                                      let len31 = l28;
-                                                                                      for i in 0..len31 {
-                                                                                        let base = base31.add(i * (8+2*::core::mem::size_of::<*const u8>()));
-                                                                                        {
-                                                                                          let l29 = *base.add(8).cast::<*mut u8>();
-                                                                                          let l30 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                          _rt::cabi_dealloc(l29, l30, 1);
-                                                                                        }
-                                                                                      }
-                                                                                      _rt::cabi_dealloc(base31, len31 * (8+2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                                    },
+                                                                                  
+                                                                                  #[cfg(target_arch = "wasm32")]
+                                                                                  #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
+                                                                                  unsafe extern "C" {
+                                                                                    #[link_name = "[resource-new]event-channel"]
+                                                                                    fn new(_: *mut u8, ) -> i32;
                                                                                   }
+
+                                                                                  #[cfg(not(target_arch = "wasm32"))]
+                                                                                  unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
+                                                                                  
+                                                                                  unsafe { new(val) as u32 }
                                                                                 }
+
+                                                                                #[doc(hidden)]
+                                                                                fn _resource_rep(handle: u32) -> *mut u8
+                                                                                where Self: Sized
+                                                                                {
+                                                                                  
+                                                                                  #[cfg(target_arch = "wasm32")]
+                                                                                  #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
+                                                                                  unsafe extern "C" {
+                                                                                    #[link_name = "[resource-rep]event-channel"]
+                                                                                    fn rep(_: i32, ) -> *mut u8;
+                                                                                  }
+
+                                                                                  #[cfg(not(target_arch = "wasm32"))]
+                                                                                  unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
+                                                                                  
+                                                                                  unsafe { rep(handle as i32) }
+                                                                                }
+
+                                                                                
+                                                                                #[allow(async_fn_in_trait)]
+                                                                                fn post(&self,events: _rt::Vec::<Event>,) -> ();
                                                                               }
-                                                                              _rt::cabi_dealloc(base32, len32 * (4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                            } }
-                                                                            #[doc(hidden)]
-                                                                            #[allow(non_snake_case, unused_unsafe)]
-                                                                            pub unsafe fn _export_create_renderer_cabi<T_: Guest>(arg0: i32,) -> i32 { unsafe {#[cfg(target_arch="wasm32")]
-                                                                            _rt::run_ctors_once();let result0 = {
-                                                                              T_::create_renderer(super::super::super::super::__with_name0::RenderContext::from_handle(arg0 as u32))
-                                                                            };
-                                                                            (result0).take_handle() as i32
-                                                                          } }
-                                                                          pub trait Guest {
-                                                                            type EventChannel: GuestEventChannel;
-                                                                            type CommandChannel: GuestCommandChannel;
-                                                                            type Dispatcher: GuestDispatcher;
-                                                                            #[allow(async_fn_in_trait)]
-                                                                            fn create_renderer(context: RenderContext,) -> Dispatcher;
+                                                                              pub trait GuestCommandChannel: 'static {
+
+                                                                                #[doc(hidden)]
+                                                                                unsafe fn _resource_new(val: *mut u8) -> u32
+                                                                                where Self: Sized
+                                                                                {
+                                                                                  
+                                                                                  #[cfg(target_arch = "wasm32")]
+                                                                                  #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
+                                                                                  unsafe extern "C" {
+                                                                                    #[link_name = "[resource-new]command-channel"]
+                                                                                    fn new(_: *mut u8, ) -> i32;
+                                                                                  }
+
+                                                                                  #[cfg(not(target_arch = "wasm32"))]
+                                                                                  unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
+                                                                                  
+                                                                                  unsafe { new(val) as u32 }
+                                                                                }
+
+                                                                                #[doc(hidden)]
+                                                                                fn _resource_rep(handle: u32) -> *mut u8
+                                                                                where Self: Sized
+                                                                                {
+                                                                                  
+                                                                                  #[cfg(target_arch = "wasm32")]
+                                                                                  #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
+                                                                                  unsafe extern "C" {
+                                                                                    #[link_name = "[resource-rep]command-channel"]
+                                                                                    fn rep(_: i32, ) -> *mut u8;
+                                                                                  }
+
+                                                                                  #[cfg(not(target_arch = "wasm32"))]
+                                                                                  unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
+                                                                                  
+                                                                                  unsafe { rep(handle as i32) }
+                                                                                }
+
+                                                                                
+                                                                                #[allow(async_fn_in_trait)]
+                                                                                fn post(&self,effects: _rt::Vec::<Effect>,) -> ();
+                                                                              }
+                                                                              pub trait GuestDispatcher: 'static {
+
+                                                                                #[doc(hidden)]
+                                                                                unsafe fn _resource_new(val: *mut u8) -> u32
+                                                                                where Self: Sized
+                                                                                {
+                                                                                  
+                                                                                  #[cfg(target_arch = "wasm32")]
+                                                                                  #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
+                                                                                  unsafe extern "C" {
+                                                                                    #[link_name = "[resource-new]dispatcher"]
+                                                                                    fn new(_: *mut u8, ) -> i32;
+                                                                                  }
+
+                                                                                  #[cfg(not(target_arch = "wasm32"))]
+                                                                                  unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
+                                                                                  
+                                                                                  unsafe { new(val) as u32 }
+                                                                                }
+
+                                                                                #[doc(hidden)]
+                                                                                fn _resource_rep(handle: u32) -> *mut u8
+                                                                                where Self: Sized
+                                                                                {
+                                                                                  
+                                                                                  #[cfg(target_arch = "wasm32")]
+                                                                                  #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
+                                                                                  unsafe extern "C" {
+                                                                                    #[link_name = "[resource-rep]dispatcher"]
+                                                                                    fn rep(_: i32, ) -> *mut u8;
+                                                                                  }
+
+                                                                                  #[cfg(not(target_arch = "wasm32"))]
+                                                                                  unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
+                                                                                  
+                                                                                  unsafe { rep(handle as i32) }
+                                                                                }
+
+                                                                                
+                                                                                #[allow(async_fn_in_trait)]
+                                                                                fn event_channel(&self,) -> EventChannel;
+                                                                                #[allow(async_fn_in_trait)]
+                                                                                fn command_channel(&self,) -> CommandChannel;
+                                                                                #[allow(async_fn_in_trait)]
+                                                                                fn dispatch(&self,) -> (_rt::Vec::<UnhandleEvent>,_rt::Vec::<Command>,);
+                                                                              }
+                                                                              #[doc(hidden)]
+
+                                                                              macro_rules! __export_local_immediate_renderer_example_render_cabi{
+                                                                                ($ty:ident with_types_in $($path_to_types:tt)*) => (const _: () = {
+
+                                                                                  #[unsafe(export_name = "local:immediate-renderer-example/render#[method]event-channel.post")]
+                                                                                  unsafe extern "C" fn export_method_event_channel_post(arg0: *mut u8,arg1: *mut u8,arg2: usize,) {
+                                                                                    unsafe { $($path_to_types)*::_export_method_event_channel_post_cabi::<<$ty as $($path_to_types)*::Guest>::EventChannel>(arg0, arg1, arg2) }
+                                                                                  }
+                                                                                  #[unsafe(export_name = "local:immediate-renderer-example/render#[method]command-channel.post")]
+                                                                                  unsafe extern "C" fn export_method_command_channel_post(arg0: *mut u8,arg1: *mut u8,arg2: usize,) {
+                                                                                    unsafe { $($path_to_types)*::_export_method_command_channel_post_cabi::<<$ty as $($path_to_types)*::Guest>::CommandChannel>(arg0, arg1, arg2) }
+                                                                                  }
+                                                                                  #[unsafe(export_name = "local:immediate-renderer-example/render#[method]dispatcher.event-channel")]
+                                                                                  unsafe extern "C" fn export_method_dispatcher_event_channel(arg0: *mut u8,) -> i32 {
+                                                                                    unsafe { $($path_to_types)*::_export_method_dispatcher_event_channel_cabi::<<$ty as $($path_to_types)*::Guest>::Dispatcher>(arg0) }
+                                                                                  }
+                                                                                  #[unsafe(export_name = "local:immediate-renderer-example/render#[method]dispatcher.command-channel")]
+                                                                                  unsafe extern "C" fn export_method_dispatcher_command_channel(arg0: *mut u8,) -> i32 {
+                                                                                    unsafe { $($path_to_types)*::_export_method_dispatcher_command_channel_cabi::<<$ty as $($path_to_types)*::Guest>::Dispatcher>(arg0) }
+                                                                                  }
+                                                                                  #[unsafe(export_name = "local:immediate-renderer-example/render#[method]dispatcher.dispatch")]
+                                                                                  unsafe extern "C" fn export_method_dispatcher_dispatch(arg0: *mut u8,) -> *mut u8 {
+                                                                                    unsafe { $($path_to_types)*::_export_method_dispatcher_dispatch_cabi::<<$ty as $($path_to_types)*::Guest>::Dispatcher>(arg0) }
+                                                                                  }
+                                                                                  #[unsafe(export_name = "cabi_post_local:immediate-renderer-example/render#[method]dispatcher.dispatch")]
+                                                                                  unsafe extern "C" fn _post_return_method_dispatcher_dispatch(arg0: *mut u8,) {
+                                                                                    unsafe { $($path_to_types)*::__post_return_method_dispatcher_dispatch::<<$ty as $($path_to_types)*::Guest>::Dispatcher>(arg0) }
+                                                                                  }
+                                                                                  #[unsafe(export_name = "local:immediate-renderer-example/render#create-renderer")]
+                                                                                  unsafe extern "C" fn export_create_renderer(arg0: i32,) -> i32 {
+                                                                                    unsafe { $($path_to_types)*::_export_create_renderer_cabi::<$ty>(arg0) }
+                                                                                  }
+
+                                                                                  const _: () = {
+                                                                                    #[doc(hidden)]
+                                                                                    #[unsafe(export_name = "local:immediate-renderer-example/render#[dtor]event-channel")]
+                                                                                    #[allow(non_snake_case)]
+                                                                                    unsafe extern "C" fn dtor(rep: *mut u8) {
+                                                                                      unsafe {
+                                                                                        $($path_to_types)*::EventChannel::dtor::<
+                                                                                        <$ty as $($path_to_types)*::Guest>::EventChannel
+                                                                                        >(rep)
+                                                                                      }
+                                                                                    }
+                                                                                  };
+                                                                                  
+
+                                                                                  const _: () = {
+                                                                                    #[doc(hidden)]
+                                                                                    #[unsafe(export_name = "local:immediate-renderer-example/render#[dtor]command-channel")]
+                                                                                    #[allow(non_snake_case)]
+                                                                                    unsafe extern "C" fn dtor(rep: *mut u8) {
+                                                                                      unsafe {
+                                                                                        $($path_to_types)*::CommandChannel::dtor::<
+                                                                                        <$ty as $($path_to_types)*::Guest>::CommandChannel
+                                                                                        >(rep)
+                                                                                      }
+                                                                                    }
+                                                                                  };
+                                                                                  
+
+                                                                                  const _: () = {
+                                                                                    #[doc(hidden)]
+                                                                                    #[unsafe(export_name = "local:immediate-renderer-example/render#[dtor]dispatcher")]
+                                                                                    #[allow(non_snake_case)]
+                                                                                    unsafe extern "C" fn dtor(rep: *mut u8) {
+                                                                                      unsafe {
+                                                                                        $($path_to_types)*::Dispatcher::dtor::<
+                                                                                        <$ty as $($path_to_types)*::Guest>::Dispatcher
+                                                                                        >(rep)
+                                                                                      }
+                                                                                    }
+                                                                                  };
+                                                                                  
+                                                                                };);
+                                                                              }
+                                                                              #[doc(hidden)]
+                                                                              pub(crate) use __export_local_immediate_renderer_example_render_cabi;
+
+                                                                              #[cfg_attr(target_pointer_width="64", repr(align(8)))]
+                                                                              #[cfg_attr(target_pointer_width="32", repr(align(4)))]
+                                                                              struct _RetArea([::core::mem::MaybeUninit::<u8>; 4*::core::mem::size_of::<*const u8>()]);
+                                                                              static mut _RET_AREA: _RetArea = _RetArea([::core::mem::MaybeUninit::uninit(); 4*::core::mem::size_of::<*const u8>()]);
+
+                                                                            }
+
                                                                           }
-                                                                          pub trait GuestEventChannel: 'static {
+                                                                        }
+                                                                      }
+                                                                      mod _rt {
+                                                                        #![allow(dead_code, unused_imports, clippy::all)]
 
-                                                                            #[doc(hidden)]
-                                                                            unsafe fn _resource_new(val: *mut u8) -> u32
-                                                                            where Self: Sized
-                                                                            {
-                                                                              
-                                                                              #[cfg(target_arch = "wasm32")]
-                                                                              #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
-                                                                              unsafe extern "C" {
-                                                                                #[link_name = "[resource-new]event-channel"]
-                                                                                fn new(_: *mut u8, ) -> i32;
-                                                                              }
 
-                                                                              #[cfg(not(target_arch = "wasm32"))]
-                                                                              unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-                                                                              
-                                                                              unsafe { new(val) as u32 }
-                                                                            }
+                                                                        use core::fmt;
+                                                                        use core::marker;
+                                                                        use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
 
-                                                                            #[doc(hidden)]
-                                                                            fn _resource_rep(handle: u32) -> *mut u8
-                                                                            where Self: Sized
-                                                                            {
-                                                                              
-                                                                              #[cfg(target_arch = "wasm32")]
-                                                                              #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
-                                                                              unsafe extern "C" {
-                                                                                #[link_name = "[resource-rep]event-channel"]
-                                                                                fn rep(_: i32, ) -> *mut u8;
-                                                                              }
+                                                                        /// A type which represents a component model resource, either imported or
+                                                                        /// exported into this component.
+                                                                        ///
+                                                                        /// This is a low-level wrapper which handles the lifetime of the resource
+                                                                        /// (namely this has a destructor). The `T` provided defines the component model
+                                                                        /// intrinsics that this wrapper uses.
+                                                                        ///
+                                                                        /// One of the chief purposes of this type is to provide `Deref` implementations
+                                                                        /// to access the underlying data when it is owned.
+                                                                        ///
+                                                                        /// This type is primarily used in generated code for exported and imported
+                                                                        /// resources.
+                                                                        #[repr(transparent)]
+                                                                        pub struct Resource<T: WasmResource> {
+                                                                          // NB: This would ideally be `u32` but it is not. The fact that this has
+                                                                          // interior mutability is not exposed in the API of this type except for the
+                                                                          // `take_handle` method which is supposed to in theory be private.
+                                                                          //
+                                                                          // This represents, almost all the time, a valid handle value. When it's
+                                                                          // invalid it's stored as `u32::MAX`.
+                                                                          handle: AtomicU32,
+                                                                          _marker: marker::PhantomData<T>,
+                                                                        }
 
-                                                                              #[cfg(not(target_arch = "wasm32"))]
-                                                                              unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-                                                                              
-                                                                              unsafe { rep(handle as i32) }
-                                                                            }
+                                                                        /// A trait which all wasm resources implement, namely providing the ability to
+                                                                        /// drop a resource.
+                                                                        ///
+                                                                        /// This generally is implemented by generated code, not user-facing code.
+                                                                        #[allow(clippy::missing_safety_doc)]
+                                                                        pub unsafe trait WasmResource {
+                                                                          /// Invokes the `[resource-drop]...` intrinsic.
+                                                                          unsafe fn drop(handle: u32);
+                                                                        }
 
-                                                                            
-                                                                            #[allow(async_fn_in_trait)]
-                                                                            fn post(&self,events: _rt::Vec::<Event>,) -> ();
-                                                                          }
-                                                                          pub trait GuestCommandChannel: 'static {
-
-                                                                            #[doc(hidden)]
-                                                                            unsafe fn _resource_new(val: *mut u8) -> u32
-                                                                            where Self: Sized
-                                                                            {
-                                                                              
-                                                                              #[cfg(target_arch = "wasm32")]
-                                                                              #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
-                                                                              unsafe extern "C" {
-                                                                                #[link_name = "[resource-new]command-channel"]
-                                                                                fn new(_: *mut u8, ) -> i32;
-                                                                              }
-
-                                                                              #[cfg(not(target_arch = "wasm32"))]
-                                                                              unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-                                                                              
-                                                                              unsafe { new(val) as u32 }
-                                                                            }
-
-                                                                            #[doc(hidden)]
-                                                                            fn _resource_rep(handle: u32) -> *mut u8
-                                                                            where Self: Sized
-                                                                            {
-                                                                              
-                                                                              #[cfg(target_arch = "wasm32")]
-                                                                              #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
-                                                                              unsafe extern "C" {
-                                                                                #[link_name = "[resource-rep]command-channel"]
-                                                                                fn rep(_: i32, ) -> *mut u8;
-                                                                              }
-
-                                                                              #[cfg(not(target_arch = "wasm32"))]
-                                                                              unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-                                                                              
-                                                                              unsafe { rep(handle as i32) }
-                                                                            }
-
-                                                                            
-                                                                            #[allow(async_fn_in_trait)]
-                                                                            fn post(&self,effects: _rt::Vec::<Effect>,) -> ();
-                                                                          }
-                                                                          pub trait GuestDispatcher: 'static {
-
-                                                                            #[doc(hidden)]
-                                                                            unsafe fn _resource_new(val: *mut u8) -> u32
-                                                                            where Self: Sized
-                                                                            {
-                                                                              
-                                                                              #[cfg(target_arch = "wasm32")]
-                                                                              #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
-                                                                              unsafe extern "C" {
-                                                                                #[link_name = "[resource-new]dispatcher"]
-                                                                                fn new(_: *mut u8, ) -> i32;
-                                                                              }
-
-                                                                              #[cfg(not(target_arch = "wasm32"))]
-                                                                              unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-                                                                              
-                                                                              unsafe { new(val) as u32 }
-                                                                            }
-
-                                                                            #[doc(hidden)]
-                                                                            fn _resource_rep(handle: u32) -> *mut u8
-                                                                            where Self: Sized
-                                                                            {
-                                                                              
-                                                                              #[cfg(target_arch = "wasm32")]
-                                                                              #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
-                                                                              unsafe extern "C" {
-                                                                                #[link_name = "[resource-rep]dispatcher"]
-                                                                                fn rep(_: i32, ) -> *mut u8;
-                                                                              }
-
-                                                                              #[cfg(not(target_arch = "wasm32"))]
-                                                                              unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-                                                                              
-                                                                              unsafe { rep(handle as i32) }
-                                                                            }
-
-                                                                            
-                                                                            #[allow(async_fn_in_trait)]
-                                                                            fn event_channel(&self,) -> EventChannel;
-                                                                            #[allow(async_fn_in_trait)]
-                                                                            fn command_channel(&self,) -> CommandChannel;
-                                                                            #[allow(async_fn_in_trait)]
-                                                                            fn dispatch(&self,) -> (_rt::Vec::<UnhandleEvent>,_rt::Vec::<Command>,);
-                                                                          }
+                                                                        impl<T: WasmResource> Resource<T> {
                                                                           #[doc(hidden)]
-
-                                                                          macro_rules! __export_local_immediate_renderer_example_render_cabi{
-                                                                            ($ty:ident with_types_in $($path_to_types:tt)*) => (const _: () = {
-
-                                                                              #[unsafe(export_name = "local:immediate-renderer-example/render#[method]event-channel.post")]
-                                                                              unsafe extern "C" fn export_method_event_channel_post(arg0: *mut u8,arg1: *mut u8,arg2: usize,) {
-                                                                                unsafe { $($path_to_types)*::_export_method_event_channel_post_cabi::<<$ty as $($path_to_types)*::Guest>::EventChannel>(arg0, arg1, arg2) }
-                                                                              }
-                                                                              #[unsafe(export_name = "local:immediate-renderer-example/render#[method]command-channel.post")]
-                                                                              unsafe extern "C" fn export_method_command_channel_post(arg0: *mut u8,arg1: *mut u8,arg2: usize,) {
-                                                                                unsafe { $($path_to_types)*::_export_method_command_channel_post_cabi::<<$ty as $($path_to_types)*::Guest>::CommandChannel>(arg0, arg1, arg2) }
-                                                                              }
-                                                                              #[unsafe(export_name = "local:immediate-renderer-example/render#[method]dispatcher.event-channel")]
-                                                                              unsafe extern "C" fn export_method_dispatcher_event_channel(arg0: *mut u8,) -> i32 {
-                                                                                unsafe { $($path_to_types)*::_export_method_dispatcher_event_channel_cabi::<<$ty as $($path_to_types)*::Guest>::Dispatcher>(arg0) }
-                                                                              }
-                                                                              #[unsafe(export_name = "local:immediate-renderer-example/render#[method]dispatcher.command-channel")]
-                                                                              unsafe extern "C" fn export_method_dispatcher_command_channel(arg0: *mut u8,) -> i32 {
-                                                                                unsafe { $($path_to_types)*::_export_method_dispatcher_command_channel_cabi::<<$ty as $($path_to_types)*::Guest>::Dispatcher>(arg0) }
-                                                                              }
-                                                                              #[unsafe(export_name = "local:immediate-renderer-example/render#[method]dispatcher.dispatch")]
-                                                                              unsafe extern "C" fn export_method_dispatcher_dispatch(arg0: *mut u8,) -> *mut u8 {
-                                                                                unsafe { $($path_to_types)*::_export_method_dispatcher_dispatch_cabi::<<$ty as $($path_to_types)*::Guest>::Dispatcher>(arg0) }
-                                                                              }
-                                                                              #[unsafe(export_name = "cabi_post_local:immediate-renderer-example/render#[method]dispatcher.dispatch")]
-                                                                              unsafe extern "C" fn _post_return_method_dispatcher_dispatch(arg0: *mut u8,) {
-                                                                                unsafe { $($path_to_types)*::__post_return_method_dispatcher_dispatch::<<$ty as $($path_to_types)*::Guest>::Dispatcher>(arg0) }
-                                                                              }
-                                                                              #[unsafe(export_name = "local:immediate-renderer-example/render#create-renderer")]
-                                                                              unsafe extern "C" fn export_create_renderer(arg0: i32,) -> i32 {
-                                                                                unsafe { $($path_to_types)*::_export_create_renderer_cabi::<$ty>(arg0) }
-                                                                              }
-
-                                                                              const _: () = {
-                                                                                #[doc(hidden)]
-                                                                                #[unsafe(export_name = "local:immediate-renderer-example/render#[dtor]event-channel")]
-                                                                                #[allow(non_snake_case)]
-                                                                                unsafe extern "C" fn dtor(rep: *mut u8) {
-                                                                                  unsafe {
-                                                                                    $($path_to_types)*::EventChannel::dtor::<
-                                                                                    <$ty as $($path_to_types)*::Guest>::EventChannel
-                                                                                    >(rep)
-                                                                                  }
-                                                                                }
-                                                                              };
-                                                                              
-
-                                                                              const _: () = {
-                                                                                #[doc(hidden)]
-                                                                                #[unsafe(export_name = "local:immediate-renderer-example/render#[dtor]command-channel")]
-                                                                                #[allow(non_snake_case)]
-                                                                                unsafe extern "C" fn dtor(rep: *mut u8) {
-                                                                                  unsafe {
-                                                                                    $($path_to_types)*::CommandChannel::dtor::<
-                                                                                    <$ty as $($path_to_types)*::Guest>::CommandChannel
-                                                                                    >(rep)
-                                                                                  }
-                                                                                }
-                                                                              };
-                                                                              
-
-                                                                              const _: () = {
-                                                                                #[doc(hidden)]
-                                                                                #[unsafe(export_name = "local:immediate-renderer-example/render#[dtor]dispatcher")]
-                                                                                #[allow(non_snake_case)]
-                                                                                unsafe extern "C" fn dtor(rep: *mut u8) {
-                                                                                  unsafe {
-                                                                                    $($path_to_types)*::Dispatcher::dtor::<
-                                                                                    <$ty as $($path_to_types)*::Guest>::Dispatcher
-                                                                                    >(rep)
-                                                                                  }
-                                                                                }
-                                                                              };
-                                                                              
-                                                                            };);
+                                                                          pub unsafe fn from_handle(handle: u32) -> Self {
+                                                                            debug_assert!(handle != 0 && handle != u32::MAX);
+                                                                            Self {
+                                                                              handle: AtomicU32::new(handle),
+                                                                              _marker: marker::PhantomData,
+                                                                            }
                                                                           }
+
+                                                                          /// Takes ownership of the handle owned by `resource`.
+                                                                          ///
+                                                                          /// Note that this ideally would be `into_handle` taking `Resource<T>` by
+                                                                          /// ownership. The code generator does not enable that in all situations,
+                                                                          /// unfortunately, so this is provided instead.
+                                                                          ///
+                                                                          /// Also note that `take_handle` is in theory only ever called on values
+                                                                          /// owned by a generated function. For example a generated function might
+                                                                          /// take `Resource<T>` as an argument but then call `take_handle` on a
+                                                                          /// reference to that argument. In that sense the dynamic nature of
+                                                                          /// `take_handle` should only be exposed internally to generated code, not
+                                                                          /// to user code.
                                                                           #[doc(hidden)]
-                                                                          pub(crate) use __export_local_immediate_renderer_example_render_cabi;
+                                                                          pub fn take_handle(resource: &Resource<T>) -> u32 {
+                                                                            resource.handle.swap(u32::MAX, Relaxed)
+                                                                          }
 
-                                                                          #[cfg_attr(target_pointer_width="64", repr(align(8)))]
-                                                                          #[cfg_attr(target_pointer_width="32", repr(align(4)))]
-                                                                          struct _RetArea([::core::mem::MaybeUninit::<u8>; 4*::core::mem::size_of::<*const u8>()]);
-                                                                          static mut _RET_AREA: _RetArea = _RetArea([::core::mem::MaybeUninit::uninit(); 4*::core::mem::size_of::<*const u8>()]);
-
-                                                                        }
-
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                  mod _rt {
-                                                                    #![allow(dead_code, unused_imports, clippy::all)]
-
-
-                                                                    use core::fmt;
-                                                                    use core::marker;
-                                                                    use core::sync::atomic::{AtomicU32, Ordering::Relaxed};
-
-                                                                    /// A type which represents a component model resource, either imported or
-                                                                    /// exported into this component.
-                                                                    ///
-                                                                    /// This is a low-level wrapper which handles the lifetime of the resource
-                                                                    /// (namely this has a destructor). The `T` provided defines the component model
-                                                                    /// intrinsics that this wrapper uses.
-                                                                    ///
-                                                                    /// One of the chief purposes of this type is to provide `Deref` implementations
-                                                                    /// to access the underlying data when it is owned.
-                                                                    ///
-                                                                    /// This type is primarily used in generated code for exported and imported
-                                                                    /// resources.
-                                                                    #[repr(transparent)]
-                                                                    pub struct Resource<T: WasmResource> {
-                                                                      // NB: This would ideally be `u32` but it is not. The fact that this has
-                                                                      // interior mutability is not exposed in the API of this type except for the
-                                                                      // `take_handle` method which is supposed to in theory be private.
-                                                                      //
-                                                                      // This represents, almost all the time, a valid handle value. When it's
-                                                                      // invalid it's stored as `u32::MAX`.
-                                                                      handle: AtomicU32,
-                                                                      _marker: marker::PhantomData<T>,
-                                                                    }
-
-                                                                    /// A trait which all wasm resources implement, namely providing the ability to
-                                                                    /// drop a resource.
-                                                                    ///
-                                                                    /// This generally is implemented by generated code, not user-facing code.
-                                                                    #[allow(clippy::missing_safety_doc)]
-                                                                    pub unsafe trait WasmResource {
-                                                                      /// Invokes the `[resource-drop]...` intrinsic.
-                                                                      unsafe fn drop(handle: u32);
-                                                                    }
-
-                                                                    impl<T: WasmResource> Resource<T> {
-                                                                      #[doc(hidden)]
-                                                                      pub unsafe fn from_handle(handle: u32) -> Self {
-                                                                        debug_assert!(handle != 0 && handle != u32::MAX);
-                                                                        Self {
-                                                                          handle: AtomicU32::new(handle),
-                                                                          _marker: marker::PhantomData,
-                                                                        }
-                                                                      }
-
-                                                                      /// Takes ownership of the handle owned by `resource`.
-                                                                      ///
-                                                                      /// Note that this ideally would be `into_handle` taking `Resource<T>` by
-                                                                      /// ownership. The code generator does not enable that in all situations,
-                                                                      /// unfortunately, so this is provided instead.
-                                                                      ///
-                                                                      /// Also note that `take_handle` is in theory only ever called on values
-                                                                      /// owned by a generated function. For example a generated function might
-                                                                      /// take `Resource<T>` as an argument but then call `take_handle` on a
-                                                                      /// reference to that argument. In that sense the dynamic nature of
-                                                                      /// `take_handle` should only be exposed internally to generated code, not
-                                                                      /// to user code.
-                                                                      #[doc(hidden)]
-                                                                      pub fn take_handle(resource: &Resource<T>) -> u32 {
-                                                                        resource.handle.swap(u32::MAX, Relaxed)
-                                                                      }
-
-                                                                      #[doc(hidden)]
-                                                                      pub fn handle(resource: &Resource<T>) -> u32 {
-                                                                        resource.handle.load(Relaxed)
-                                                                      }
-                                                                    }
-
-                                                                    impl<T: WasmResource> fmt::Debug for Resource<T> {
-                                                                      fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                                                                        f.debug_struct("Resource")
-                                                                        .field("handle", &self.handle)
-                                                                        .finish()
-                                                                      }
-                                                                    }
-
-                                                                    impl<T: WasmResource> Drop for Resource<T> {
-                                                                      fn drop(&mut self) {
-                                                                        unsafe {
-                                                                          match self.handle.load(Relaxed) {
-                                                                            // If this handle was "taken" then don't do anything in the
-                                                                            // destructor.
-                                                                            u32::MAX => {}
-
-                                                                            // ... but otherwise do actually destroy it with the imported
-                                                                            // component model intrinsic as defined through `T`.
-                                                                            other => T::drop(other),
+                                                                          #[doc(hidden)]
+                                                                          pub fn handle(resource: &Resource<T>) -> u32 {
+                                                                            resource.handle.load(Relaxed)
                                                                           }
                                                                         }
-                                                                      }
-                                                                    }
-                                                                    pub unsafe fn bool_lift(val: u8) -> bool {
-                                                                      if cfg!(debug_assertions) {
-                                                                        match val {
-                                                                          0 => false,
-                                                                          1 => true,
-                                                                          _ => panic!("invalid bool discriminant"),
+
+                                                                        impl<T: WasmResource> fmt::Debug for Resource<T> {
+                                                                          fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                                                                            f.debug_struct("Resource")
+                                                                            .field("handle", &self.handle)
+                                                                            .finish()
+                                                                          }
                                                                         }
-                                                                      } else {
-                                                                        val != 0
-                                                                      }
-                                                                    }
-                                                                    pub use alloc_crate::vec::Vec;
-                                                                    pub use alloc_crate::alloc;
-                                                                    pub use alloc_crate::string::String;
-                                                                    pub unsafe fn string_lift(bytes: Vec<u8>) -> String {
-                                                                      if cfg!(debug_assertions) {
-                                                                        String::from_utf8(bytes).unwrap()
-                                                                      } else {
-                                                                        unsafe { String::from_utf8_unchecked(bytes) }
-                                                                      }
-                                                                    }
-                                                                    pub unsafe fn invalid_enum_discriminant<T>() -> T {
-                                                                      if cfg!(debug_assertions) {
-                                                                        panic!("invalid enum discriminant")
-                                                                      } else {
-                                                                        unsafe { core::hint::unreachable_unchecked() }
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    pub fn as_i64<T: AsI64>(t: T) -> i64 {
-                                                                      t.as_i64()
-                                                                    }
 
-                                                                    pub trait AsI64 {
-                                                                      fn as_i64(self) -> i64;
-                                                                    }
+                                                                        impl<T: WasmResource> Drop for Resource<T> {
+                                                                          fn drop(&mut self) {
+                                                                            unsafe {
+                                                                              match self.handle.load(Relaxed) {
+                                                                                // If this handle was "taken" then don't do anything in the
+                                                                                // destructor.
+                                                                                u32::MAX => {}
 
-                                                                    impl<'a, T: Copy + AsI64> AsI64 for &'a T {
-                                                                      fn as_i64(self) -> i64 {
-                                                                        (*self).as_i64()
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI64 for i64 {
-                                                                      #[inline]
-                                                                      fn as_i64(self) -> i64 {
-                                                                        self as i64
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI64 for u64 {
-                                                                      #[inline]
-                                                                      fn as_i64(self) -> i64 {
-                                                                        self as i64
-                                                                      }
-                                                                    }
-                                                                    pub unsafe fn cabi_dealloc(ptr: *mut u8, size: usize, align: usize) {
-                                                                      if size == 0 {
-                                                                        return;
-                                                                      }
-                                                                      unsafe {
-                                                                        let layout = alloc::Layout::from_size_align_unchecked(size, align);
-                                                                        alloc::dealloc(ptr, layout);
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    pub fn as_i32<T: AsI32>(t: T) -> i32 {
-                                                                      t.as_i32()
-                                                                    }
+                                                                                // ... but otherwise do actually destroy it with the imported
+                                                                                // component model intrinsic as defined through `T`.
+                                                                                other => T::drop(other),
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                        pub unsafe fn bool_lift(val: u8) -> bool {
+                                                                          if cfg!(debug_assertions) {
+                                                                            match val {
+                                                                              0 => false,
+                                                                              1 => true,
+                                                                              _ => panic!("invalid bool discriminant"),
+                                                                            }
+                                                                          } else {
+                                                                            val != 0
+                                                                          }
+                                                                        }
+                                                                        pub use alloc_crate::vec::Vec;
+                                                                        pub use alloc_crate::alloc;
+                                                                        pub use alloc_crate::string::String;
+                                                                        pub unsafe fn string_lift(bytes: Vec<u8>) -> String {
+                                                                          if cfg!(debug_assertions) {
+                                                                            String::from_utf8(bytes).unwrap()
+                                                                          } else {
+                                                                            unsafe { String::from_utf8_unchecked(bytes) }
+                                                                          }
+                                                                        }
+                                                                        pub unsafe fn invalid_enum_discriminant<T>() -> T {
+                                                                          if cfg!(debug_assertions) {
+                                                                            panic!("invalid enum discriminant")
+                                                                          } else {
+                                                                            unsafe { core::hint::unreachable_unchecked() }
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        pub fn as_i64<T: AsI64>(t: T) -> i64 {
+                                                                          t.as_i64()
+                                                                        }
 
-                                                                    pub trait AsI32 {
-                                                                      fn as_i32(self) -> i32;
-                                                                    }
+                                                                        pub trait AsI64 {
+                                                                          fn as_i64(self) -> i64;
+                                                                        }
 
-                                                                    impl<'a, T: Copy + AsI32> AsI32 for &'a T {
-                                                                      fn as_i32(self) -> i32 {
-                                                                        (*self).as_i32()
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI32 for i32 {
-                                                                      #[inline]
-                                                                      fn as_i32(self) -> i32 {
-                                                                        self as i32
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI32 for u32 {
-                                                                      #[inline]
-                                                                      fn as_i32(self) -> i32 {
-                                                                        self as i32
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI32 for i16 {
-                                                                      #[inline]
-                                                                      fn as_i32(self) -> i32 {
-                                                                        self as i32
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI32 for u16 {
-                                                                      #[inline]
-                                                                      fn as_i32(self) -> i32 {
-                                                                        self as i32
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI32 for i8 {
-                                                                      #[inline]
-                                                                      fn as_i32(self) -> i32 {
-                                                                        self as i32
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI32 for u8 {
-                                                                      #[inline]
-                                                                      fn as_i32(self) -> i32 {
-                                                                        self as i32
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI32 for char {
-                                                                      #[inline]
-                                                                      fn as_i32(self) -> i32 {
-                                                                        self as i32
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsI32 for usize {
-                                                                      #[inline]
-                                                                      fn as_i32(self) -> i32 {
-                                                                        self as i32
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    pub fn as_f32<T: AsF32>(t: T) -> f32 {
-                                                                      t.as_f32()
-                                                                    }
+                                                                        impl<'a, T: Copy + AsI64> AsI64 for &'a T {
+                                                                          fn as_i64(self) -> i64 {
+                                                                            (*self).as_i64()
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI64 for i64 {
+                                                                          #[inline]
+                                                                          fn as_i64(self) -> i64 {
+                                                                            self as i64
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI64 for u64 {
+                                                                          #[inline]
+                                                                          fn as_i64(self) -> i64 {
+                                                                            self as i64
+                                                                          }
+                                                                        }
+                                                                        pub unsafe fn cabi_dealloc(ptr: *mut u8, size: usize, align: usize) {
+                                                                          if size == 0 {
+                                                                            return;
+                                                                          }
+                                                                          unsafe {
+                                                                            let layout = alloc::Layout::from_size_align_unchecked(size, align);
+                                                                            alloc::dealloc(ptr, layout);
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        pub fn as_i32<T: AsI32>(t: T) -> i32 {
+                                                                          t.as_i32()
+                                                                        }
 
-                                                                    pub trait AsF32 {
-                                                                      fn as_f32(self) -> f32;
-                                                                    }
+                                                                        pub trait AsI32 {
+                                                                          fn as_i32(self) -> i32;
+                                                                        }
 
-                                                                    impl<'a, T: Copy + AsF32> AsF32 for &'a T {
-                                                                      fn as_f32(self) -> f32 {
-                                                                        (*self).as_f32()
+                                                                        impl<'a, T: Copy + AsI32> AsI32 for &'a T {
+                                                                          fn as_i32(self) -> i32 {
+                                                                            (*self).as_i32()
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI32 for i32 {
+                                                                          #[inline]
+                                                                          fn as_i32(self) -> i32 {
+                                                                            self as i32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI32 for u32 {
+                                                                          #[inline]
+                                                                          fn as_i32(self) -> i32 {
+                                                                            self as i32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI32 for i16 {
+                                                                          #[inline]
+                                                                          fn as_i32(self) -> i32 {
+                                                                            self as i32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI32 for u16 {
+                                                                          #[inline]
+                                                                          fn as_i32(self) -> i32 {
+                                                                            self as i32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI32 for i8 {
+                                                                          #[inline]
+                                                                          fn as_i32(self) -> i32 {
+                                                                            self as i32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI32 for u8 {
+                                                                          #[inline]
+                                                                          fn as_i32(self) -> i32 {
+                                                                            self as i32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI32 for char {
+                                                                          #[inline]
+                                                                          fn as_i32(self) -> i32 {
+                                                                            self as i32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsI32 for usize {
+                                                                          #[inline]
+                                                                          fn as_i32(self) -> i32 {
+                                                                            self as i32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        pub fn as_f32<T: AsF32>(t: T) -> f32 {
+                                                                          t.as_f32()
+                                                                        }
+
+                                                                        pub trait AsF32 {
+                                                                          fn as_f32(self) -> f32;
+                                                                        }
+
+                                                                        impl<'a, T: Copy + AsF32> AsF32 for &'a T {
+                                                                          fn as_f32(self) -> f32 {
+                                                                            (*self).as_f32()
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsF32 for f32 {
+                                                                          #[inline]
+                                                                          fn as_f32(self) -> f32 {
+                                                                            self as f32
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        pub fn as_f64<T: AsF64>(t: T) -> f64 {
+                                                                          t.as_f64()
+                                                                        }
+
+                                                                        pub trait AsF64 {
+                                                                          fn as_f64(self) -> f64;
+                                                                        }
+
+                                                                        impl<'a, T: Copy + AsF64> AsF64 for &'a T {
+                                                                          fn as_f64(self) -> f64 {
+                                                                            (*self).as_f64()
+                                                                          }
+                                                                        }
+                                                                        
+                                                                        impl AsF64 for f64 {
+                                                                          #[inline]
+                                                                          fn as_f64(self) -> f64 {
+                                                                            self as f64
+                                                                          }
+                                                                        }
+                                                                        pub use alloc_crate::boxed::Box;
+
+                                                                        #[cfg(target_arch = "wasm32")]
+                                                                        pub fn run_ctors_once() {
+                                                                          wit_bindgen::rt::run_ctors_once();
+                                                                        }
+                                                                        extern crate alloc as alloc_crate;
                                                                       }
-                                                                    }
-                                                                    
-                                                                    impl AsF32 for f32 {
-                                                                      #[inline]
-                                                                      fn as_f32(self) -> f32 {
-                                                                        self as f32
+
+                                                                      /// Generates `#[unsafe(no_mangle)]` functions to export the specified type as
+                                                                      /// the root implementation of all generated traits.
+                                                                      ///
+                                                                      /// For more information see the documentation of `wit_bindgen::generate!`.
+                                                                      ///
+                                                                      /// ```rust
+                                                                      /// # macro_rules! export{ ($($t:tt)*) => (); }
+                                                                      /// # trait Guest {}
+                                                                      /// struct MyType;
+                                                                      ///
+                                                                      /// impl Guest for MyType {
+                                                                      ///     // ...
+                                                                      /// }
+                                                                      ///
+                                                                      /// export!(MyType);
+                                                                      /// ```
+                                                                      #[allow(unused_macros)]
+                                                                      #[doc(hidden)]
+
+                                                                      macro_rules! __export_example_world_impl {
+                                                                        ($ty:ident) => (crate::bindings::example_world::export!($ty with_types_in crate::bindings::example_world););
+                                                                        ($ty:ident with_types_in $($path_to_types_root:tt)*) => (
+                                                                        $($path_to_types_root)*::exports::local::immediate_renderer_example::render::__export_local_immediate_renderer_example_render_cabi!($ty with_types_in $($path_to_types_root)*::exports::local::immediate_renderer_example::render);
+                                                                        )
                                                                       }
-                                                                    }
-                                                                    
-                                                                    pub fn as_f64<T: AsF64>(t: T) -> f64 {
-                                                                      t.as_f64()
-                                                                    }
+                                                                      #[doc(inline)]
+                                                                      pub(crate) use __export_example_world_impl as export;
 
-                                                                    pub trait AsF64 {
-                                                                      fn as_f64(self) -> f64;
-                                                                    }
-
-                                                                    impl<'a, T: Copy + AsF64> AsF64 for &'a T {
-                                                                      fn as_f64(self) -> f64 {
-                                                                        (*self).as_f64()
-                                                                      }
-                                                                    }
-                                                                    
-                                                                    impl AsF64 for f64 {
-                                                                      #[inline]
-                                                                      fn as_f64(self) -> f64 {
-                                                                        self as f64
-                                                                      }
-                                                                    }
-                                                                    pub use alloc_crate::boxed::Box;
-
-                                                                    #[cfg(target_arch = "wasm32")]
-                                                                    pub fn run_ctors_once() {
-                                                                      wit_bindgen::rt::run_ctors_once();
-                                                                    }
-                                                                    extern crate alloc as alloc_crate;
-                                                                  }
-
-                                                                  /// Generates `#[unsafe(no_mangle)]` functions to export the specified type as
-                                                                  /// the root implementation of all generated traits.
-                                                                  ///
-                                                                  /// For more information see the documentation of `wit_bindgen::generate!`.
-                                                                  ///
-                                                                  /// ```rust
-                                                                  /// # macro_rules! export{ ($($t:tt)*) => (); }
-                                                                  /// # trait Guest {}
-                                                                  /// struct MyType;
-                                                                  ///
-                                                                  /// impl Guest for MyType {
-                                                                  ///     // ...
-                                                                  /// }
-                                                                  ///
-                                                                  /// export!(MyType);
-                                                                  /// ```
-                                                                  #[allow(unused_macros)]
-                                                                  #[doc(hidden)]
-
-                                                                  macro_rules! __export_example_world_impl {
-                                                                    ($ty:ident) => (crate::bindings::example_world::export!($ty with_types_in crate::bindings::example_world););
-                                                                    ($ty:ident with_types_in $($path_to_types_root:tt)*) => (
-                                                                    $($path_to_types_root)*::exports::local::immediate_renderer_example::render::__export_local_immediate_renderer_example_render_cabi!($ty with_types_in $($path_to_types_root)*::exports::local::immediate_renderer_example::render);
-                                                                    )
-                                                                  }
-                                                                  #[doc(inline)]
-                                                                  pub(crate) use __export_example_world_impl as export;
-
-                                                                  #[cfg(target_arch = "wasm32")]
-                                                                  #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:encoded world")]
-                                                                  #[doc(hidden)]
-                                                                  #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30857] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x84\xf0\x01\x01A\x02\
+                                                                      #[cfg(target_arch = "wasm32")]
+                                                                      #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:encoded world")]
+                                                                      #[doc(hidden)]
+                                                                      #[allow(clippy::octal_escapes)]
+                                                                      pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31149] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xa8\xf2\x01\x01A\x02\
 \x01A\x1a\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16943,19 +17109,22 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x13\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
-source\x03\x05bytes\x04\x04\0\x0aimage-data\x03\0\x05\x01q\x01\x0aimage-data\x01\
-\x06\0\x04\0\x06effect\x03\0\x07\x01m#\x07default\x04none\x0ccontext-menu\x04hel\
-p\x07pointer\x08progress\x04wait\x04cell\x09crosshair\x04text\x0dvertical-text\x05\
-alias\x04copy\x04move\x07no-drop\x0bnot-allowed\x04grab\x08grabbing\x0aall-scrol\
-l\x0acol-resize\x0arow-resize\x08n-resize\x08e-resize\x08s-resize\x08w-resize\x09\
-ne-resize\x09nw-resize\x09se-resize\x09sw-resize\x09ew-resize\x09ns-resize\x0bne\
-sw-resize\x0bnwse-resize\x07zoom-in\x08zoom-out\x04\0\x0ccursor-style\x03\0\x09\x01\
-q\x01\x04text\x01s\0\x04\0\x0eclipboard-data\x03\0\x0b\x01r\x03\x06offsety\x03le\
-ny\x09new-values\x04\0\x0bchange-spec\x03\0\x0d\x01p\x03\x01p\x0e\x01q\x05\x0bop\
-en-window\x01\x01\0\x0drequest-image\x01\x0f\0\x06cursor\x01\x0a\0\x09clipboard\x01\
-\x0c\0\x0achange-set\x01\x10\0\x04\0\x07command\x03\0\x11\x03\0,local:immediate-\
-renderer-example/interaction\x05\x0b\x01B\x1d\x01n\x02\x04left\x05right\x04\0\x10\
+B\x18\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
+source\x03\x05bytes\x04\x04\0\x0eexternal-asset\x03\0\x05\x01r\x03\x06source\x03\
+\x04names\x05bytes\x04\x04\0\x0dexternal-font\x03\0\x07\x01q\x02\x0aimage-data\x01\
+\x06\0\x09font-data\x01\x08\0\x04\0\x06effect\x03\0\x09\x01m#\x07default\x04none\
+\x0ccontext-menu\x04help\x07pointer\x08progress\x04wait\x04cell\x09crosshair\x04\
+text\x0dvertical-text\x05alias\x04copy\x04move\x07no-drop\x0bnot-allowed\x04grab\
+\x08grabbing\x0aall-scroll\x0acol-resize\x0arow-resize\x08n-resize\x08e-resize\x08\
+s-resize\x08w-resize\x09ne-resize\x09nw-resize\x09se-resize\x09sw-resize\x09ew-r\
+esize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07zoom-in\x08zoom-out\x04\0\x0c\
+cursor-style\x03\0\x0b\x01q\x01\x04text\x01s\0\x04\0\x0eclipboard-data\x03\0\x0d\
+\x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x0f\x04\0\x0bchange-spec\x03\0\x10\
+\x01q\x02\x10selection-bounds\0\0\x10character-bounds\0\0\x04\0\x12composition-b\
+ounds\x03\0\x12\x01p\x03\x01p\x11\x01q\x06\x0bopen-window\x01\x01\0\x0drequest-i\
+mage\x01\x14\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x0achange-set\x01\x15\0\
+\x12composition-bounds\x01\x13\0\x04\0\x07command\x03\0\x16\x03\0,local:immediat\
+e-renderer-example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10\
 modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-k\
 ey\x01\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08locatio\
 n\x03\0\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmous\
@@ -16965,33 +17134,36 @@ delete\x04\0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x0e\
 m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\
 \0\x10\x01q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\0\x04nav\
 i\x01\x11\0\x04\0\x04keys\x03\0\x12\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-op\
-s\x03\0\x14\x01q\x02\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11composition-st\
-ate\x03\0\x16\x01o\x02\x13\x09\x01q\x0d\x09modifiers\x01\x03\0\x07pointer\x01\x05\
-\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-move\0\0\x08key-down\x01\
-\x18\0\x06key-up\x01\x13\0\x18update-composition-state\x01\x17\0\x07history\x01\x15\
-\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x04\0\x05event\x03\0\x19\
-\x01q\x02\x05event\x01\x1a\0\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0\
-\x1b\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x02\x03\0\x04\x07command\x02\
-\x03\0\x04\x06effect\x02\x03\0\x03\x0erender-context\x02\x03\0\x05\x05event\x02\x03\
-\0\x05\x0eunhandle-event\x01B%\x02\x03\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\
-\x02\x01\x0e\x04\0\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\x04\0\x0erender-conte\
-xt\x03\0\x04\x02\x03\x02\x01\x10\x04\0\x05event\x03\0\x06\x02\x03\x02\x01\x11\x04\
-\0\x0eunhandle-event\x03\0\x08\x04\0\x0devent-channel\x03\x01\x04\0\x0fcommand-c\
-hannel\x03\x01\x04\0\x0adispatcher\x03\x01\x01h\x0a\x01p\x07\x01@\x02\x04self\x0d\
-\x06events\x0e\x01\0\x04\0\x1a[method]event-channel.post\x01\x0f\x01h\x0b\x01p\x03\
-\x01@\x02\x04self\x10\x07effects\x11\x01\0\x04\0\x1c[method]command-channel.post\
-\x01\x12\x01h\x0c\x01i\x0a\x01@\x01\x04self\x13\0\x14\x04\0\x20[method]dispatche\
-r.event-channel\x01\x15\x01i\x0b\x01@\x01\x04self\x13\0\x16\x04\0\"[method]dispa\
-tcher.command-channel\x01\x17\x01p\x09\x01p\x01\x01o\x02\x18\x19\x01@\x01\x04sel\
-f\x13\0\x1a\x04\0\x1b[method]dispatcher.dispatch\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\
-\x07context\x1c\0\x1d\x04\0\x0fcreate-renderer\x01\x1e\x04\0'local:immediate-ren\
-derer-example/render\x05\x12\x04\0.local:immediate-renderer-example/example-worl\
-d\x04\0\x0b\x13\x01\0\x0dexample-world\x03\0\0\0G\x09producers\x01\x0cprocessed-\
-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+s\x03\0\x14\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x16\x01\
+q\x03\x0fselection-range\x01\x17\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11\
+composition-state\x03\0\x18\x01k\x17\x01q\x01\x10character-bounds\x01\x1a\0\x04\0\
+\x16composition-bounds-req\x03\0\x1b\x01o\x02\x13\x09\x01q\x0e\x09modifiers\x01\x03\
+\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-m\
+ove\0\0\x08key-down\x01\x1d\0\x06key-up\x01\x13\0\x1arequest-composition-bounds\x01\
+\x1c\0\x18update-composition-state\x01\x19\0\x07history\x01\x15\0\x03cut\0\0\x04\
+copy\0\0\x05paste\x01s\0\x08activate\0\0\x04\0\x05event\x03\0\x1e\x01q\x02\x05ev\
+ent\x01\x1f\0\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x20\x03\0\x1el\
+ocal:immediate-renderer/types\x05\x0c\x02\x03\0\x04\x07command\x02\x03\0\x04\x06\
+effect\x02\x03\0\x03\x0erender-context\x02\x03\0\x05\x05event\x02\x03\0\x05\x0eu\
+nhandle-event\x01B%\x02\x03\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\
+\x0e\x04\0\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\x04\0\x0erender-context\x03\0\
+\x04\x02\x03\x02\x01\x10\x04\0\x05event\x03\0\x06\x02\x03\x02\x01\x11\x04\0\x0eu\
+nhandle-event\x03\0\x08\x04\0\x0devent-channel\x03\x01\x04\0\x0fcommand-channel\x03\
+\x01\x04\0\x0adispatcher\x03\x01\x01h\x0a\x01p\x07\x01@\x02\x04self\x0d\x06event\
+s\x0e\x01\0\x04\0\x1a[method]event-channel.post\x01\x0f\x01h\x0b\x01p\x03\x01@\x02\
+\x04self\x10\x07effects\x11\x01\0\x04\0\x1c[method]command-channel.post\x01\x12\x01\
+h\x0c\x01i\x0a\x01@\x01\x04self\x13\0\x14\x04\0\x20[method]dispatcher.event-chan\
+nel\x01\x15\x01i\x0b\x01@\x01\x04self\x13\0\x16\x04\0\"[method]dispatcher.comman\
+d-channel\x01\x17\x01p\x09\x01p\x01\x01o\x02\x18\x19\x01@\x01\x04self\x13\0\x1a\x04\
+\0\x1b[method]dispatcher.dispatch\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\x07context\x1c\
+\0\x1d\x04\0\x0fcreate-renderer\x01\x1e\x04\0'local:immediate-renderer-example/r\
+ender\x05\x12\x04\0.local:immediate-renderer-example/example-world\x04\0\x0b\x13\
+\x01\0\x0dexample-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-c\
+omponent\x070.245.1\x10wit-bindgen-rust\x060.53.1";
 
-                                                                  #[inline(never)]
-                                                                  #[doc(hidden)]
-                                                                  pub fn __link_custom_section_describing_imports() {
-                                                                    wit_bindgen::rt::maybe_link_cabi_realloc();
-                                                                  }
-                                                                  
+                                                                      #[inline(never)]
+                                                                      #[doc(hidden)]
+                                                                      pub fn __link_custom_section_describing_imports() {
+                                                                        wit_bindgen::rt::maybe_link_cabi_realloc();
+                                                                      }
+                                                                      

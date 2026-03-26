@@ -91,7 +91,14 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::Copy => input.events.push(egui::Event::Copy),
             types::Event::Paste(text) => input.events.push(egui::Event::Paste(text.clone())),
             types::Event::Activate => {
+                input.focused = true;
                 unhandled_events.activate = Some(());
+            }
+            types::Event::RequestCompositionBounds(req) => {
+                unhandled_events.composition_bound_req = Some(());
+            }
+            types::Event::UpdateCompositionState(types::CompositionState::SelectionRange(range)) => {
+                unhandled_events.composition_sel_range = Some(range.clone());
             }
         }
     }
@@ -114,24 +121,27 @@ impl<'a> From<MouseButtonW<'a>> for PointerButton {
     }
 }
 
-pub fn push_platform_output(output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
-    let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, events, .. } = output;
+pub fn push_platform_output(conetx: &egui::Context, output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
+    let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, events, mutable_text_under_cursor: edit_mutable, .. } = output;
 
     // println!("Platform output/ime: {:?}", ime);
-    if !events.is_empty() { println!("Platform output/platform-events/len: {}", events.len()); }
+    if !events.is_empty() { println!("Platform output/platform-events/len: {}, mutable_text_under_cursor: {}", events.len(), edit_mutable); }
     for event in events {
         let info = event.widget_info();
         println!("Platform output/prev: {:?}, new: {:?}, sel: {:?}", info.prev_text_value.as_ref(), info.current_text_value.as_ref(), info.text_selection);
 
         match (info.prev_text_value.as_ref(), info.current_text_value.as_ref()) {
-            (None, _) => (),
+            (None, Some(text)) if edit_mutable => {
+
+            }
             (Some(old_text), None) => {
                 let len = old_text.chars().map(|c| c.len_utf16() as u32).sum::<u32>();
-                commands.push(ExampleCommand::ChangeSet(vec![ChangeSpec{ offset: 0, len, new_value: "".into() }]));
+                commands.push(ExampleCommand::ChangeSet(vec![ChangeSpec{ offset: 0, len, new_value: Some("".into()) }]));
             },
             (Some(old_text), Some(new_text)) => {
                 commands.push(ExampleCommand::ChangeSet(create_text_change_set(&old_text, &new_text)));
             }
+            (None, _) => (),
         }
     }
 
@@ -173,7 +183,7 @@ pub fn create_text_change_set(old_text: &str, new_text: &str) -> Vec<crate::Chan
                 let end = old_indexes.by_ref().take(old_len).last();
                 current_old_index = old_index + old_len + 1;
 
-                start.zip(end).map(|(s, e)| crate::ChangeSpec{ offset: s, len: e - s, new_value: "".into() })
+                start.zip(end).map(|(s, e)| crate::ChangeSpec{ offset: s, len: e - s, new_value: Some("".into()) })
             }
             &similar::DiffOp::Insert { old_index, new_index, new_len  } => {
                 let start = old_indexes.nth(old_index - current_old_index);
@@ -182,7 +192,7 @@ pub fn create_text_change_set(old_text: &str, new_text: &str) -> Vec<crate::Chan
                 for _ in 0..(new_index - current_new_index) { new_chars.next(); }
                 current_new_index = new_index + new_len;
 
-                start.map(|s| crate::ChangeSpec{ offset: s, len: 0, new_value: new_chars.by_ref().take(new_len).collect() })
+                start.map(|s| crate::ChangeSpec{ offset: s, len: 0, new_value: Some(new_chars.by_ref().take(new_len).collect()) })
             }
             &similar::DiffOp::Replace { old_index, old_len, new_index, new_len } => {
                 let start = old_indexes.nth(old_index - current_old_index);
@@ -192,7 +202,7 @@ pub fn create_text_change_set(old_text: &str, new_text: &str) -> Vec<crate::Chan
                 for _ in 0..(new_index - current_new_index) { new_chars.next(); }
                 current_new_index = new_index + new_len;
 
-                start.zip(end).map(|(s, e)| crate::ChangeSpec{ offset: s, len: e - s, new_value: new_chars.by_ref().take(new_len).collect() })
+                start.zip(end).map(|(s, e)| crate::ChangeSpec{ offset: s, len: e - s, new_value: Some(new_chars.by_ref().take(new_len).collect()) })
             }
             similar::DiffOp::Equal { .. } => None,
         })

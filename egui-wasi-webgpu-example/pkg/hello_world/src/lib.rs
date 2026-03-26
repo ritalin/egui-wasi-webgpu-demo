@@ -1,3 +1,5 @@
+use wasi_renderer::bindings::types;
+
 mod bindings;
 mod recorder;
 
@@ -26,16 +28,19 @@ pub enum ClipboardData {
 #[derive(Debug, Clone)]
 pub enum ExampleEffect {
     ImageData{ url: String, bytes: Vec<u8> },
+    FontData{ url: String, name: String, bytes: Vec<u8> },
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct UnhandledEvent {
     pub activate: Option<()>,
+    pub composition_sel_range: Option<types::CompositionRange>,
+    pub composition_bound_req: Option<()>,
 }
 
 #[derive(Debug, Clone)]
 pub struct ChangeSpec {
     offset: u32,
     len: u32,
-    new_value: String,
+    new_value: Option<String>,
 }

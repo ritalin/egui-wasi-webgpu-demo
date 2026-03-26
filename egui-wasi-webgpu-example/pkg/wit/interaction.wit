@@ -10,14 +10,22 @@ interface interaction {
         cursor(cursor-style),
         clipboard(clipboard-data),
         change-set(list<change-spec>),
+        composition-bounds(composition-bounds)
     }
 
     variant effect {
-        image-data(image-data),
+        image-data(external-asset),
+        font-data(external-font),
     }
 
-    record image-data {
+    record external-asset {
         source: url,
+        bytes: list<u8>,
+    }
+
+    record external-font {
+        source: url,
+        name: string,
         bytes: list<u8>,
     }
 
@@ -66,6 +74,11 @@ interface interaction {
     record change-spec {
         offset: u32,
         len: u32,
-        new-value: string,
+        new-value: option<string>,
+    }
+
+    variant composition-bounds {
+        selection-bounds,
+        character-bounds,
     }
 }

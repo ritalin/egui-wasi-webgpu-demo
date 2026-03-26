@@ -42,9 +42,14 @@ class AppLoop {
 const imports = { ...getImportObject(), ...new WASIShim().getImportObject() };
 const defaultLoader = undefined as unknown as (path: string) => Promise<WebAssembly.Module>;
 
-const instance = await instantiate(defaultLoader, imports as unknown as ImportObject);
+try {
+  const instance = await instantiate(defaultLoader, imports as unknown as ImportObject);
 
-const runtime = await createWebGpuRuntime();
-const engine = new WasmEngine(runtime, instance);
-const app = new AppLoop(engine);
-await app.run("route://app/main");
+  const runtime = await createWebGpuRuntime();
+  const engine = await WasmEngine.create(runtime, instance);
+  const app = new AppLoop(engine);
+  await app.run("route://app/main");
+} catch (err) {
+  console.error(err);
+  console.error("Application terminated unexpectedly.");
+}

@@ -115,7 +115,8 @@ impl TextureCache {
                 }
                 hash_map::Entry::Vacant(entry) => {
                     // println!("New texture/key: {:?}", img.key());
-                    let texture = new_texture(device, self.format, size);
+                    let texture = new_texture(device, webgpu::GpuTextureFormat::Rgba8unormSrgb, size);
+                    // let texture = new_texture(device, self.format, size);
                     let sampling = img.sampling();
                     let sampler = self.samplers.entry(sampling)
                         .or_insert_with(|| new_sampler(device, &sampling))

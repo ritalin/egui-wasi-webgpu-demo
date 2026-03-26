@@ -18,14 +18,24 @@ export interface RouteEntry {
   effects: Effect[];
 }
 
+const DEFAULT_FONT_NAME = "NotoSansJP-Regular";
+const DEFAULT_FONT_PATH = `/assets/${DEFAULT_FONT_NAME}.otf`;
+
 export class WasmEngine {
   runtime: WebGpuRuntime;
   instance: Root;
   dispatchers: Map<Route, RouteEntry> = new Map<Route, RouteEntry>();
+  font?: Uint8Array<ArrayBuffer>;
 
-  constructor(runtime: WebGpuRuntime, instance: Root) {
+  static async create(runtime: WebGpuRuntime, instance: Root): Promise<WasmEngine> {
+    const font = await loadFont(DEFAULT_FONT_PATH);
+    return new WasmEngine(runtime, instance, font);
+  }
+
+  private constructor(runtime: WebGpuRuntime, instance: Root, font?: Uint8Array<ArrayBuffer>) {
     this.runtime = runtime;
     this.instance = instance;
+    this.font = font;
   }
 
   addEvent(route: Route, events: DispatchEvent[]) {
@@ -42,9 +52,16 @@ export class WasmEngine {
     const surface = this.runtime.createRenderContext(canvas) as unknown as RenderContext;
 
     let dispatcher;
+    const effects: Effect[] = [];
     switch (route) {
       case "route://app/main": {
         dispatcher = this.instance.render.createRenderer(surface);
+        if (this.font) {
+          effects.push({
+            tag: "font-data",
+            val: { source: DEFAULT_FONT_PATH, name: DEFAULT_FONT_NAME, bytes: this.font },
+          });
+        }
         break;
       }
       default: {
@@ -52,7 +69,7 @@ export class WasmEngine {
       }
     }
 
-    this.dispatchers.set(route, { canvas, editContext, surface, dispatcher, events: [], effects: [] });
+    this.dispatchers.set(route, { canvas, editContext, surface, dispatcher, events: [], effects });
 
     return true;
   }
@@ -74,4 +91,21 @@ export class WasmEngine {
       queueCommand(this, route, commands);
     }
   }
+}
+async function loadFont(path: string): Promise<Uint8Array<ArrayBuffer> | undefined> {
+  const url = new URL(
+    `${import.meta.env.BASE_URL}${path.startsWith("/") ? path.slice(1) : path}`,
+    window.location.origin,
+  );
+
+  return fetch(url).then(async (res) => {
+    if (!res.ok) {
+      console.error(`Font is not fount:  "${url}"`);
+      return;
+    }
+    const buffer = await res.bytes();
+    console.log("font-size/len", buffer.byteLength);
+
+    return buffer;
+  });
 }

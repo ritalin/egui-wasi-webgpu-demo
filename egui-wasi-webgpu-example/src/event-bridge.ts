@@ -131,6 +131,52 @@ export class DomEventBridge {
       callback([modifiers, { tag: "key-up", val: payload }]);
     });
 
+    let editState: { text: string; start: number; len: number };
+
+    editContext?.addEventListener("compositionstart", (ev) => {
+      restoreEditMode(canvas, editContext);
+
+      editState = editContext 
+        ? {
+            text: editContext.text,
+            start: editContext.selectionStart,
+            len: editContext.selectionEnd - editContext.selectionStart,
+          }
+        : { text: "", start: 0, len: 0 };
+      console.log("composition/start", `state: ${editContext.text}, buffer: ${editState}`);
+
+      callback([{ tag: "request-composition-bounds", val: { tag: "character-bounds", val: undefined } }]);
+    });
+    editContext?.addEventListener("textupdate", (ev) => {
+      console.log("composition/update", `text: ${editContext.text}, state: ${editState}`);
+
+      editContext.updateText(
+        ev.selectionStart - ev.text.length,
+        ev.selectionEnd,
+        editState.text.substring(editState.start, editState.start + editState.len),
+      );
+      console.log("composition/update(rollbacked)", `state: ${editContext.text}`);
+
+      callback([
+        {
+          tag: "update-composition-state",
+          val: { tag: "pre-edit", val: ev.text },
+        },
+        // {
+        //   tag: "update-composition-state",
+        //   val: { tag: "selection-range", val: { offset, len } },
+        // },
+      ]);
+    });
+    // editContext?.addEventListener("characterboundsupdate", (ev) => {
+    //   callback([
+    //     { tag: "request-composition-bounds", val: { tag: "catacter-bounds", val: [ev.rangeStart, ev.rangeEnd] } },
+    //   ]);
+    // });
+    editContext?.addEventListener("compositionend", (ev) => {
+      callback([{ tag: "update-composition-state", val: { tag: "commit", val: ev.data } }]);
+    });
+
     canvas.addEventListener("beforeinput", (ev) => {
       console.info("beforeinput", ev.inputType);
       switch (ev.inputType) {
