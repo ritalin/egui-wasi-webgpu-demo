@@ -1,9 +1,4 @@
-import {
-  GpuDevice,
-  GpuRenderPipeline,
-  GpuBindGroupLayout,
-  GpuCanvasContext,
-} from "wasi-webgpu-shim/host-api";
+import { GpuDevice, GpuRenderPipeline, GpuBindGroupLayout, GpuCanvasContext } from "wasi-webgpu-shim/host-api";
 import type { FrameSize } from "../../types/local-immediate-renderer-surface.js";
 import type { RenderContextPeer } from "../../peers/surface.js";
 // origin: src/types/local-immediate-renderer-surface.d.ts:11
@@ -24,9 +19,13 @@ export class RenderContext {
   }
   // origin: src/types/local-immediate-renderer-surface.d.ts:18
   requestSetSize(size: FrameSize): void {
+    const scaleFacftor = this.scaleFactor();
     const canvas = this._handle.canvas as HTMLCanvasElement;
-    canvas.width = size.width;
-    canvas.height = size.height;
+    canvas.width = size.width * scaleFacftor;
+    canvas.height = size.height * scaleFacftor;
+
+    canvas.style.width = `${size.width}px`;
+    canvas.style.height = `${size.height}px`;
   }
   // origin: src/types/local-immediate-renderer-surface.d.ts:19
   getDevice(): GpuDevice {
