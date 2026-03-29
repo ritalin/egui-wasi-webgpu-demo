@@ -16,6 +16,7 @@ interface types {
         copy,
         paste(string),
         activate,
+        keep-focus,
     }
 
     variant unhandle-event {

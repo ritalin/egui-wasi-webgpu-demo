@@ -148,4 +148,5 @@ function updateCompositionBounds(engine: WasmEngine, route: Route, bounds: Compo
 
   entry.eventSource.restoreEditMode();
   entry.eventSource.updateCompositionBounds(bounds);
+  entry.events.push({ tag: "keep-focus" });
 }

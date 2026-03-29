@@ -100,6 +100,9 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                 input.focused = true;
                 unhandled_events.activate = Some(());
             }
+            types::Event::KeepFocus => {
+                input.focused = true;
+            }
             types::Event::RequestCompositionBounds(req) => {
                 unhandled_events.composition_bound_req = Some(());
             }
