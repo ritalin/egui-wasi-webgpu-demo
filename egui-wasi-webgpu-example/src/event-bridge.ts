@@ -9,6 +9,7 @@ import type {
 } from "pkg/interfaces/local-immediate-renderer-types";
 import type { Route } from "./command-handler";
 import type { Event as DispatchEvent } from "pkg/interfaces/local-immediate-renderer-example-render";
+import type { EditEventSource } from "./edit-event-source";
 
 export class DomEventBridge {
   static findCanvas(route: Route): HTMLCanvasElement | undefined {
@@ -28,14 +29,15 @@ export class DomEventBridge {
     return undefined;
   }
 
-  static bind(canvas: HTMLCanvasElement, editHost: HTMLElement, callback: (events: DispatchEvent[]) => any) {
-    canvas.addEventListener("pointerdown", (ev) => {
-      const rect = canvas.getBoundingClientRect();
+  static bind(eventSource: EditEventSource, callback: (events: DispatchEvent[]) => any) {
+    eventSource.editHost.addEventListener("pointerdown", (ev) => {
+      const scaleFactor = window.devicePixelRatio;
+      const rect = eventSource.editHost.getBoundingClientRect();
       callback([
         makeModifierOptions(ev),
         {
           tag: "pointer",
-          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+          val: { x: (ev.clientX - rect.left) * scaleFactor, y: (ev.clientY - rect.top) * scaleFactor },
         },
         {
           tag: "mouse-down",
@@ -43,13 +45,14 @@ export class DomEventBridge {
         },
       ]);
     });
-    canvas.addEventListener("pointerup", (ev) => {
-      const rect = canvas.getBoundingClientRect();
+    eventSource.editHost.addEventListener("pointerup", (ev) => {
+      const scaleFactor = window.devicePixelRatio;
+      const rect = eventSource.editHost.getBoundingClientRect();
       callback([
         makeModifierOptions(ev),
         {
           tag: "pointer",
-          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+          val: { x: (ev.clientX - rect.left) * scaleFactor, y: (ev.clientY - rect.top) * scaleFactor },
         },
         {
           tag: "mouse-up",
@@ -57,13 +60,14 @@ export class DomEventBridge {
         },
       ]);
     });
-    canvas.addEventListener("pointermove", (ev) => {
-      const rect = canvas.getBoundingClientRect();
+    eventSource.editHost.addEventListener("pointermove", (ev) => {
+      const scaleFactor = window.devicePixelRatio;
+      const rect = eventSource.editHost.getBoundingClientRect();
       callback([
         makeModifierOptions(ev),
         {
           tag: "pointer",
-          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+          val: { x: (ev.clientX - rect.left) * scaleFactor, y: (ev.clientY - rect.top) * scaleFactor },
         },
         {
           tag: "mouse-move",
@@ -71,9 +75,7 @@ export class DomEventBridge {
       ]);
     });
 
-    const editContext = editHost.editContext;
-
-    canvas.addEventListener("keydown", async (ev) => {
+    eventSource.editHost.addEventListener("keydown", async (ev) => {
       if (ev.isComposing) return;
 
       const combo = keyCombinationType(ev);
@@ -82,7 +84,7 @@ export class DomEventBridge {
       if (combo) {
         switch (combo.tag) {
           case "clipboard": {
-            enterDOMOnputMode(editHost);
+            eventSource.enterDOMOnputMode();
             return;
           }
           case "history": {
@@ -93,8 +95,8 @@ export class DomEventBridge {
         }
       }
 
-      restoreEditMode(editHost, editContext);
-      console.log("DOM-event/keydown - edditable?", editHost.contentEditable);
+      eventSource.restoreEditMode();
+      console.log("DOM-event/keydown - edditable?", eventSource.editHost.contentEditable);
 
       const modifiers = makeModifierOptions(ev);
       const payload = makeKeyEvent(ev);
@@ -111,7 +113,7 @@ export class DomEventBridge {
       ev.preventDefault();
       callback([modifiers, { tag: "key-down", val: [payload, options] }]);
     });
-    canvas.addEventListener("keyup", (ev) => {
+    eventSource.editHost.addEventListener("keyup", (ev) => {
       console.log("DOM-event/keyup");
       if (ev.isComposing) return;
       if (keyCombinationType(ev)) return;
@@ -131,31 +133,14 @@ export class DomEventBridge {
       callback([modifiers, { tag: "key-up", val: payload }]);
     });
 
-    let editState: { text: string; start: number; len: number };
-
-    editContext?.addEventListener("compositionstart", (ev) => {
-      restoreEditMode(canvas, editContext);
-
-      editState = editContext 
-        ? {
-            text: editContext.text,
-            start: editContext.selectionStart,
-            len: editContext.selectionEnd - editContext.selectionStart,
-          }
-        : { text: "", start: 0, len: 0 };
-      console.log("composition/start", `state: ${editContext.text}, buffer: ${editState}`);
+    eventSource.oncompositionstart = () => {
+      eventSource.restoreEditMode();
+      console.log("composition/start", `state: ${eventSource.text}`);
 
       callback([{ tag: "request-composition-bounds", val: { tag: "character-bounds", val: undefined } }]);
-    });
-    editContext?.addEventListener("textupdate", (ev) => {
-      console.log("composition/update", `text: ${editContext.text}, state: ${editState}`);
-
-      editContext.updateText(
-        ev.selectionStart - ev.text.length,
-        ev.selectionEnd,
-        editState.text.substring(editState.start, editState.start + editState.len),
-      );
-      console.log("composition/update(rollbacked)", `state: ${editContext.text}`);
+    };
+    eventSource.ontextupdate = (ev) => {
+      console.log("composition/update(rollbacked)", `state: ${eventSource.text}`);
 
       callback([
         {
@@ -167,17 +152,12 @@ export class DomEventBridge {
         //   val: { tag: "selection-range", val: { offset, len } },
         // },
       ]);
-    });
-    // editContext?.addEventListener("characterboundsupdate", (ev) => {
-    //   callback([
-    //     { tag: "request-composition-bounds", val: { tag: "catacter-bounds", val: [ev.rangeStart, ev.rangeEnd] } },
-    //   ]);
-    // });
-    editContext?.addEventListener("compositionend", (ev) => {
-      callback([{ tag: "update-composition-state", val: { tag: "commit", val: ev.data } }]);
-    });
+    };
+    eventSource.oncompositionend = (ev) => {
+      callback([{ tag: "update-composition-state", val: { tag: "commit", val: ev.text } }]);
+    };
 
-    canvas.addEventListener("beforeinput", (ev) => {
+    eventSource.editHost.addEventListener("beforeinput", (ev) => {
       console.info("beforeinput", ev.inputType);
       switch (ev.inputType) {
         case "historyUndo": {
@@ -200,7 +180,7 @@ export class DomEventBridge {
       }
     });
 
-    canvas.addEventListener(
+    eventSource.editHost.addEventListener(
       "copy",
       (ev) => {
         ev.preventDefault();
@@ -212,7 +192,7 @@ export class DomEventBridge {
       },
       { capture: true },
     );
-    canvas.addEventListener("cut", (ev) => {
+    eventSource.editHost.addEventListener("cut", (ev) => {
       console.log("DOM-event/cut");
       ev.preventDefault();
       callback([
@@ -221,7 +201,7 @@ export class DomEventBridge {
         },
       ]);
     });
-    canvas.addEventListener(
+    eventSource.editHost.addEventListener(
       "paste",
       (ev) => {
         console.log("DOM-event/paste#2");
@@ -307,19 +287,5 @@ function makeKeyEvent(ev: KeyboardEvent): KeyEventPayload | undefined {
       return { tag: "navi", val: "arrow-up" };
     default:
       return undefined;
-  }
-}
-
-function enterDOMOnputMode(editHost: HTMLElement) {
-  if (editHost.editContext) {
-    editHost.editContext = undefined;
-    editHost.removeAttribute("contentEditable");
-  }
-}
-
-export function restoreEditMode(editHost: HTMLElement, editContext: EditContext | undefined) {
-  if (!editHost.editContext) {
-    editHost.editContext = editContext;
-    editHost.contentEditable = "true";
   }
 }

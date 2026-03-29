@@ -14,8 +14,9 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
     let mut modifiers = Modifiers::default();
 
     let mut unhandled_events = UnhandledEvent::default();
+    let in_composition = in_ime_composition(events);
 
-    for event in events {
+    for event in events.into_iter().filter(filter_ime_commit_enter_pressed(in_composition)) {
         match event {
             types::Event::Modifiers(m) => {
                 modifiers.ctrl = ! m.ctrl.is_empty();
@@ -39,6 +40,8 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
             types::Event::KeyDown((key, opts)) => {
+                println!("Event::KeyDown/key: {key:?}");
+
                 input.events.push(egui::Event::Key {
                     key: supports::KeyWrapper(key).into(),
                     physical_key: None,
@@ -48,6 +51,8 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                 });
             }
             types::Event::KeyUp(key) => {
+                println!("Event::KeyUp/key: {key:?}");
+
                 input.events.push(egui::Event::Key {
                     key: supports::KeyWrapper(key).into(),
                     physical_key: None,
@@ -63,6 +68,7 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                 ]);
             }
             types::Event::UpdateCompositionState(types::CompositionState::Commit(text)) => {
+                println!("Event::UpdateCompositionState/text: {text:?}");
                 input.events.extend([
                     egui::Event::Ime(egui::ImeEvent::Enabled),
                     egui::Event::Ime(egui::ImeEvent::Commit(text.clone()))
@@ -107,6 +113,31 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
     unhandled_events
 }
 
+fn in_ime_composition(events: &[types::Event]) -> bool {
+    let found = events.iter().find_map(|ev| match ev {
+        types::Event::UpdateCompositionState(types::CompositionState::Commit(_)) => Some(true),
+        _ => None,
+    });
+    found.is_some()
+}
+
+fn filter_ime_commit_enter_pressed(in_composition: bool) -> impl FnMut(&&types::Event) -> bool {
+    move |ev| {
+        if !in_composition { return true }
+        match ev {
+            types::Event::KeyDown((key, _)) => {
+                let key: egui::Key = supports::KeyWrapper(key).into();
+                key != egui::Key::Enter
+            }
+            types::Event::KeyUp(key) =>{
+                let key: egui::Key = supports::KeyWrapper(key).into();
+                key != egui::Key::Enter
+            }
+            _ => true
+        }
+    }
+}
+
 pub struct MouseButtonW<'a>(&'a types::MouseButton);
 
 impl<'a> From<MouseButtonW<'a>> for PointerButton {
@@ -121,19 +152,14 @@ impl<'a> From<MouseButtonW<'a>> for PointerButton {
     }
 }
 
-pub fn push_platform_output(conetx: &egui::Context, output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
-    let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, events, mutable_text_under_cursor: edit_mutable, .. } = output;
+pub fn push_platform_output(_conetx: &egui::Context, output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
+    let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, events, .. } = output;
 
-    // println!("Platform output/ime: {:?}", ime);
-    if !events.is_empty() { println!("Platform output/platform-events/len: {}, mutable_text_under_cursor: {}", events.len(), edit_mutable); }
+    // if !events.is_empty() { println!("Platform output/platform-events/len: {}, mutable_text_under_cursor: {}", events.len(), edit_mutable); }
     for event in events {
         let info = event.widget_info();
-        println!("Platform output/prev: {:?}, new: {:?}, sel: {:?}", info.prev_text_value.as_ref(), info.current_text_value.as_ref(), info.text_selection);
 
         match (info.prev_text_value.as_ref(), info.current_text_value.as_ref()) {
-            (None, Some(text)) if edit_mutable => {
-
-            }
             (Some(old_text), None) => {
                 let len = old_text.chars().map(|c| c.len_utf16() as u32).sum::<u32>();
                 commands.push(ExampleCommand::ChangeSet(vec![ChangeSpec{ offset: 0, len, new_value: Some("".into()) }]));
@@ -143,6 +169,10 @@ pub fn push_platform_output(conetx: &egui::Context, output: egui::PlatformOutput
             }
             (None, _) => (),
         }
+    }
+
+    if let Some(ime_output) = ime {
+        commands.push(ExampleCommand::CompositionBounds(ime_output.cursor_rect.clone()));
     }
 
     commands.push(ExampleCommand::Cursor(cursor_icon));
@@ -159,7 +189,7 @@ pub fn push_platform_output(conetx: &egui::Context, output: egui::PlatformOutput
 }
 
 pub fn create_text_change_set(old_text: &str, new_text: &str) -> Vec<crate::ChangeSpec> {
-    let mut old_indexes = std::iter::once(0)
+    let old_indexes = std::iter::once(0)
         .chain(
             old_text.chars()
                 .map(|c| c.len_utf16() as u32)
@@ -168,41 +198,31 @@ pub fn create_text_change_set(old_text: &str, new_text: &str) -> Vec<crate::Chan
                     Some(*state)
                 })
         )
+        .collect::<Vec<_>>()
     ;
     let mut new_chars = new_text.chars();
 
     let diff = similar::TextDiff::from_chars(old_text, new_text);
 
-    let mut current_old_index = 0;
-    let mut current_new_index = 0;
-
-    diff.ops().iter()
+    let ops = diff.ops();
+    ops.iter()
         .filter_map(|op| match op {
             &similar::DiffOp::Delete { old_index, old_len, .. } => {
-                let start = old_indexes.nth(old_index - current_old_index);
-                let end = old_indexes.by_ref().take(old_len).last();
-                current_old_index = old_index + old_len + 1;
+                let start = old_indexes[old_index];
+                let end = old_indexes[old_index..][old_len];
 
-                start.zip(end).map(|(s, e)| crate::ChangeSpec{ offset: s, len: e - s, new_value: Some("".into()) })
+                Some(crate::ChangeSpec{ offset: start, len: end - start, new_value: Some("".into()) })
             }
-            &similar::DiffOp::Insert { old_index, new_index, new_len  } => {
-                let start = old_indexes.nth(old_index - current_old_index);
-                current_old_index = old_index + 1;
+            &similar::DiffOp::Insert { old_index, new_index:_, new_len  } => {
+                let start = old_indexes[old_index];
 
-                for _ in 0..(new_index - current_new_index) { new_chars.next(); }
-                current_new_index = new_index + new_len;
-
-                start.map(|s| crate::ChangeSpec{ offset: s, len: 0, new_value: Some(new_chars.by_ref().take(new_len).collect()) })
+                Some(crate::ChangeSpec{ offset: start, len: 0, new_value: Some(new_chars.by_ref().take(new_len).collect()) })
             }
-            &similar::DiffOp::Replace { old_index, old_len, new_index, new_len } => {
-                let start = old_indexes.nth(old_index - current_old_index);
-                let end = old_indexes.by_ref().take(old_len).last();
-                current_old_index = old_index + old_len + 1;
+            &similar::DiffOp::Replace { old_index, old_len, new_index:_, new_len } => {
+                let start = old_indexes[old_index];
+                let end = old_indexes[old_index..][old_len];
 
-                for _ in 0..(new_index - current_new_index) { new_chars.next(); }
-                current_new_index = new_index + new_len;
-
-                start.zip(end).map(|(s, e)| crate::ChangeSpec{ offset: s, len: e - s, new_value: Some(new_chars.by_ref().take(new_len).collect()) })
+                Some(crate::ChangeSpec{ offset: start, len: end - start, new_value: Some(new_chars.by_ref().take(new_len).collect()) })
             }
             similar::DiffOp::Equal { .. } => None,
         })

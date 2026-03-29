@@ -283,21 +283,17 @@ pub mod local {
           f.debug_struct("ChangeSpec").field("offset", &self.offset).field("len", &self.len).field("new-value", &self.new_value).finish()
         }
       }
+      #[repr(C)]
       #[derive(Clone, Copy)]
-      pub enum CompositionBounds {
-        SelectionBounds,
-        CharacterBounds,
+      pub struct CompositionBounds {
+        pub left: f32,
+        pub top: f32,
+        pub width: f32,
+        pub height: f32,
       }
       impl ::core::fmt::Debug for CompositionBounds {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-          match self {
-            CompositionBounds::SelectionBounds => {
-              f.debug_tuple("CompositionBounds::SelectionBounds").finish()
-            }
-            CompositionBounds::CharacterBounds => {
-              f.debug_tuple("CompositionBounds::CharacterBounds").finish()
-            }
-          }
+          f.debug_struct("CompositionBounds").field("left", &self.left).field("top", &self.top).field("width", &self.width).field("height", &self.height).finish()
         }
       }
       #[derive(Clone)]
@@ -15763,10 +15759,10 @@ pub mod wasi {
                                                                                 *ptr1.add(0).cast::<*mut u8>() = result23;
                                                                                 let vec34 = t2_1;
                                                                                 let len34 = vec34.len();
-                                                                                let layout34 = _rt::alloc::Layout::from_size_align(vec34.len() * (4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                let layout34 = _rt::alloc::Layout::from_size_align(vec34.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
                                                                                 let (result34, _cleanup34) = wit_bindgen::rt::Cleanup::new(layout34);if let Some(cleanup) = _cleanup34 { cleanup.forget(); }
                                                                                 for (i, e) in vec34.into_iter().enumerate() {
-                                                                                  let base = result34.add(i * (4*::core::mem::size_of::<*const u8>()));
+                                                                                  let base = result34.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                   {
                                                                                     use super::super::super::super::local::immediate_renderer_example::interaction::Command as V33;
                                                                                     match e {
@@ -15852,19 +15848,11 @@ pub mod wasi {
                                                                                         },
                                                                                         V33::CompositionBounds(e) => {
                                                                                           *base.add(0).cast::<u8>() = (5i32) as u8;
-                                                                                          use super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds as V32;
-                                                                                          match e {
-                                                                                            V32::SelectionBounds=> {
-                                                                                              {
-                                                                                                *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
-                                                                                              }
-                                                                                            }
-                                                                                            V32::CharacterBounds=> {
-                                                                                              {
-                                                                                                *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
-                                                                                              }
-                                                                                            }
-                                                                                          }
+                                                                                          let super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds{ left:left32, top:top32, width:width32, height:height32, } = e;
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left32);
+                                                                                          *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top32);
+                                                                                          *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width32);
+                                                                                          *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height32);
                                                                                         },
                                                                                       }
                                                                                     }
@@ -15937,7 +15925,7 @@ pub mod wasi {
                                                                                   let base33 = l14;
                                                                                   let len33 = l15;
                                                                                   for i in 0..len33 {
-                                                                                    let base = base33.add(i * (4*::core::mem::size_of::<*const u8>()));
+                                                                                    let base = base33.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                     {
                                                                                       let l16 = i32::from(*base.add(0).cast::<u8>());
                                                                                       match l16 {
@@ -15997,7 +15985,7 @@ pub mod wasi {
                                                                                       }
                                                                                     }
                                                                                   }
-                                                                                  _rt::cabi_dealloc(base33, len33 * (4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                  _rt::cabi_dealloc(base33, len33 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                 } }
                                                                                 #[doc(hidden)]
                                                                                 #[allow(non_snake_case, unused_unsafe)]
@@ -16550,8 +16538,8 @@ pub mod wasi {
                                                                       #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:encoded world")]
                                                                       #[doc(hidden)]
                                                                       #[allow(clippy::octal_escapes)]
-                                                                      pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31149] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xa8\xf2\x01\x01A\x02\
+                                                                      pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31137] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x9c\xf2\x01\x01A\x02\
 \x01A\x1a\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -17120,46 +17108,46 @@ s-resize\x08w-resize\x09ne-resize\x09nw-resize\x09se-resize\x09sw-resize\x09ew-r
 esize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07zoom-in\x08zoom-out\x04\0\x0c\
 cursor-style\x03\0\x0b\x01q\x01\x04text\x01s\0\x04\0\x0eclipboard-data\x03\0\x0d\
 \x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x0f\x04\0\x0bchange-spec\x03\0\x10\
-\x01q\x02\x10selection-bounds\0\0\x10character-bounds\0\0\x04\0\x12composition-b\
-ounds\x03\0\x12\x01p\x03\x01p\x11\x01q\x06\x0bopen-window\x01\x01\0\x0drequest-i\
-mage\x01\x14\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x0achange-set\x01\x15\0\
-\x12composition-bounds\x01\x13\0\x04\0\x07command\x03\0\x16\x03\0,local:immediat\
-e-renderer-example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10\
-modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-k\
-ey\x01\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08locatio\
-n\x03\0\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmous\
-e-button\x03\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01m\x03\x05\
-enter\x03tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09backspace\x06\
-delete\x04\0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x0e\x01\
-m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\
-\0\x10\x01q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\0\x04nav\
-i\x01\x11\0\x04\0\x04keys\x03\0\x12\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-op\
-s\x03\0\x14\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x16\x01\
-q\x03\x0fselection-range\x01\x17\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11\
-composition-state\x03\0\x18\x01k\x17\x01q\x01\x10character-bounds\x01\x1a\0\x04\0\
-\x16composition-bounds-req\x03\0\x1b\x01o\x02\x13\x09\x01q\x0e\x09modifiers\x01\x03\
-\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-m\
-ove\0\0\x08key-down\x01\x1d\0\x06key-up\x01\x13\0\x1arequest-composition-bounds\x01\
-\x1c\0\x18update-composition-state\x01\x19\0\x07history\x01\x15\0\x03cut\0\0\x04\
-copy\0\0\x05paste\x01s\0\x08activate\0\0\x04\0\x05event\x03\0\x1e\x01q\x02\x05ev\
-ent\x01\x1f\0\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x20\x03\0\x1el\
-ocal:immediate-renderer/types\x05\x0c\x02\x03\0\x04\x07command\x02\x03\0\x04\x06\
-effect\x02\x03\0\x03\x0erender-context\x02\x03\0\x05\x05event\x02\x03\0\x05\x0eu\
-nhandle-event\x01B%\x02\x03\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\
-\x0e\x04\0\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\x04\0\x0erender-context\x03\0\
-\x04\x02\x03\x02\x01\x10\x04\0\x05event\x03\0\x06\x02\x03\x02\x01\x11\x04\0\x0eu\
-nhandle-event\x03\0\x08\x04\0\x0devent-channel\x03\x01\x04\0\x0fcommand-channel\x03\
-\x01\x04\0\x0adispatcher\x03\x01\x01h\x0a\x01p\x07\x01@\x02\x04self\x0d\x06event\
-s\x0e\x01\0\x04\0\x1a[method]event-channel.post\x01\x0f\x01h\x0b\x01p\x03\x01@\x02\
-\x04self\x10\x07effects\x11\x01\0\x04\0\x1c[method]command-channel.post\x01\x12\x01\
-h\x0c\x01i\x0a\x01@\x01\x04self\x13\0\x14\x04\0\x20[method]dispatcher.event-chan\
-nel\x01\x15\x01i\x0b\x01@\x01\x04self\x13\0\x16\x04\0\"[method]dispatcher.comman\
-d-channel\x01\x17\x01p\x09\x01p\x01\x01o\x02\x18\x19\x01@\x01\x04self\x13\0\x1a\x04\
-\0\x1b[method]dispatcher.dispatch\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\x07context\x1c\
-\0\x1d\x04\0\x0fcreate-renderer\x01\x1e\x04\0'local:immediate-renderer-example/r\
-ender\x05\x12\x04\0.local:immediate-renderer-example/example-world\x04\0\x0b\x13\
-\x01\0\x0dexample-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-c\
-omponent\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+\x01r\x04\x04leftv\x03topv\x05widthv\x06heightv\x04\0\x12composition-bounds\x03\0\
+\x12\x01p\x03\x01p\x11\x01q\x06\x0bopen-window\x01\x01\0\x0drequest-image\x01\x14\
+\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x0achange-set\x01\x15\0\x12composi\
+tion-bounds\x01\x13\0\x04\0\x07command\x03\0\x16\x03\0,local:immediate-renderer-\
+example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10modifier-p\
+ressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\
+\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\
+\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\
+\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01m\x03\x05enter\x03ta\
+b\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09backspace\x06delete\x04\
+\0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x0e\x01m\x04\x0a\
+arrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x10\x01\
+q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\0\x04navi\x01\x11\0\
+\x04\0\x04keys\x03\0\x12\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x14\
+\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x16\x01q\x03\x0fse\
+lection-range\x01\x17\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11composition\
+-state\x03\0\x18\x01k\x17\x01q\x01\x10character-bounds\x01\x1a\0\x04\0\x16compos\
+ition-bounds-req\x03\0\x1b\x01o\x02\x13\x09\x01q\x0e\x09modifiers\x01\x03\0\x07p\
+ointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-move\0\0\
+\x08key-down\x01\x1d\0\x06key-up\x01\x13\0\x1arequest-composition-bounds\x01\x1c\
+\0\x18update-composition-state\x01\x19\0\x07history\x01\x15\0\x03cut\0\0\x04copy\
+\0\0\x05paste\x01s\0\x08activate\0\0\x04\0\x05event\x03\0\x1e\x01q\x02\x05event\x01\
+\x1f\0\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x20\x03\0\x1elocal:im\
+mediate-renderer/types\x05\x0c\x02\x03\0\x04\x07command\x02\x03\0\x04\x06effect\x02\
+\x03\0\x03\x0erender-context\x02\x03\0\x05\x05event\x02\x03\0\x05\x0eunhandle-ev\
+ent\x01B%\x02\x03\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\x0e\x04\0\
+\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\x04\0\x0erender-context\x03\0\x04\x02\x03\
+\x02\x01\x10\x04\0\x05event\x03\0\x06\x02\x03\x02\x01\x11\x04\0\x0eunhandle-even\
+t\x03\0\x08\x04\0\x0devent-channel\x03\x01\x04\0\x0fcommand-channel\x03\x01\x04\0\
+\x0adispatcher\x03\x01\x01h\x0a\x01p\x07\x01@\x02\x04self\x0d\x06events\x0e\x01\0\
+\x04\0\x1a[method]event-channel.post\x01\x0f\x01h\x0b\x01p\x03\x01@\x02\x04self\x10\
+\x07effects\x11\x01\0\x04\0\x1c[method]command-channel.post\x01\x12\x01h\x0c\x01\
+i\x0a\x01@\x01\x04self\x13\0\x14\x04\0\x20[method]dispatcher.event-channel\x01\x15\
+\x01i\x0b\x01@\x01\x04self\x13\0\x16\x04\0\"[method]dispatcher.command-channel\x01\
+\x17\x01p\x09\x01p\x01\x01o\x02\x18\x19\x01@\x01\x04self\x13\0\x1a\x04\0\x1b[met\
+hod]dispatcher.dispatch\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\x07context\x1c\0\x1d\x04\
+\0\x0fcreate-renderer\x01\x1e\x04\0'local:immediate-renderer-example/render\x05\x12\
+\x04\0.local:immediate-renderer-example/example-world\x04\0\x0b\x13\x01\0\x0dexa\
+mple-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070\
+.245.1\x10wit-bindgen-rust\x060.53.1";
 
                                                                       #[inline(never)]
                                                                       #[doc(hidden)]

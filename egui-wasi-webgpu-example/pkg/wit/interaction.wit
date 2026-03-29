@@ -77,8 +77,10 @@ interface interaction {
         new-value: option<string>,
     }
 
-    variant composition-bounds {
-        selection-bounds,
-        character-bounds,
+    record composition-bounds {
+        left: f32,
+        top: f32,
+        width: f32,
+        height: f32,
     }
 }

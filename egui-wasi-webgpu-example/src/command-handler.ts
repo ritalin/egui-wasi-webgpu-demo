@@ -2,10 +2,12 @@ import type {
   ChangeSpec,
   ClipboardData,
   Command,
+  CompositionBounds,
   CursorStyle,
 } from "pkg/interfaces/local-immediate-renderer-example-interaction";
 import type { WasmEngine } from "./engine";
-import { DomEventBridge, restoreEditMode } from "./event-bridge";
+import { DomEventBridge } from "./event-bridge";
+import { EditEventSource } from "./edit-event-source";
 
 export type Route = "route://app/main";
 export type HostCommand =
@@ -47,6 +49,10 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
         updateEditContext(engine, route, cmd.val);
         break;
       }
+      case "composition-bounds": {
+        updateCompositionBounds(engine, route, cmd.val);
+        break;
+      }
     }
   }
 }
@@ -59,12 +65,12 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
         return Promise.reject(`Canvas of the route is not found: (${route})`);
       }
 
-      const { editHost, editContext } = createEditHost(canvas);
-      editHost.focus();
+      const eventSource = new EditEventSource(canvas);
+      eventSource.editHost.focus();
 
-      if (engine.launch(route, canvas, editContext)) {
+      if (engine.launch(route, canvas, eventSource)) {
         engine.addEvent(route, [{ tag: "activate" }]);
-        DomEventBridge.bind(canvas, editHost, (events) => engine.addEvent(route, events));
+        DomEventBridge.bind(eventSource, (events) => engine.addEvent(route, events));
       }
       break;
     }
@@ -74,12 +80,12 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
         return Promise.reject(`Canvas of the route is not found: (${route})`);
       }
 
-      const { editHost, editContext } = createEditHost(canvas);
+      const eventSource = new EditEventSource(canvas);
 
       DomEventBridge.show(canvas);
 
-      if (engine.launch(route, canvas, editContext)) {
-        DomEventBridge.bind(canvas, editHost, (events) => engine.addEvent(route, events));
+      if (engine.launch(route, canvas, eventSource)) {
+        DomEventBridge.bind(eventSource, (events) => engine.addEvent(route, events));
       }
       break;
     }
@@ -121,27 +127,25 @@ function changeCursor(route: Route, cursorStyle: CursorStyle) {
   canvas.style.cursor = cursorStyle;
 }
 
-function createEditHost(canvas: HTMLElement): { editHost: HTMLElement; editContext: EditContext } {
-  const editContext = new EditContext();
-  canvas.contentEditable = "true";
-  canvas.tabIndex = 0;
-
-  canvas.editContext = editContext;
-
-  return { editHost: canvas, editContext };
-}
-
 function updateEditContext(engine: WasmEngine, route: Route, changeSpecs: ChangeSpec[]) {
   const entry = engine.entry(route);
   if (!entry) return;
 
-  restoreEditMode(entry.canvas, entry.editContext);
+  entry.eventSource.restoreEditMode();
 
-  console.log("change-spec", `len: ${changeSpecs.length}`, `prev-state: ${entry.editContext.text}`);
+  console.log("change-spec", `len: ${changeSpecs.length}`, `prev-state: ${entry.eventSource.text}`);
 
   for (const c of changeSpecs.reverse()) {
     console.debug("ChangeSpec", c.offset, c.len, c.newValue);
-    entry.editContext.updateText(c.offset, c.offset + c.len, c.newValue!);
-    console.debug(`Active edit changed/current: "${entry.editContext.text}"`);
+    entry.eventSource.updateText(c.offset, c.offset + c.len, c.newValue!);
+    console.debug(`Active edit changed/current: "${entry.eventSource.text}"`);
   }
+}
+
+function updateCompositionBounds(engine: WasmEngine, route: Route, bounds: CompositionBounds) {
+  const entry = engine.entry(route);
+  if (!entry) return;
+
+  entry.eventSource.restoreEditMode();
+  entry.eventSource.updateCompositionBounds(bounds);
 }

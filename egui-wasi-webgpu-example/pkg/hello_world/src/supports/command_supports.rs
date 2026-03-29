@@ -12,6 +12,7 @@ impl From<ExampleCommand> for interaction::Command {
             ExampleCommand::ChangeSet(change_specs) => {
                 interaction::Command::ChangeSet(change_specs.into_iter().map(Into::into).collect::<Vec<_>>())
             }
+            ExampleCommand::CompositionBounds(bounds) =>interaction::Command::CompositionBounds(bounds.into()),
         }
     }
 }
@@ -102,6 +103,17 @@ impl From<crate::ChangeSpec> for interaction::ChangeSpec {
             offset: value.offset,
             len: value.len,
             new_value: value.new_value,
+        }
+    }
+}
+
+impl From<egui::Rect> for interaction::CompositionBounds {
+    fn from(value: egui::Rect) -> Self {
+        interaction::CompositionBounds{
+            left: value.left(),
+            top: value.top(),
+            width: value.width(),
+            height: value.height(),
         }
     }
 }

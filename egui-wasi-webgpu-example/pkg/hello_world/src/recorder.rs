@@ -33,7 +33,7 @@ impl RecoderInner {
                     }
                 }
                 ExampleEffect::FontData { name, bytes, url } => {
-                    println!("*** Apply font: {}, size: {}", url, bytes.len());
+                    println!("*** Apply font/name: {}, path: {}, size: {}", name, url, bytes.len());
                     let font_data = egui::FontData::from_owned(bytes);
                     let font_families = vec![epaint::text::InsertFontFamily{
                         family: egui::FontFamily::Proportional,
@@ -87,26 +87,6 @@ impl recorder_core::Recorder for RecoderInner {
         let mut request_img = None;
 
         self.apply_effects(effects.into_iter().map(|c| c.into()));
-
-        if let Some(range) = unhandled_event.composition_sel_range.as_ref() {
-            if let Some(id) = self.egui_context.memory_mut(|m| m.focused()) {
-                println!("Focused-widget/id: {id:?}");
-
-                self.egui_context.output(|output| {
-                    println!("Prev-outpt-event/len: {}", output.events.len());
-                });
-
-                if let Some(state) = egui::text_edit::TextEditState::load(&self.egui_context, id) {
-                    println!("Focused-widget/char-range: {:?}", state.cursor.char_range());
-
-
-
-                    // state.cursor.set_char_range(Some(new_cursor));
-                    // state.store(&self.egui_context, id);
-                }
-            }
-        }
-
 
         let output = self.egui_context.run(input, |cx| {
             egui::CentralPanel::default().show(cx, |ui| {

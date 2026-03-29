@@ -18,6 +18,7 @@ pub enum ExampleCommand {
     Cursor(egui::CursorIcon),
     Clipboard(ClipboardData),
     ChangeSet(Vec<ChangeSpec>),
+    CompositionBounds(egui::Rect),
 }
 
 #[derive(Debug, Clone)]
@@ -40,7 +41,7 @@ pub struct UnhandledEvent {
 
 #[derive(Debug, Clone)]
 pub struct ChangeSpec {
-    offset: u32,
-    len: u32,
-    new_value: Option<String>,
+    pub offset: u32,
+    pub len: u32,
+    pub new_value: Option<String>,
 }

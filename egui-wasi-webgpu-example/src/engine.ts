@@ -8,14 +8,22 @@ import type {
 
 import type { WebGpuRuntime } from "wasi-webgpu-runtime/host";
 import { queueCommand, type Route } from "./command-handler";
+import type { EditEventSource } from "./edit-event-source";
 
-export interface RouteEntry {
-  canvas: HTMLCanvasElement;
-  editContext: EditContext;
+export class RouteEntry {
+  eventSource: EditEventSource;
   surface: RenderContext;
   dispatcher: Dispatcher;
   events: DispatchEvent[];
   effects: Effect[];
+
+  constructor(eventSource: EditEventSource, surface: RenderContext, dispatcher: Dispatcher, effects: Effect[]) {
+    this.eventSource = eventSource;
+    this.surface = surface;
+    this.dispatcher = dispatcher;
+    this.events = [];
+    this.effects = effects;
+  }
 }
 
 const DEFAULT_FONT_NAME = "NotoSansJP-Regular";
@@ -46,7 +54,7 @@ export class WasmEngine {
     this.dispatchers.get(route)?.effects.push(...effects);
   }
 
-  launch(route: Route, canvas: HTMLCanvasElement, editContext: EditContext): boolean {
+  launch(route: Route, canvas: HTMLCanvasElement, eventSource: EditEventSource): boolean {
     if (this.dispatchers.has(route)) return false;
 
     const surface = this.runtime.createRenderContext(canvas) as unknown as RenderContext;
@@ -69,7 +77,7 @@ export class WasmEngine {
       }
     }
 
-    this.dispatchers.set(route, { canvas, editContext, surface, dispatcher, events: [], effects });
+    this.dispatchers.set(route, new RouteEntry(eventSource, surface, dispatcher, effects));
 
     return true;
   }
@@ -104,7 +112,7 @@ async function loadFont(path: string): Promise<Uint8Array<ArrayBuffer> | undefin
       return;
     }
     const buffer = await res.bytes();
-    console.log("font-size/len", buffer.byteLength);
+    console.log("font-data/len", buffer.byteLength);
 
     return buffer;
   });
