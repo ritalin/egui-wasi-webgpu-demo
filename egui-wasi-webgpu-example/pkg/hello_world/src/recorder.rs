@@ -6,6 +6,7 @@ use crate::{ChangeSpec, ExampleCommand, ExampleEffect, supports::{egui_supports,
 pub struct RecoderInner {
     egui_context: egui::Context,
     state: AppState,
+    in_compositioning: bool,
 }
 impl RecoderInner {
     pub fn new() -> Self {
@@ -15,7 +16,7 @@ impl RecoderInner {
         Self {
             egui_context,
             state: AppState::default(),
-
+            in_compositioning: false,
         }
     }
 
@@ -80,7 +81,7 @@ impl recorder_core::Recorder for RecoderInner {
         I::Item: Into<Self::Effect>,
     {
         let mut input = RawInput::default();
-        let unhandled_event = egui_supports::populate_events(events, &screen, &mut input);
+        let unhandled_event = egui_supports::populate_events(events, &screen, &mut self.in_compositioning, &mut input);
 
         let mut commands = vec![];
 

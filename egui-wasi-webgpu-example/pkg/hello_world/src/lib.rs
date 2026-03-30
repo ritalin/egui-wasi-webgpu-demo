@@ -36,7 +36,6 @@ pub enum ExampleEffect {
 pub struct UnhandledEvent {
     pub activate: Option<()>,
     pub composition_sel_range: Option<types::CompositionRange>,
-    pub composition_bound_req: Option<()>,
 }
 
 #[derive(Debug, Clone)]

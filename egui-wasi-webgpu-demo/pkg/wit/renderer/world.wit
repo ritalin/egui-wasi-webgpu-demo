@@ -92,6 +92,7 @@ interface types {
     }
 
     variant composition-state {
+        start,
         selection-range(composition-range),
         pre-edit(string),
         commit(string),

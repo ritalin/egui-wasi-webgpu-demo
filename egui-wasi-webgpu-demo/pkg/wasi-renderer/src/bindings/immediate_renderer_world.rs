@@ -15013,6 +15013,7 @@ pub mod wasi {
                                                                                       }
                                                                                       #[derive(Clone)]
                                                                                       pub enum CompositionState {
+                                                                                        Start,
                                                                                         SelectionRange(CompositionRange),
                                                                                         PreEdit(_rt::String),
                                                                                         Commit(_rt::String),
@@ -15020,6 +15021,9 @@ pub mod wasi {
                                                                                       impl ::core::fmt::Debug for CompositionState {
                                                                                         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                                                                                           match self {
+                                                                                            CompositionState::Start => {
+                                                                                              f.debug_tuple("CompositionState::Start").finish()
+                                                                                            }
                                                                                             CompositionState::SelectionRange(e) => {
                                                                                               f.debug_tuple("CompositionState::SelectionRange").field(e).finish()
                                                                                             }
@@ -15818,8 +15822,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer:immediate-renderer-world:imports and exports")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30425] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xc9\xec\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30433] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xd1\xec\x01\x01A\x02\
 \x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16400,18 +16404,18 @@ e\x06delete\x04\0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\0
 vi-key\x03\0\x10\x01q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\
 \0\x04navi\x01\x11\0\x04\0\x04keys\x03\0\x12\x01m\x02\x04undo\x04redo\x04\0\x0bh\
 istory-ops\x03\0\x14\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\
-\x16\x01q\x03\x0fselection-range\x01\x17\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\
-\0\x11composition-state\x03\0\x18\x01k\x17\x01q\x01\x10character-bounds\x01\x1a\0\
-\x04\0\x16composition-bounds-req\x03\0\x1b\x01o\x02\x13\x09\x01q\x0f\x09modifier\
-s\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0a\
-mouse-move\0\0\x08key-down\x01\x1d\0\x06key-up\x01\x13\0\x1arequest-composition-\
-bounds\x01\x1c\0\x18update-composition-state\x01\x19\0\x07history\x01\x15\0\x03c\
-ut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05ev\
-ent\x03\0\x1e\x01q\x02\x05event\x01\x1f\0\x0bopen-window\x01s\0\x04\0\x0eunhandl\
-e-event\x03\0\x20\x04\0\x1elocal:immediate-renderer/types\x05\x0c\x04\01local:im\
-mediate-renderer/immediate-renderer-world\x04\0\x0b\x1e\x01\0\x18immediate-rende\
-rer-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.\
-245.1\x10wit-bindgen-rust\x060.53.1";
+\x16\x01q\x04\x05start\0\0\x0fselection-range\x01\x17\0\x08pre-edit\x01s\0\x06co\
+mmit\x01s\0\x04\0\x11composition-state\x03\0\x18\x01k\x17\x01q\x01\x10character-\
+bounds\x01\x1a\0\x04\0\x16composition-bounds-req\x03\0\x1b\x01o\x02\x13\x09\x01q\
+\x0f\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mous\
+e-up\x01\x07\0\x0amouse-move\0\0\x08key-down\x01\x1d\0\x06key-up\x01\x13\0\x1are\
+quest-composition-bounds\x01\x1c\0\x18update-composition-state\x01\x19\0\x07hist\
+ory\x01\x15\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-foc\
+us\0\0\x04\0\x05event\x03\0\x1e\x01q\x02\x05event\x01\x1f\0\x0bopen-window\x01s\0\
+\x04\0\x0eunhandle-event\x03\0\x20\x04\0\x1elocal:immediate-renderer/types\x05\x0c\
+\x04\01local:immediate-renderer/immediate-renderer-world\x04\0\x0b\x1e\x01\0\x18\
+immediate-renderer-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-\
+component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                 };
                                                                 )
                                                               }

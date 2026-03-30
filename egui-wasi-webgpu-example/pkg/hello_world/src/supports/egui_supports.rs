@@ -3,7 +3,7 @@ use wasi_renderer::{ScreenDescriptor, bindings::types};
 
 use crate::{ChangeSpec, ClipboardData, ExampleCommand, UnhandledEvent, supports};
 
-pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input: &mut egui::RawInput) -> UnhandledEvent {
+pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, in_compositioning: &mut bool, input: &mut egui::RawInput) -> UnhandledEvent {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();
     viewport.native_pixels_per_point = Some(screen.scale_factor);
 
@@ -14,9 +14,8 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
     let mut modifiers = Modifiers::default();
 
     let mut unhandled_events = UnhandledEvent::default();
-    let in_composition = in_ime_composition(events);
 
-    for event in events.into_iter().filter(filter_ime_commit_enter_pressed(in_composition)) {
+    for event in events.into_iter() {
         match event {
             types::Event::Modifiers(m) => {
                 modifiers.ctrl = ! m.ctrl.is_empty();
@@ -39,11 +38,19 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::MouseMove => {
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
+            types::Event::KeyDown((types::Keys::Whitespace(types::WhitespaceKey::Enter), _)) |
+            types::Event::KeyUp(types::Keys::Whitespace(types::WhitespaceKey::Enter)) if *in_compositioning => {
+                // discard
+            }
+            types::Event::KeyDown((types::Keys::Whitespace(types::WhitespaceKey::Space), _)) if !*in_compositioning => {
+                input.events.push(egui::Event::Text(" ".into()));
+            }
             types::Event::KeyDown((key, opts)) => {
                 println!("Event::KeyDown/key: {key:?}");
+                let key: egui::Key = supports::KeyWrapper(key).into();
 
                 input.events.push(egui::Event::Key {
-                    key: supports::KeyWrapper(key).into(),
+                    key,
                     physical_key: None,
                     pressed: true,
                     repeat: opts.contains(types::KeyOptions::REPEAT),
@@ -52,14 +59,18 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             }
             types::Event::KeyUp(key) => {
                 println!("Event::KeyUp/key: {key:?}");
+                let key: egui::Key = supports::KeyWrapper(key).into();
 
                 input.events.push(egui::Event::Key {
-                    key: supports::KeyWrapper(key).into(),
+                    key,
                     physical_key: None,
                     pressed: false,
                     repeat: false,
                     modifiers
                 });
+            }
+            types::Event::UpdateCompositionState(types::CompositionState::Start) => {
+                *in_compositioning = true;
             }
             types::Event::UpdateCompositionState(types::CompositionState::PreEdit(text)) => {
                 input.events.extend([
@@ -73,6 +84,7 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                     egui::Event::Ime(egui::ImeEvent::Enabled),
                     egui::Event::Ime(egui::ImeEvent::Commit(text.clone()))
                 ]);
+                *in_compositioning = false;
             }
             types::Event::History(ops) => {
                 println!("Event::History: {:?}", ops);
@@ -103,8 +115,7 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::KeepFocus => {
                 input.focused = true;
             }
-            types::Event::RequestCompositionBounds(req) => {
-                unhandled_events.composition_bound_req = Some(());
+            types::Event::RequestCompositionBounds(_) => {
             }
             types::Event::UpdateCompositionState(types::CompositionState::SelectionRange(range)) => {
                 unhandled_events.composition_sel_range = Some(range.clone());
@@ -114,31 +125,6 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
     input.modifiers = modifiers;
 
     unhandled_events
-}
-
-fn in_ime_composition(events: &[types::Event]) -> bool {
-    let found = events.iter().find_map(|ev| match ev {
-        types::Event::UpdateCompositionState(types::CompositionState::Commit(_)) => Some(true),
-        _ => None,
-    });
-    found.is_some()
-}
-
-fn filter_ime_commit_enter_pressed(in_composition: bool) -> impl FnMut(&&types::Event) -> bool {
-    move |ev| {
-        if !in_composition { return true }
-        match ev {
-            types::Event::KeyDown((key, _)) => {
-                let key: egui::Key = supports::KeyWrapper(key).into();
-                key != egui::Key::Enter
-            }
-            types::Event::KeyUp(key) =>{
-                let key: egui::Key = supports::KeyWrapper(key).into();
-                key != egui::Key::Enter
-            }
-            _ => true
-        }
-    }
 }
 
 pub struct MouseButtonW<'a>(&'a types::MouseButton);

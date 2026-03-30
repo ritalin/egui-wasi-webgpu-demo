@@ -79,7 +79,7 @@ export class DomEventBridge {
       if (ev.isComposing) return;
 
       const combo = keyCombinationType(ev);
-      console.log("DOM-event/keydown", combo);
+      console.log("DOM-event/keydown", combo, ev.code);
 
       if (combo) {
         switch (combo.tag) {
@@ -137,7 +137,10 @@ export class DomEventBridge {
       eventSource.restoreEditMode();
       console.log("composition/start", `state: ${eventSource.text}`);
 
-      callback([{ tag: "request-composition-bounds", val: { tag: "character-bounds", val: undefined } }]);
+      callback([
+        { tag: "request-composition-bounds", val: { tag: "character-bounds", val: undefined } },
+        { tag: "update-composition-state", val: { tag: "start" } },
+      ]);
     };
     eventSource.ontextupdate = (ev) => {
       console.log("composition/update(rollbacked)", `state: ${eventSource.text}`);
@@ -154,6 +157,7 @@ export class DomEventBridge {
       ]);
     };
     eventSource.oncompositionend = (ev) => {
+      console.log("composition/oncompositionend", `state: ${ev.text}`);
       callback([{ tag: "update-composition-state", val: { tag: "commit", val: ev.text } }]);
     };
 
