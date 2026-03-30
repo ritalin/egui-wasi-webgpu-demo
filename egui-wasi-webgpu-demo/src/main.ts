@@ -55,11 +55,12 @@ class DomEventBridge {
 
   static bind(canvas: HTMLCanvasElement, callback: (events: DispatchEvent[]) => any) {
     canvas.addEventListener("pointerdown", (ev) => {
+      const scaleFcactor = window.devicePixelRatio;
       const rect = canvas.getBoundingClientRect();
       callback([
         {
           tag: "pointer",
-          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+          val: { x: (ev.clientX - rect.left) * scaleFcactor, y: (ev.clientY - rect.top) * scaleFcactor },
         },
         {
           tag: "mouse-down",
@@ -68,11 +69,12 @@ class DomEventBridge {
       ]);
     });
     canvas.addEventListener("pointerup", (ev) => {
+      const scaleFcactor = window.devicePixelRatio;
       const rect = canvas.getBoundingClientRect();
       callback([
         {
           tag: "pointer",
-          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+          val: { x: (ev.clientX - rect.left) * scaleFcactor, y: (ev.clientY - rect.top) * scaleFcactor },
         },
         {
           tag: "mouse-up",
@@ -81,11 +83,12 @@ class DomEventBridge {
       ]);
     });
     canvas.addEventListener("pointermove", (ev) => {
+      const scaleFcactor = window.devicePixelRatio;
       const rect = canvas.getBoundingClientRect();
       callback([
         {
           tag: "pointer",
-          val: { x: ev.clientX - rect.left, y: ev.clientY - rect.top },
+          val: { x: (ev.clientX - rect.left) * scaleFcactor, y: (ev.clientY - rect.top) * scaleFcactor },
         },
         {
           tag: "mouse-move",

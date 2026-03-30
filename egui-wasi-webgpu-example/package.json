@@ -9,6 +9,9 @@
   "packageManager": "pnpm@10.12.1",
   "scripts": {
     "dev": "vite",
+    "build:shim": "pnpm --filter wasi-webgpu-runtime run build",
+    "build:pkg": "./scripts/transpile.sh",
+    "build": "pnpm run build:shim && pnpm run build:pkg hello_world release && tsc && vite build",
     "build:dist": "tsc && vite build",
     "preview": "vite preview"
   },

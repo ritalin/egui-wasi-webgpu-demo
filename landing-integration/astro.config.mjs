@@ -6,4 +6,8 @@ export default defineConfig({
   output: "static",
   outDir: "../dist-final",
   base: "/egui-wasi-webgpu-demo/",
+
+  build: {
+    format: "directory",
+  },
 });
