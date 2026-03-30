@@ -1,11 +1,13 @@
+
 ---
 import PageLayout from '../components/PageLayout.astro';
 import { getAssets, getPagesFromDist } from '../lib/asset-supports';
 import { buildPageTree, type TreeNode } from "../lib/page-tree";
+import path from 'node:path';
 
 export async function getStaticPaths() {
   const pages = await getPagesFromDist();
-  return pages.map(p => ({ params: { name: p.path } }));
+  return pages.filter(p => p.isApp).map(p => ({ params: { name: path.join(p.prefix, p.path) } }));
 }
 
 const name = Astro.params.name;
