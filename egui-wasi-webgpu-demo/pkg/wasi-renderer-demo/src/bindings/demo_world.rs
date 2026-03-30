@@ -14721,13 +14721,16 @@ pub mod wasi {
                                                                                               use super::super::super::super::__with_name1::CompositionState as V5;
                                                                                               let v5 = match arg2 as i32 {
                                                                                                 0 => {
+                                                                                                  V5::Start
+                                                                                                }
+                                                                                                1 => {
                                                                                                   let e5 = super::super::super::super::__with_name1::CompositionRange{
                                                                                                     offset: arg3 as i32 as u32,
                                                                                                     len: arg4 as i32 as u32,
                                                                                                   };
                                                                                                   V5::SelectionRange(e5)
                                                                                                 }
-                                                                                                1 => {
+                                                                                                2 => {
                                                                                                   let e5 = {
                                                                                                     let len3 = arg4;
                                                                                                     let bytes3 = _rt::Vec::from_raw_parts(arg3.cast(), len3, len3);
@@ -14737,7 +14740,7 @@ pub mod wasi {
                                                                                                   V5::PreEdit(e5)
                                                                                                 }
                                                                                                 n => {
-                                                                                                  debug_assert_eq!(n, 2, "invalid enum discriminant");
+                                                                                                  debug_assert_eq!(n, 3, "invalid enum discriminant");
                                                                                                   let e5 = {
                                                                                                     let len4 = arg4;
                                                                                                     let bytes4 = _rt::Vec::from_raw_parts(arg3.cast(), len4, len4);
@@ -14972,6 +14975,9 @@ pub mod wasi {
                                                                                                 use super::super::super::super::__with_name1::CompositionState as V36;
                                                                                                 let v36 = match l27 {
                                                                                                   0 => {
+                                                                                                    V36::Start
+                                                                                                  }
+                                                                                                  1 => {
                                                                                                     let e36 = {
                                                                                                       let l28 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<i32>();
                                                                                                       let l29 = *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<i32>();
@@ -14983,7 +14989,7 @@ pub mod wasi {
                                                                                                     };
                                                                                                     V36::SelectionRange(e36)
                                                                                                   }
-                                                                                                  1 => {
+                                                                                                  2 => {
                                                                                                     let e36 = {
                                                                                                       let l30 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                                       let l31 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
@@ -14995,7 +15001,7 @@ pub mod wasi {
                                                                                                     V36::PreEdit(e36)
                                                                                                   }
                                                                                                   n => {
-                                                                                                    debug_assert_eq!(n, 2, "invalid enum discriminant");
+                                                                                                    debug_assert_eq!(n, 3, "invalid enum discriminant");
                                                                                                     let e36 = {
                                                                                                       let l33 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                                       let l34 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
@@ -15177,14 +15183,19 @@ pub mod wasi {
                                                                                                 *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (8i32) as u8;
                                                                                                 use super::super::super::super::__with_name1::CompositionState as V17;
                                                                                                 match e {
+                                                                                                  V17::Start=> {
+                                                                                                    {
+                                                                                                      *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
+                                                                                                    }
+                                                                                                  }
                                                                                                   V17::SelectionRange(e) => {
-                                                                                                    *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
+                                                                                                    *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
                                                                                                     let super::super::super::super::__with_name1::CompositionRange{ offset:offset14, len:len14, } = e;
                                                                                                     *base.add(3*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(offset14);
                                                                                                     *base.add(4+3*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(len14);
                                                                                                   },
                                                                                                   V17::PreEdit(e) => {
-                                                                                                    *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
+                                                                                                    *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
                                                                                                     let vec15 = (e.into_bytes()).into_boxed_slice();
                                                                                                     let ptr15 = vec15.as_ptr().cast::<u8>();
                                                                                                     let len15 = vec15.len();
@@ -15193,7 +15204,7 @@ pub mod wasi {
                                                                                                     *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr15.cast_mut();
                                                                                                   },
                                                                                                   V17::Commit(e) => {
-                                                                                                    *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
+                                                                                                    *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
                                                                                                     let vec16 = (e.into_bytes()).into_boxed_slice();
                                                                                                     let ptr16 = vec16.as_ptr().cast::<u8>();
                                                                                                     let len16 = vec16.len();
@@ -15281,7 +15292,8 @@ pub mod wasi {
                                                                                                 let l4 = i32::from(*base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                 match l4 {
                                                                                                   0 => (),
-                                                                                                  1 => {
+                                                                                                  1 => (),
+                                                                                                  2 => {
                                                                                                     let l5 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                                     let l6 = *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                                     _rt::cabi_dealloc(l5, l6, 1);
@@ -15772,8 +15784,8 @@ pub mod wasi {
                                                                     #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-demo:demo-world:encoded world")]
                                                                     #[doc(hidden)]
                                                                     #[allow(clippy::octal_escapes)]
-                                                                    pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30214] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x84\xeb\x01\x01A\x02\
+                                                                    pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30222] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x8c\xeb\x01\x01A\x02\
 \x01A\x16\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16341,28 +16353,28 @@ key\x03\0\x0a\x01m\x02\x09backspace\x06delete\x04\0\x08edit-key\x03\0\x0c\x01m\x
 ow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x10\x01q\x04\x0awhitespace\x01\x0b\0\
 \x04edit\x01\x0d\0\x02ui\x01\x0f\0\x04navi\x01\x11\0\x04\0\x04keys\x03\0\x12\x01\
 m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x14\x01r\x02\x06offsety\x03leny\
-\x04\0\x11composition-range\x03\0\x16\x01q\x03\x0fselection-range\x01\x17\0\x08p\
-re-edit\x01s\0\x06commit\x01s\0\x04\0\x11composition-state\x03\0\x18\x01k\x17\x01\
-q\x01\x10character-bounds\x01\x1a\0\x04\0\x16composition-bounds-req\x03\0\x1b\x01\
-o\x02\x13\x09\x01q\x0f\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\
-\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-move\0\0\x08key-down\x01\x1d\0\x06key-\
-up\x01\x13\0\x1arequest-composition-bounds\x01\x1c\0\x18update-composition-state\
-\x01\x19\0\x07history\x01\x15\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activa\
-te\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\x1e\x01q\x02\x05event\x01\x1f\0\x0b\
-open-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x20\x03\0\x1elocal:immediate-re\
-nderer/types\x05\x0b\x02\x03\0\x03\x0erender-context\x02\x03\0\x04\x05event\x02\x03\
-\0\x04\x0eunhandle-event\x01B\x16\x02\x03\x02\x01\x0c\x04\0\x0erender-context\x03\
-\0\0\x02\x03\x02\x01\x0d\x04\0\x05event\x03\0\x02\x02\x03\x02\x01\x0e\x04\0\x0eu\
-nhandle-event\x03\0\x04\x04\0\x0adispatcher\x03\x01\x01h\x06\x01@\x02\x04self\x07\
-\x05event\x03\x01\0\x04\0\x1d[method]dispatcher.push-event\x01\x08\x01p\x03\x01@\
-\x02\x04self\x07\x05event\x09\x01\0\x04\0![method]dispatcher.push-event-all\x01\x0a\
-\x01p\x05\x01@\x01\x04self\x07\0\x0b\x04\0\x1b[method]dispatcher.dispatch\x01\x0c\
-\x01i\x01\x01i\x06\x01@\x01\x07context\x0d\0\x0e\x04\0\x14create-main-renderer\x01\
-\x0f\x04\0\x18create-triangle-renderer\x01\x0f\x04\0\x17create-counter-renderer\x01\
-\x0f\x04\0$local:immediate-renderer-demo/render\x05\x0f\x04\0(local:immediate-re\
-nderer-demo/demo-world\x04\0\x0b\x10\x01\0\x0ademo-world\x03\0\0\0G\x09producers\
-\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53\
-.1";
+\x04\0\x11composition-range\x03\0\x16\x01q\x04\x05start\0\0\x0fselection-range\x01\
+\x17\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11composition-state\x03\0\x18\x01\
+k\x17\x01q\x01\x10character-bounds\x01\x1a\0\x04\0\x16composition-bounds-req\x03\
+\0\x1b\x01o\x02\x13\x09\x01q\x0f\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\x0a\
+mouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-move\0\0\x08key-down\x01\x1d\
+\0\x06key-up\x01\x13\0\x1arequest-composition-bounds\x01\x1c\0\x18update-composi\
+tion-state\x01\x19\0\x07history\x01\x15\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\
+\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\x1e\x01q\x02\x05event\x01\
+\x1f\0\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0\x20\x03\0\x1elocal:im\
+mediate-renderer/types\x05\x0b\x02\x03\0\x03\x0erender-context\x02\x03\0\x04\x05\
+event\x02\x03\0\x04\x0eunhandle-event\x01B\x16\x02\x03\x02\x01\x0c\x04\0\x0erend\
+er-context\x03\0\0\x02\x03\x02\x01\x0d\x04\0\x05event\x03\0\x02\x02\x03\x02\x01\x0e\
+\x04\0\x0eunhandle-event\x03\0\x04\x04\0\x0adispatcher\x03\x01\x01h\x06\x01@\x02\
+\x04self\x07\x05event\x03\x01\0\x04\0\x1d[method]dispatcher.push-event\x01\x08\x01\
+p\x03\x01@\x02\x04self\x07\x05event\x09\x01\0\x04\0![method]dispatcher.push-even\
+t-all\x01\x0a\x01p\x05\x01@\x01\x04self\x07\0\x0b\x04\0\x1b[method]dispatcher.di\
+spatch\x01\x0c\x01i\x01\x01i\x06\x01@\x01\x07context\x0d\0\x0e\x04\0\x14create-m\
+ain-renderer\x01\x0f\x04\0\x18create-triangle-renderer\x01\x0f\x04\0\x17create-c\
+ounter-renderer\x01\x0f\x04\0$local:immediate-renderer-demo/render\x05\x0f\x04\0\
+(local:immediate-renderer-demo/demo-world\x04\0\x0b\x10\x01\0\x0ademo-world\x03\0\
+\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bi\
+ndgen-rust\x060.53.1";
 
                                                                     #[inline(never)]
                                                                     #[doc(hidden)]

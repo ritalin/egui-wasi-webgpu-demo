@@ -54,6 +54,7 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                     modifiers
                 });
             }
+            types::Event::UpdateCompositionState(types::CompositionState::Start) => todo!(),
             types::Event::UpdateCompositionState(types::CompositionState::PreEdit(text)) => {
                 input.events.extend([
                     egui::Event::Ime(egui::ImeEvent::Enabled),
@@ -66,6 +67,8 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                     egui::Event::Ime(egui::ImeEvent::Commit(text.clone()))
                 ]);
             }
+            types::Event::UpdateCompositionState(types::CompositionState::SelectionRange(_range)) => todo!(),
+            types::Event::RequestCompositionBounds(_req) => todo!(),
             types::Event::History(ops) => {
                 input.events.extend([
                     egui::Event::Key {
@@ -88,6 +91,7 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::Copy => input.events.push(egui::Event::Copy),
             types::Event::Paste(text) => input.events.push(egui::Event::Paste(text.clone())),
             types::Event::Activate => todo!(),
+            types::Event::KeepFocus => todo!(),
         }
     }
 
