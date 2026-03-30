@@ -5,7 +5,7 @@ An experimental marriage of **egui** (immediate mode UI) and **wasi:webgpu** (th
 A cutting-edge demonstration of egui running on WASI Preview2 and rendering via wasi:webgpu.
 This project leverages the WebAssembly Component Model to bridge Rust-based UI with native browser GPU capabilities.
 
-## prerequests
+## Prerequests
 
 - Rust: latest (recommended)
     - Target: wasm32-wasip2 (Install via rustup target add wasm32-wasip2)
