@@ -1,5 +1,5 @@
 export { TextureFormat } from "../supports/enum-conv.js";
-export { computeWgpuLayout, WGpuType } from "./supports/compute-size.js";
+export { computeWgpuLayout, WGpuType } from "../supports/compute-size.js";
 
 import {
   GpuDevice as PublicGpuDevice,
@@ -8,7 +8,7 @@ import {
   GpuCanvasContext as PublicGpuCanvasContext,
 } from "../resources/wasi-webgpu-webgpu/index.js";
 
-import { GpuCanvasConfiguration } from "./wasi-webgpu-webgpu.d.ts";
+import type { GpuCanvasConfiguration } from "./wasi-webgpu-webgpu.d.ts";
 
 export class GpuDevice extends PublicGpuDevice {
   constructor(_handle: GPUDevice);
