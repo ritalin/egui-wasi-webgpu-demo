@@ -64,7 +64,7 @@ struct DispatcherImpl {
 }
 impl DispatcherImpl {
     fn new<Recorder: for<'a> recorder_core::Recorder<Effect = ()> + 'static>(context: surface::RenderContext, recorder: Recorder) -> Self {
-        let renderer = render_core::Renderer::new(&context);
+        let renderer = render_core::Renderer::new(&context, webgpu::GpuTextureFormat::Rgba8unormSrgb);
         let inner = DispatcherEngine::new(recorder, renderer);
 
         Self {

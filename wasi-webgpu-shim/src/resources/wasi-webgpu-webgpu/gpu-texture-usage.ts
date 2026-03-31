@@ -26,6 +26,6 @@ export class GpuTextureUsage {
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1580
   static renderAttachment(): GpuFlagsConstant {
-    return GPUTextureUsage.TRANSIENT_ATTACHMENT;
+    return GPUTextureUsage.RENDER_ATTACHMENT;
   }
 }

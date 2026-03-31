@@ -6,7 +6,9 @@ import {
   GpuBindGroupLayout as PublicGpuBindGroupLayout,
   GpuRenderPipeline as PublicGpuRenderPipeline,
   GpuCanvasContext as PublicGpuCanvasContext,
-} from "./recources/wasi-webgpu-webgpu/index.js";
+} from "../resources/wasi-webgpu-webgpu/index.js";
+
+import { GpuCanvasConfiguration } from "./wasi-webgpu-webgpu.d.ts";
 
 export class GpuDevice extends PublicGpuDevice {
   constructor(_handle: GPUDevice);

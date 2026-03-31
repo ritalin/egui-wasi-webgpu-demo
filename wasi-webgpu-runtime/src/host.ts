@@ -1,11 +1,7 @@
 /// <reference types="@webgpu/types" />
 
 import { RenderContext } from "./resources/local-immediate-renderer-surface/render-context.js";
-import {
-  type RenderContextPeer,
-  UNIFORM_LAYOUT_SIZE,
-  VERTEX_LAYOUT_SIZE,
-} from "./peers/surface.js";
+import { type RenderContextPeer, UNIFORM_LAYOUT_SIZE, VERTEX_LAYOUT_SIZE } from "./peers/surface.js";
 import {
   TextureFormat,
   GpuDevice,
@@ -49,10 +45,7 @@ export class WebGpuRuntime {
       device: this.device,
       canvas: canvas,
       context: canvasContext,
-      pipeline: createRenderPipeline(this.device, format, [
-        uniformLayout,
-        textureLayout,
-      ]),
+      pipeline: createRenderPipeline(this.device, format, [uniformLayout, textureLayout]),
       uniformLayout,
       textureLayout,
     };
@@ -61,6 +54,7 @@ export class WebGpuRuntime {
     context.getCanvas().configure({
       device: new GpuDevice(this.device),
       format: TextureFormat.intoWasi(format),
+      alphaMode: "opaque",
     });
     console.log("Surface configured");
 
@@ -75,9 +69,7 @@ export const createWebGpuRuntime = async function (): Promise<WebGpuRuntime> {
 
   const adapter = await navigator.gpu.requestAdapter();
   if (adapter === null) {
-    throw new Error(
-      "Can not create WebGpuRuntime (reason: GPUAdapter is null)",
-    );
+    throw new Error("Can not create WebGpuRuntime (reason: GPUAdapter is null)");
   }
   const device = await adapter.requestDevice();
 
@@ -172,10 +164,7 @@ function vertexDesc(shader_raw: GPUShaderModule): GPUVertexState {
   return desc;
 }
 
-function fragmentDesc(
-  shader_raw: GPUShaderModule,
-  format: GPUTextureFormat,
-): GPUFragmentState {
+function fragmentDesc(shader_raw: GPUShaderModule, format: GPUTextureFormat): GPUFragmentState {
   const desc: GPUFragmentState = {
     module: shader_raw,
     entryPoint: "fs_main",
@@ -184,15 +173,14 @@ function fragmentDesc(
       {
         format: format,
         blend: {
+          // premultiplied blending
           color: {
-            srcFactor: "one",
+            srcFactor: "src-alpha",
             dstFactor: "one-minus-src-alpha",
-            operation: "add",
           },
           alpha: {
-            srcFactor: "one-minus-dst-alpha",
-            dstFactor: "one",
-            operation: "add",
+            srcFactor: "one",
+            dstFactor: "one-minus-src-alpha",
           },
         },
         writeMask: GPUColorWrite.ALL,

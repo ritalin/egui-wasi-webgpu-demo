@@ -59,16 +59,16 @@ pub trait ImageSpec {
 pub struct TextureCache {
     map: ahash::AHashMap<TextureKey, TextureBindEntry>,
     samplers: ahash::AHashMap<SamplingOption, webgpu::GpuSampler>,
-    format: webgpu::GpuTextureFormat,
+    source_format: webgpu::GpuTextureFormat,
     group_layout: webgpu::GpuBindGroupLayout,
 }
 impl TextureCache {
     const DEFAULT_SAMPLER_OPT: SamplingOption = SamplingOption::simple(webgpu::GpuFilterMode::Linear, webgpu::GpuFilterMode::Nearest, webgpu::GpuAddressMode::ClampToEdge);
 
-    pub fn new(device: &webgpu::GpuDevice, format: webgpu::GpuTextureFormat, group_layout: webgpu::GpuBindGroupLayout) -> Self {
+    pub fn new(device: &webgpu::GpuDevice, source_format: webgpu::GpuTextureFormat, group_layout: webgpu::GpuBindGroupLayout) -> Self {
         let size = webgpu::GpuExtent3D{ width: 1, height: Some(1), depth_or_array_layers: Some(1) };
         let default_sampler = new_sampler(device, &Self::DEFAULT_SAMPLER_OPT);
-        let texture_fallback = new_texture(device, format, size);
+        let texture_fallback = new_texture(device, source_format, size);
         let group_fallback = new_bind_grpup(device, &group_layout, &texture_fallback.create_view(None), &default_sampler);
 
         device.queue().write_texture_with_copy(
@@ -90,11 +90,10 @@ impl TextureCache {
         let samplers = ahash::AHashMap::from([(Self::DEFAULT_SAMPLER_OPT, default_sampler)]);
         let map = ahash::AHashMap::from([(TextureKey::Default, TextureBindEntry{ bind_group: group_fallback, texture: texture_fallback })]);
 
-        // println!("texture/format: {format:?}");
         Self {
             map,
             samplers,
-            format,
+            source_format,
             group_layout,
         }
     }
@@ -115,7 +114,7 @@ impl TextureCache {
                 }
                 hash_map::Entry::Vacant(entry) => {
                     // println!("New texture/key: {:?}", img.key());
-                    let texture = new_texture(device, webgpu::GpuTextureFormat::Rgba8unormSrgb, size);
+                    let texture = new_texture(device, self.source_format, size);
                     // let texture = new_texture(device, self.format, size);
                     let sampling = img.sampling();
                     let sampler = self.samplers.entry(sampling)

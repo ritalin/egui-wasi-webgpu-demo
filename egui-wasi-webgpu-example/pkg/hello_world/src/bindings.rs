@@ -21,7 +21,7 @@ impl DispatcherInner {
         for<'a> Recorder::Output<'a>: RecordOutput<RequestCommand = crate::ExampleCommand>,
     {
         let canvas = context.get_canvas();
-        let renderer = render_core::Renderer::new(&context);
+        let renderer = render_core::Renderer::new(&context, webgpu::GpuTextureFormat::Rgba8unormSrgb);
 
         Self {
             context,

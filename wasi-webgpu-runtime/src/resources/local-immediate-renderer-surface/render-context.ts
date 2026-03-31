@@ -24,6 +24,10 @@ export class RenderContext {
     canvas.width = size.width * scaleFacftor;
     canvas.height = size.height * scaleFacftor;
 
+    const canvasContext = this.getCanvas();
+    const config = canvasContext.getConfiguration();
+    canvasContext.configure(config);
+
     canvas.style.width = `${size.width}px`;
     canvas.style.height = `${size.height}px`;
   }
