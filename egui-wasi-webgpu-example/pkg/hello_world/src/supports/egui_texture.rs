@@ -27,6 +27,10 @@ impl<'a> RecordOutput for EguiOutput {
     type Textures<'s> = EguiTextureSet<'s>;
     type RequestCommand = crate::ExampleCommand;
 
+    fn clear_color<'s>(&'s self) -> Option<webgpu::GpuColor> {
+        None
+    }
+
     fn meshes<'s>(&'s self) -> Vec<Option<render_core::Mesh<'s>>> {
         self.shapes.iter()
             .map(|p| -> Option<render_core::Mesh> {

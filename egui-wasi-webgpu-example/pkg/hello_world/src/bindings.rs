@@ -95,7 +95,7 @@ where
         let output = self.recorder.record(screen, &self.events.split_off(0), self.effects.drain(..))?;
         self.renderer.send_texture(output.textures());
         let resolved = self.renderer.update_mesh(render_core::MeshVectorIter::new(&output.meshes()))?;
-        self.renderer.render(canvas.get_current_texture(), resolved)?;
+        self.renderer.render(canvas.get_current_texture(), output.clear_color(), resolved)?;
         self.renderer.remove_textures(&output.removed_textures());
 
         Ok((output.unhandle_events(), output.command_requests().into_iter().map(render::Command::from).collect()))

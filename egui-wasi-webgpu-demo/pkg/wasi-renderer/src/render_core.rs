@@ -150,7 +150,7 @@ impl Renderer {
         self.texture_cache.update_cache(&self.device, images);
     }
 
-    pub fn render(&self, surface_texture: webgpu::GpuTexture, meshes: ResolvedMeshSet) -> Result<(), error::RenderError> {
+    pub fn render(&self, surface_texture: webgpu::GpuTexture, clear_color: Option<webgpu::GpuColor>, meshes: ResolvedMeshSet) -> Result<(), error::RenderError> {
         let view = surface_texture.create_view(None);
 
         let desc = webgpu::GpuCommandEncoderDescriptor { label: Some("Command encoder".into()) };
@@ -163,9 +163,9 @@ impl Renderer {
                     view: &view,
                     depth_slice: None,
                     resolve_target: None,
-                    clear_value: Some(webgpu::GpuColor{ r: 1.0, g: 1.0, b: 1.0, a: 1.0 }),
-                    load_op: webgpu::GpuLoadOp::Clear,
+                    load_op: if clear_color.is_some() { webgpu::GpuLoadOp::Clear } else { webgpu::GpuLoadOp::Load },
                     store_op: webgpu::GpuStoreOp::Store,
+                    clear_value: clear_color,
                 }),
             ],
             depth_stencil_attachment: None,

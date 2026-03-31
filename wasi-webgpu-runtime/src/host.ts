@@ -24,6 +24,15 @@ export interface IRenderContext {
 }
 class ProtectedRenderContext extends RenderContext implements IRenderContext {}
 
+export type BlendingMode = "premultiplied" | "plain";
+
+export type WebGpuRuntimeInit = {
+  blendingMode: BlendingMode;
+};
+const defaults: WebGpuRuntimeInit = {
+  blendingMode: "premultiplied",
+};
+
 export class WebGpuRuntime {
   private device: GPUDevice;
 
@@ -31,7 +40,9 @@ export class WebGpuRuntime {
     this.device = device;
   }
 
-  createRenderContext(canvas: HTMLCanvasElement): IRenderContext {
+  createRenderContext(canvas: HTMLCanvasElement, options?: WebGpuRuntimeInit): IRenderContext {
+    const { blendingMode } = options ?? defaults;
+
     const format = navigator.gpu.getPreferredCanvasFormat();
     const uniformLayout = createUniformBindgroupLayout(this.device);
     const textureLayout = createtextureBindgroupLayout(this.device);
@@ -45,7 +56,7 @@ export class WebGpuRuntime {
       device: this.device,
       canvas: canvas,
       context: canvasContext,
-      pipeline: createRenderPipeline(this.device, format, [uniformLayout, textureLayout]),
+      pipeline: createRenderPipeline(this.device, format, [uniformLayout, textureLayout], blendingMode),
       uniformLayout,
       textureLayout,
     };
@@ -100,6 +111,7 @@ function createRenderPipeline(
   device: GPUDevice,
   format: GPUTextureFormat,
   bindGroups: Array<GPUBindGroupLayout>,
+  blendingMode: BlendingMode,
 ): GPURenderPipeline {
   const module_desc: GPUShaderModuleDescriptor = {
     label: "shader",
@@ -119,7 +131,7 @@ function createRenderPipeline(
     label: "Render pipeline",
     layout: layout_raw,
     vertex: vertexDesc(module_raw),
-    fragment: fragmentDesc(module_raw, format),
+    fragment: fragmentDesc(module_raw, format, blendingMode),
     primitive: primitiveDesc(),
     multisample: { count: 1, mask: 0xffffffff, alphaToCoverageEnabled: false },
     depthStencil: undefined,
@@ -164,7 +176,42 @@ function vertexDesc(shader_raw: GPUShaderModule): GPUVertexState {
   return desc;
 }
 
-function fragmentDesc(shader_raw: GPUShaderModule, format: GPUTextureFormat): GPUFragmentState {
+function fragmentDesc(
+  shader_raw: GPUShaderModule,
+  format: GPUTextureFormat,
+  blendingMode: BlendingMode,
+): GPUFragmentState {
+  let blend: GPUBlendState;
+
+  switch (blendingMode) {
+    case "premultiplied":
+      blend = {
+        color: {
+          srcFactor: "one",
+          dstFactor: "one-minus-src-alpha",
+          operation: "add",
+        },
+        alpha: {
+          srcFactor: "one-minus-dst-alpha",
+          dstFactor: "one",
+          operation: "add",
+        },
+      };
+      break;
+    case "plain":
+      blend = {
+        color: {
+          srcFactor: "src-alpha",
+          dstFactor: "one-minus-src-alpha",
+        },
+        alpha: {
+          srcFactor: "one",
+          dstFactor: "one-minus-src-alpha",
+        },
+      };
+      break;
+  }
+
   const desc: GPUFragmentState = {
     module: shader_raw,
     entryPoint: "fs_main",
@@ -172,17 +219,7 @@ function fragmentDesc(shader_raw: GPUShaderModule, format: GPUTextureFormat): GP
     targets: [
       {
         format: format,
-        blend: {
-          // premultiplied blending
-          color: {
-            srcFactor: "src-alpha",
-            dstFactor: "one-minus-src-alpha",
-          },
-          alpha: {
-            srcFactor: "one",
-            dstFactor: "one-minus-src-alpha",
-          },
-        },
+        blend,
         writeMask: GPUColorWrite.ALL,
       },
     ],

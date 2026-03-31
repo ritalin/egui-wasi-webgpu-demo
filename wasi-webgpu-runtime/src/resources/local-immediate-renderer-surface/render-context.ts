@@ -26,7 +26,13 @@ export class RenderContext {
 
     const canvasContext = this.getCanvas();
     const config = canvasContext.getConfiguration();
-    canvasContext.configure(config);
+    if (config) {
+      canvasContext.configure({
+        device: config.device,
+        format: config.format,
+        alphaMode: config.alphaMode,
+      });
+    }
 
     canvas.style.width = `${size.width}px`;
     canvas.style.height = `${size.height}px`;

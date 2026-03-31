@@ -18,7 +18,7 @@ export class GpuCanvasContext {
     const c: GPUCanvasConfiguration = {
       device: device._handle,
       format: TextureFormat.fromWasi(configuration.format),
-      alphaMode: CanvasAlphaMode.fromWasi(configuration.alphaMode),
+      alphaMode: configuration.alphaMode ? CanvasAlphaMode.fromWasi(configuration.alphaMode) : undefined,
       usage: GpuTextureUsage.renderAttachment(),
     };
     this._handle.configure(c);
