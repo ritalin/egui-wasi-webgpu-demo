@@ -3,9 +3,9 @@
 // Licensed under Apache-2.0 or MIT.
 
 use anyhow::Context;
-use wasi_renderer::{ScreenDescriptor, recorder_core, render_core, bindings::{surface, types}};
+use wasi_renderer::{ScreenDescriptor, bindings::{surface, types, webgpu}, recorder_core, render_core};
 
-use crate::widget_recorder::BitmapImage;
+use crate::{widget_recorder::BitmapImage};
 
 const SAMPLE_IAMGE: &'static [u8] = include_bytes!("../../assets/img/happy-tree.png");
 
@@ -51,7 +51,7 @@ impl TriangleOutput {
                 render_core::Vertex{
                     pos: render_core::Pos2{ x, y },
                     uv: render_core::Pos2{ x: v.uv[0], y: v.uv[1] },
-                    color: render_core::Color32::from_rgba_premultiplied(v.color[0], v.color[1], v.color[2], v.color[3]),
+                    color: render_core::Color32::from_rgba_unmultiplied(v.color[0], v.color[1], v.color[2], v.color[3]),
                 }
             })
             .collect::<Vec<_>>()
@@ -73,6 +73,10 @@ impl recorder_core::RecordOutput for TriangleOutput {
     type ImageSpec<'s> = BitmapImage;
     type Textures<'s> = std::vec::IntoIter<BitmapImage>;
     type RequestCommand = ();
+
+    fn clear_color<'s>(&'s self) -> Option<webgpu::GpuColor> {
+        Some(webgpu::GpuColor{ r: 0.90, g: 0.90, b: 0.90, a: 1.0 })
+    }
 
     fn meshes<'s>(&'s self) -> Vec<Option<render_core::Mesh<'s>>> {
         let mesh = render_core::Mesh{
@@ -110,9 +114,9 @@ struct InputVertex {
 }
 
 const VERTEXIES: &[InputVertex] = &[
-    InputVertex{ position: [0.0, 0.5, 0.0], uv: [0.5, 0.0], color: [255, 0, 0, 255] },
-    InputVertex{ position: [-0.5, -0.5, 0.0], uv: [0.0, 1.0], color: [0, 255, 0, 255] },
-    InputVertex{ position: [0.5, -0.5, 0.0], uv: [1.0, 1.0], color: [0, 0, 255, 255] },
+    InputVertex{ position: [0.0, 0.5, 0.0], uv: [0.5, 0.0], color: [255, 128, 128, 255] },
+    InputVertex{ position: [-0.5, -0.5, 0.0], uv: [0.0, 1.0], color: [128, 255, 128, 255] },
+    InputVertex{ position: [0.5, -0.5, 0.0], uv: [1.0, 1.0], color: [128, 128, 255, 255] },
 ];
 
 const INDICES: &[u32] = &[

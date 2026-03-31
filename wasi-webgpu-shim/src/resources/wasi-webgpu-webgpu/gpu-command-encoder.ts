@@ -29,8 +29,10 @@ export class GpuCommandEncoder {
       colorAttachments: descriptor.colorAttachments.map((att) => {
         if (!att) return undefined as unknown as GPURenderPassColorAttachment;
 
+        // console.log("***beginRenderPass", att.loadOp, att.storeOp, att.clearValue);
         const att_raw: GPURenderPassColorAttachment = {
           view: (att.view as unknown as GpuTextureView)._handle,
+          clearValue: att.clearValue,
           loadOp: att.loadOp,
           storeOp: att.storeOp,
         };
@@ -40,9 +42,7 @@ export class GpuCommandEncoder {
     return new GpuRenderPassEncoder(this._handle.beginRenderPass(desc));
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1251
-  beginComputePass(
-    __descriptor: GpuComputePassDescriptor | undefined,
-  ): GpuComputePassEncoder {
+  beginComputePass(__descriptor: GpuComputePassDescriptor | undefined): GpuComputePassEncoder {
     console.error("(Todo)", "GpuCommandEncoder.beginComputePass(...)");
     return undefined as any;
   }
@@ -85,11 +85,7 @@ export class GpuCommandEncoder {
     return undefined as any;
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1256
-  clearBuffer(
-    __buffer: GpuBuffer,
-    __offset: GpuSize64 | undefined,
-    __size: GpuSize64 | undefined,
-  ): void {
+  clearBuffer(__buffer: GpuBuffer, __offset: GpuSize64 | undefined, __size: GpuSize64 | undefined): void {
     console.error("(Todo)", "GpuCommandEncoder.clearBuffer(...)");
     return undefined as any;
   }

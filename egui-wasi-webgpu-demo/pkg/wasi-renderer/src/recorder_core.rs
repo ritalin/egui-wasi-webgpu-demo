@@ -1,4 +1,4 @@
-use crate::{ScreenDescriptor, render_core, types};
+use crate::{ScreenDescriptor, bindings::webgpu, render_core, types};
 
 #[derive(Debug, thiserror::Error)]
 pub enum RecorderError {
@@ -28,6 +28,7 @@ pub trait RecordOutput {
     type Textures<'s>: Iterator<Item =Self::ImageSpec<'s>> + 's where Self: 's;
     type RequestCommand;
 
+    fn clear_color<'s>(&'s self) -> Option<webgpu::GpuColor>;
     fn meshes<'s>(&'s self) -> Vec<Option<render_core::Mesh<'s>>>;
     fn textures<'s>(&'s self) -> Self::Textures<'s>;
     fn removed_textures(&self) -> Vec<render_core::TextureKey>;

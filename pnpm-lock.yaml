@@ -62,6 +62,9 @@ importers:
       egui-wasi-webgpu-demo:
         specifier: workspace:*
         version: link:../egui-wasi-webgpu-demo
+      egui-wasi-webgpu-example:
+        specifier: workspace:*
+        version: link:../egui-wasi-webgpu-example
       typescript:
         specifier: ~5.9.3
         version: 5.9.3

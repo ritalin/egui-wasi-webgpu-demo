@@ -1,11 +1,9 @@
 /// <reference types="@webgpu/types" />
 import { GpuTexture } from "./gpu-texture.js";
 import { GpuDevice } from "./gpu-device.js";
-import type {
-  GpuCanvasConfiguration,
-  GpuCanvasConfigurationOwned,
-} from "../../types/wasi-webgpu-webgpu.js";
-import { TextureFormat } from "../../supports/enum-conv.js";
+import { GpuTextureUsage } from "./gpu-texture-usage.js";
+import { type GpuCanvasConfiguration, type GpuCanvasConfigurationOwned } from "../../types/wasi-webgpu-webgpu.js";
+import { CanvasAlphaMode, TextureFormat } from "../../supports/enum-conv.js";
 
 // origin: src/types/wasi-webgpu-webgpu.d.ts:1213
 export class GpuCanvasContext {
@@ -20,6 +18,8 @@ export class GpuCanvasContext {
     const c: GPUCanvasConfiguration = {
       device: device._handle,
       format: TextureFormat.fromWasi(configuration.format),
+      alphaMode: configuration.alphaMode ? CanvasAlphaMode.fromWasi(configuration.alphaMode) : undefined,
+      usage: GpuTextureUsage.renderAttachment(),
     };
     this._handle.configure(c);
   }
@@ -36,6 +36,7 @@ export class GpuCanvasContext {
     return {
       device: new GpuDevice(config_raw.device),
       format: TextureFormat.intoWasi(config_raw.format),
+      alphaMode: CanvasAlphaMode.intoWasi(config_raw.alphaMode),
     };
   }
   // origin: src/types/wasi-webgpu-webgpu.d.ts:1221

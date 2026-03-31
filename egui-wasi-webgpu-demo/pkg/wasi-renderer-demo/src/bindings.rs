@@ -49,7 +49,7 @@ impl<'a, Recorder: recorder_core::Recorder<Effect = ()> + 'a, > EngineCore<EguiE
         let output = self.recorder.record(screen, &self.events.split_off(0), std::iter::empty::<()>())?;
         self.renderer.send_texture(output.textures());
         let resolved = self.renderer.update_mesh(render_core::MeshVectorIter::new(&output.meshes()))?;
-        self.renderer.render(canvas.get_current_texture(), resolved)?;
+        self.renderer.render(canvas.get_current_texture(), output.clear_color(), resolved)?;
         self.renderer.remove_textures(&output.removed_textures());
 
         Ok(output.unhandle_events())
@@ -64,7 +64,7 @@ struct DispatcherImpl {
 }
 impl DispatcherImpl {
     fn new<Recorder: for<'a> recorder_core::Recorder<Effect = ()> + 'static>(context: surface::RenderContext, recorder: Recorder) -> Self {
-        let renderer = render_core::Renderer::new(&context);
+        let renderer = render_core::Renderer::new(&context, webgpu::GpuTextureFormat::Rgba8unormSrgb);
         let inner = DispatcherEngine::new(recorder, renderer);
 
         Self {

@@ -26,12 +26,11 @@ pub struct Renderer {
 impl Renderer {
     const MIN_BUFFER_SIZE: usize = 4096;
 
-    pub fn new(context: &surface::RenderContext) -> Self
+    pub fn new(context: &surface::RenderContext, source_texture_format: webgpu::GpuTextureFormat) -> Self
     {
         let device = context.get_device();
         let uniform_bind_group_layout = context.get_uniform_layout();
         let texture_bind_group_layout = context.get_texture_layout();
-        let format = context.get_canvas().get_configuration().unwrap().format;
 
         let vertex_buffer = new_buffer(&device, Self::MIN_BUFFER_SIZE as u64, webgpu::GpuBufferUsage::vertex(), Some("Vertex buffer".into()));
         let index_buffer = new_buffer(&device, Self::MIN_BUFFER_SIZE as u64, webgpu::GpuBufferUsage::index(), Some("Index buffer".into()));
@@ -39,7 +38,7 @@ impl Renderer {
 
         let uniform_bind_group = device.create_bind_group(&UniformInfo::desc(&uniform_bind_group_layout, &uniform_buffer));
 
-        let texture_cache = texture::TextureCache::new(&device, format, texture_bind_group_layout);
+        let texture_cache = texture::TextureCache::new(&device, source_texture_format, texture_bind_group_layout);
 
         Self {
             queue: device.queue(),
@@ -151,7 +150,7 @@ impl Renderer {
         self.texture_cache.update_cache(&self.device, images);
     }
 
-    pub fn render(&self, surface_texture: webgpu::GpuTexture, meshes: ResolvedMeshSet) -> Result<(), error::RenderError> {
+    pub fn render(&self, surface_texture: webgpu::GpuTexture, clear_color: Option<webgpu::GpuColor>, meshes: ResolvedMeshSet) -> Result<(), error::RenderError> {
         let view = surface_texture.create_view(None);
 
         let desc = webgpu::GpuCommandEncoderDescriptor { label: Some("Command encoder".into()) };
@@ -164,9 +163,9 @@ impl Renderer {
                     view: &view,
                     depth_slice: None,
                     resolve_target: None,
-                    clear_value: None,
-                    load_op: webgpu::GpuLoadOp::Load,
+                    load_op: if clear_color.is_some() { webgpu::GpuLoadOp::Clear } else { webgpu::GpuLoadOp::Load },
                     store_op: webgpu::GpuStoreOp::Store,
+                    clear_value: clear_color,
                 }),
             ],
             depth_stencil_attachment: None,
