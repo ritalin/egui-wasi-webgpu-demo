@@ -9,17 +9,18 @@
   "scripts": {
     "predev": "rm -rf public && ln -s ../dist public",
     "dev": "astro dev",
-    "prebuild": "rm -rf public && cp -al ../dist public",
+    "prebuild": "rm -rf public && cp -al ../dist public && find public -name 'index.html' -type f -delete",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.0.5"
+    "astro": "^6.1.1"
   },
   "devDependencies": {
     "@types/node": "^25.2.3",
     "egui-wasi-webgpu-demo": "workspace:*",
+    "egui-wasi-webgpu-example": "workspace:*",
     "typescript": "~5.9.3"
   }
 }

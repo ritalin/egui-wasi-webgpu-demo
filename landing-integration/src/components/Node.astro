@@ -9,7 +9,7 @@ const base = import.meta.env.BASE_URL;
         {node.name}
         <ul>
             {node.children.map(child => (
-            <Node node={child} />
+                <Astro.self node={child} />
             ))}
         </ul>
         </>)

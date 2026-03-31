@@ -1,0 +1,86 @@
+package local:immediate-renderer-example;
+
+interface interaction {
+    type route = string;
+    type url = string;
+
+    variant command {
+        open-window(route),
+        request-image(list<url>),
+        cursor(cursor-style),
+        clipboard(clipboard-data),
+        change-set(list<change-spec>),
+        composition-bounds(composition-bounds)
+    }
+
+    variant effect {
+        image-data(external-asset),
+        font-data(external-font),
+    }
+
+    record external-asset {
+        source: url,
+        bytes: list<u8>,
+    }
+
+    record external-font {
+        source: url,
+        name: string,
+        bytes: list<u8>,
+    }
+
+    enum cursor-style {
+        default,
+        none,
+        context-menu,
+        help,
+        pointer,
+        progress,
+        wait,
+        cell,
+        crosshair,
+        text,
+        vertical-text,
+        alias,
+        copy,
+        move,
+        no-drop,
+        not-allowed,
+        grab,
+        grabbing,
+        all-scroll,
+        col-resize,
+        row-resize,
+        n-resize,
+        e-resize,
+        s-resize,
+        w-resize,
+        ne-resize,
+        nw-resize,
+        se-resize,
+        sw-resize,
+        ew-resize,
+        ns-resize,
+        nesw-resize,
+        nwse-resize,
+        zoom-in,
+        zoom-out,
+    }
+
+    variant clipboard-data {
+        text(string),
+    }
+
+    record change-spec {
+        offset: u32,
+        len: u32,
+        new-value: option<string>,
+    }
+
+    record composition-bounds {
+        left: f32,
+        top: f32,
+        width: f32,
+        height: f32,
+    }
+}

@@ -16,27 +16,31 @@ export async function getAssets(name: string): Promise<{ js: string; css: string
 }
 
 export interface PageEntry {
+  prefix: string;
   path: string;
+  isApp: boolean;
 }
 
 export async function getPagesFromDist(): Promise<PageEntry[]> {
   const pages: PageEntry[] = [];
 
-  async function rec(baseDirPth: string, relPath: string, name: string) {
-    const fullpath = path.join(baseDirPth, relPath, name);
+  async function rec(baseDirPth: string, prefix: string, name: string) {
+    if (prefix === ".") prefix = "";
+
+    const fullpath = path.join(baseDirPth, prefix, name);
     if (!(await fs.stat(fullpath)).isDirectory()) return;
     const entries = await fs.readdir(fullpath, { withFileTypes: true });
 
     if (entries.some((f) => f.isDirectory() && f.name === "assets")) {
-      pages.push({ path: path.join(relPath, name) });
+      pages.push({ prefix, path: name, isApp: true });
       return;
     }
-    if (relPath !== "") {
-      pages.push({ path: "" });
+    if (name !== "") {
+      pages.push({ prefix, path: name, isApp: false });
     }
 
     for (const subdir of entries) {
-      await rec(baseDirPth, relPath, subdir.name);
+      await rec(baseDirPth, path.join(prefix, name), subdir.name);
     }
   }
 

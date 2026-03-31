@@ -103,8 +103,6 @@ impl TextureCache {
         let queue = device.queue();
 
         for img in images {
-            // log::debug!("New texture/key: {:?}", img.key());
-
             let size = webgpu::GpuExtent3D{
                 width: img.size().width,
                 height: Some(img.size().height),
@@ -116,7 +114,9 @@ impl TextureCache {
                     entry
                 }
                 hash_map::Entry::Vacant(entry) => {
-                    let texture = new_texture(device, self.format, size);
+                    // println!("New texture/key: {:?}", img.key());
+                    let texture = new_texture(device, webgpu::GpuTextureFormat::Rgba8unormSrgb, size);
+                    // let texture = new_texture(device, self.format, size);
                     let sampling = img.sampling();
                     let sampler = self.samplers.entry(sampling)
                         .or_insert_with(|| new_sampler(device, &sampling))
