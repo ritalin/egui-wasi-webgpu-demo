@@ -3,8 +3,13 @@
     "target": "ESNext",
     "module": "NodeNext",
     "lib": ["ESNext", "DOM"],
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "types": ["@webgpu/types"],
+    "baseUrl": ".",
+    "paths": {
+      "./wasi-webgpu-webgpu.js": ["./wasi-webgpu-webgpu.d.ts"],
+    },
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules"],
 }
