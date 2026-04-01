@@ -1,7 +1,7 @@
 use egui::{RawInput};
 use wasi_renderer::{ScreenDescriptor, bindings::types, recorder_core};
 
-use crate::{ChangeSpec, ExampleCommand, ExampleEffect, supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}}};
+use example_core::{ChangeSpec, ExampleCommand, ExampleEffect, supports::{egui_supports, EguiOutput, EguiTexture, EguiTextureSet}};
 
 pub struct RecoderInner {
     egui_context: egui::Context,

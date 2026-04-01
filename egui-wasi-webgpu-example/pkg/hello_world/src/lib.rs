@@ -1,46 +1,18 @@
-use wasi_renderer::bindings::types;
-
-mod bindings;
+use example_core::bindings::{DispatcherEngineWrapper, DispatcherInner, render};
+use wasi_renderer::bindings::surface::FrameSize;
 mod recorder;
 
-mod supports {
-    pub mod egui_texture;
-    pub mod egui_supports;
-    pub mod command_supports;
+struct Component;
 
-    pub struct KeyWrapper<'a>(pub &'a wasi_renderer::bindings::types::Keys);
+impl render::Guest for Component {
+    type EventChannel = DispatcherEngineWrapper;
+    type CommandChannel = DispatcherEngineWrapper;
+    type Dispatcher = DispatcherInner;
+
+    fn create_renderer(context: render::RenderContext,) -> render::Dispatcher {
+        context.request_set_size(FrameSize{ width: 512, height: 512 });
+        render::Dispatcher::new(DispatcherInner::new(context, recorder::RecoderInner::new()))
+    }
 }
 
-#[derive(Debug, Clone)]
-pub enum ExampleCommand {
-    OpenWindow(String),
-    RequestImage { paths: Vec<String> },
-    Cursor(egui::CursorIcon),
-    Clipboard(ClipboardData),
-    ChangeSet(Vec<ChangeSpec>),
-    CompositionBounds(egui::Rect),
-}
-
-#[derive(Debug, Clone)]
-pub enum ClipboardData {
-    Text(String),
-}
-
-#[derive(Debug, Clone)]
-pub enum ExampleEffect {
-    ImageData{ url: String, bytes: Vec<u8> },
-    FontData{ url: String, name: String, bytes: Vec<u8> },
-}
-
-#[derive(Debug, Clone, Default)]
-pub struct UnhandledEvent {
-    pub activate: Option<()>,
-    pub composition_sel_range: Option<types::CompositionRange>,
-}
-
-#[derive(Debug, Clone)]
-pub struct ChangeSpec {
-    pub offset: u32,
-    pub len: u32,
-    pub new_value: Option<String>,
-}
+example_core::export!(Component);

@@ -8,9 +8,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 wasi-renderer.workspace = true
-wit-bindgen.workspace = true
-anyhow.workspace = true
-bytemuck.workspace = true
+example_core.workspace = true
 egui.workspace = true
 epaint.workspace = true
 image.workspace = true
