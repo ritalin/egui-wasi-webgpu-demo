@@ -7,5 +7,5 @@ edition = "2024"
 wit-bindgen = "0.53.1"
 thiserror = "2.0.18"
 ahash = "0.8.12"
-epaint = { version = "0.33.3", default-features = false, features = ["bytemuck"] }
+egui = { version = "0.34.1", default-features = false, features = ["bytemuck"] }
 bytemuck = {version = "1.24.0", features = ["derive"] }

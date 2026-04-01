@@ -31,12 +31,12 @@ impl<'a, RecorderInner: EguiWidgetRecorder + 'a> EguiRecoder<'a, RecorderInner> 
                 ExampleEffect::FontData { name, bytes, url } => {
                     println!("*** Apply font/name: {}, path: {}, size: {}", name, url, bytes.len());
                     let font_data = egui::FontData::from_owned(bytes);
-                    let font_families = vec![epaint::text::InsertFontFamily{
+                    let font_families = vec![egui::epaint::text::InsertFontFamily{
                         family: egui::FontFamily::Proportional,
-                        priority: epaint::text::FontPriority::Highest,
+                        priority: egui::epaint::text::FontPriority::Highest,
                     }];
 
-                    self.egui_context.add_font(epaint::text::FontInsert::new(&name, font_data, font_families));
+                    self.egui_context.add_font(egui::epaint::text::FontInsert::new(&name, font_data, font_families));
                 }
                 _ => (),
             }
@@ -62,6 +62,7 @@ impl<'a, RecorderInner: EguiWidgetRecorder + 'a> recorder_core::Recorder for Egu
         let mut input = egui::RawInput::default();
         let unhandled_event = supports::populate_events(events, &screen, &mut self.in_compositioning, &mut input);
 
+        self.inner.bump_events(&self.egui_context, &mut input);
         self.apply_effects(effects.into_iter().map(|c| c.into()));
 
         let mut commands = vec![];
@@ -82,5 +83,6 @@ impl<'a, RecorderInner: EguiWidgetRecorder + 'a> recorder_core::Recorder for Egu
 
 pub trait EguiWidgetRecorder {
     fn apply_effect(&mut self, ctx: &egui::Context, effect: &ExampleEffect);
+    fn bump_events(&mut self, ctx: &egui::Context, input: &mut egui::RawInput);
     fn record(&mut self, ctx: &egui::Context, input: egui::RawInput, unhandled_event: &UnhandledEvent, commands: &mut Vec<ExampleCommand>) -> egui::FullOutput;
 }

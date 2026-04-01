@@ -9,7 +9,6 @@ wit-bindgen.workspace = true
 anyhow.workspace = true
 bytemuck.workspace = true
 egui.workspace = true
-epaint.workspace = true
 image.workspace = true
 egui_extras.workspace = true
 similar.workspace = true

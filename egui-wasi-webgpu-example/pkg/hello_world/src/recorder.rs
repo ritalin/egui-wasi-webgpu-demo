@@ -28,6 +28,10 @@ impl example_core::recorder::EguiWidgetRecorder for RecoderInner{
         }
     }
 
+    fn bump_events(&mut self, _ctx: &egui::Context, _input: &mut egui::RawInput) {
+        // discard
+    }
+
     fn record(&mut self, ctx: &egui::Context, input: egui::RawInput, unhandled_event: &example_core::UnhandledEvent, commands: &mut Vec<ExampleCommand>) -> egui::FullOutput {
         if let Some(_) = unhandled_event.activate {
             commands.push(ExampleCommand::ChangeSet(vec![
@@ -37,8 +41,8 @@ impl example_core::recorder::EguiWidgetRecorder for RecoderInner{
 
         let mut request_img = None;
 
-        let output = ctx.run(input, |cx| {
-            egui::CentralPanel::default().show(cx, |ui| {
+        let output = ctx.run_ui(input, |cx| {
+            egui::CentralPanel::default().show_inside(cx, |ui| {
                 ui.heading("My egui Application");
                 ui.horizontal(|ui| {
                     let name_label = ui.label("Your name: ");

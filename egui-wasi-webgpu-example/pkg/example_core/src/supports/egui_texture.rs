@@ -35,7 +35,7 @@ impl<'a> RecordOutput for EguiOutput {
         self.shapes.iter()
             .map(|p| -> Option<render_core::Mesh> {
                 match &p.primitive {
-                    epaint::Primitive::Mesh(mesh) => {
+                    egui::epaint::Primitive::Mesh(mesh) => {
                         Some(render_core::Mesh {
                             key: match mesh.texture_id {
                                 egui::TextureId::Managed(id) => render_core::TextureKey::Managed(id),
@@ -46,7 +46,7 @@ impl<'a> RecordOutput for EguiOutput {
                             scissor_rect: self.screen.into_scissor_rect(p.clip_rect),
                         })
                     }
-                    epaint::Primitive::Callback(_callback) => None,
+                    egui::epaint::Primitive::Callback(_callback) => None,
                 }
             })
             .collect()
@@ -137,7 +137,7 @@ pub struct EguiTextureSet<'a> {
     textures: std::slice::Iter<'a, (egui::TextureId, egui::epaint::ImageDelta)>,
 }
 impl<'a> EguiTextureSet<'a> {
-    pub fn new(textures: std::slice::Iter<'a, (egui::TextureId, epaint::ImageDelta)>) -> Self {
+    pub fn new(textures: std::slice::Iter<'a, (egui::TextureId, egui::epaint::ImageDelta)>) -> Self {
         Self { textures }
     }
 }
