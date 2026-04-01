@@ -21,11 +21,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
-    "paths": {
-      "pkg/egui-renderer": ["./pkg/hello_world/_transpiled/egui-renderer"],
-      "pkg/interfaces/*": ["./pkg/hello_world/_transpiled/interfaces/*"],
-    },
   },
   "include": ["src", "src/types/*.d.ts"],
 }
