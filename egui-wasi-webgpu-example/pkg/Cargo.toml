@@ -1,11 +1,13 @@
 [workspace]
 members = [
     "hello_world",
+    "custom_keypad",
 ]
 resolver = "2"
 
 [workspace.dependencies]
 wasi-renderer = { path = "../../egui-wasi-webgpu-demo/pkg/wasi-renderer" }
+example_core = { path = "./example_core" }
 wit-bindgen = { version = "0.50.0", features = ["async", "async-spawn"] }
 anyhow = "1.0.100"
 bytemuck = {version = "1.24.0", features = ["derive"] }
