@@ -2,6 +2,7 @@ use wasi_renderer::bindings::types;
 
 pub mod bindings;
 pub mod supports;
+pub mod recorder;
 
 #[derive(Debug, Clone)]
 pub enum ExampleCommand {

@@ -11,7 +11,7 @@ impl render::Guest for Component {
 
     fn create_renderer(context: render::RenderContext,) -> render::Dispatcher {
         context.request_set_size(FrameSize{ width: 512, height: 512 });
-        render::Dispatcher::new(DispatcherInner::new(context, recorder::RecoderInner::new()))
+        render::Dispatcher::new(DispatcherInner::new(context, example_core::recorder::EguiRecoder::new(crate::recorder::RecoderInner::new())))
     }
 }
 
