@@ -110,6 +110,11 @@ dependencies = [
 [[package]]
 name = "custom_keypad"
 version = "0.1.0"
+dependencies = [
+ "egui",
+ "example_core",
+ "wasi-renderer",
+]
 
 [[package]]
 name = "ecolor"
@@ -387,11 +392,8 @@ name = "hello_world"
 version = "0.1.0"
 dependencies = [
  "egui",
- "egui_extras",
- "epaint",
  "example_core",
  "image",
- "similar",
  "wasi-renderer",
 ]
 
