@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "pkg/egui-renderer": ["./_transpiled/egui-renderer"],
+      "pkg/interfaces/*": ["./_transpiled/interfaces/*"],
+    },
+  },
+}

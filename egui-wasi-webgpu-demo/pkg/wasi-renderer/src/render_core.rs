@@ -1,6 +1,6 @@
 use crate::bindings::{surface, webgpu};
 
-pub use epaint::{Vertex, Pos2, Color32, Rect};
+pub use egui::epaint::{Vertex, Pos2, Color32, Rect};
 
 mod mesh;
 pub use mesh::{Mesh, ScissorRect, MeshVectorIter, ResolvedMeshSet};

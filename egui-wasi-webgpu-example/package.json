@@ -8,12 +8,12 @@
   "license": "ISC",
   "packageManager": "pnpm@10.12.1",
   "scripts": {
-    "dev": "vite",
+    "dev": "./scripts/serve-dev.sh",
     "build:shim": "pnpm --filter wasi-webgpu-runtime run build",
     "build:pkg": "./scripts/transpile.sh",
-    "build": "pnpm run build:shim && pnpm run build:pkg hello_world release && tsc && vite build",
-    "build:dist": "tsc && vite build",
-    "preview": "vite preview"
+    "build:dist": "node ./scripts/build-dist.ts",
+    "build": "pnpm run build:shim && pnpm run build:dist",
+    "preview": "vite preview -c"
   },
   "devDependencies": {
     "@bytecodealliance/jco": "^1.16.1",
