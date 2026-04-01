@@ -57,7 +57,7 @@ export class WasmEngine {
   launch(route: Route, canvas: HTMLCanvasElement, eventSource: EditEventSource): boolean {
     if (this.dispatchers.has(route)) return false;
 
-    const surface = this.runtime.createRenderContext(canvas) as unknown as RenderContext;
+    const surface = this.runtime.createRenderContext(canvas);
 
     let dispatcher;
     const effects: Effect[] = [];

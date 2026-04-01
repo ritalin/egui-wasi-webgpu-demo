@@ -3,8 +3,9 @@
     "target": "ESNext",
     "module": "NodeNext",
     "lib": ["ESNext", "DOM"],
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "types": ["@webgpu/types"],
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules"],
 }

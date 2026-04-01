@@ -126,7 +126,7 @@ class WasmEngine {
   launch(route: Route, canvas: HTMLCanvasElement): boolean {
     if (this.dispatchers.has(route)) return false;
 
-    const surface = this.runtime.createRenderContext(canvas) as unknown as RenderContext;
+    const surface = this.runtime.createRenderContext(canvas);
 
     let dispatcher;
     switch (route) {
