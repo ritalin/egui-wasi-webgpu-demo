@@ -10,6 +10,7 @@ pub enum ExampleCommand {
     RequestImage { paths: Vec<String> },
     Cursor(egui::CursorIcon),
     Clipboard(ClipboardData),
+    OpenUrl(egui::OpenUrl),
     ChangeSet(Vec<ChangeSpec>),
     CompositionBounds(egui::Rect),
 }

@@ -23,7 +23,7 @@ impl example_core::recorder::EguiWidgetRecorder for RecoderInner{
         // discard
     }
 
-    fn record(&mut self, ctx: &egui::Context, input: egui::RawInput, _unhandled_event: &example_core::UnhandledEvent, commands: &mut Vec<example_core::ExampleCommand>) -> egui::FullOutput {
+    fn record(&mut self, ctx: &egui::Context, input: egui::RawInput, _unhandled_event: &example_core::UnhandledEvent, _commands: &mut Vec<example_core::ExampleCommand>) -> egui::FullOutput {
         let output = ctx.run_ui(input, |cx| {
             egui::CentralPanel::default().show_inside(cx, |ui| {
                 ui.heading("egui using a customized style");

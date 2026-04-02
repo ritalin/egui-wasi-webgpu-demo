@@ -1,3 +1,4 @@
+use egui::OpenUrl;
 use wasi_renderer::bindings::types;
 
 use crate::{ClipboardData, ExampleCommand, ExampleEffect, bindings::interaction, supports::KeyWrapper};
@@ -9,6 +10,11 @@ impl From<ExampleCommand> for interaction::Command {
             ExampleCommand::RequestImage { paths } => interaction::Command::RequestImage(paths),
             ExampleCommand::Cursor(cursor) => interaction::Command::Cursor(cursor.into()),
             ExampleCommand::Clipboard(data) => interaction::Command::Clipboard(data.into()),
+            ExampleCommand::OpenUrl(OpenUrl{ url, new_tab }) => {
+                let mut options = interaction::OpenUrlOptions::empty();
+                options.set(interaction::OpenUrlOptions::NEW_TAB, new_tab);
+                interaction::Command::OpenUrl((url, options))
+            }
             ExampleCommand::ChangeSet(change_specs) => {
                 interaction::Command::ChangeSet(change_specs.into_iter().map(Into::into).collect::<Vec<_>>())
             }

@@ -9,6 +9,7 @@ interface interaction {
         request-image(list<url>),
         cursor(cursor-style),
         clipboard(clipboard-data),
+        open-url(tuple<string, open-url-options>),
         change-set(list<change-spec>),
         composition-bounds(composition-bounds)
     }
@@ -83,4 +84,12 @@ interface interaction {
         width: f32,
         height: f32,
     }
+
+    flags open-url-options {
+        new-tab,
+    }
+}
+
+world interaction-world {
+    export interaction;
 }
