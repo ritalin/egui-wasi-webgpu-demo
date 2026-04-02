@@ -3,6 +3,7 @@ members = [
     "hello_world",
     "custom_keypad",
     "custom_style",
+    "custom_font_style",
 ]
 resolver = "2"
 

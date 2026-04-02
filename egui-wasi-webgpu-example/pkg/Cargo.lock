@@ -140,6 +140,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "custom_font_style"
+version = "0.1.0"
+dependencies = [
+ "egui",
+ "example_core",
+ "wasi-renderer",
+]
+
+[[package]]
 name = "custom_keypad"
 version = "0.1.0"
 dependencies = [
