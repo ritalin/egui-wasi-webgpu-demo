@@ -12,6 +12,7 @@ This project is based on examples from `egui`, adapted to run as WebAssembly com
 - **Browser Compatibility**: Requires Chrome or Edge (Chromium-based browsers) due to the use of the `EditContext API` for text input.
 - **Color Emojis**: Variation selector 16 (VS16) is rendered as "Tofu" (glyph not found).
 - **IME** In Japanese, Unicode U+3000 char (Ideographic Space / Zenkaku Space) is currently not supported.
+- **Hyperlink**: `Window.open()` has strict secrity requirements, so links copies to the clipboard instead of being opened the page.
 
 ## Credits
 
