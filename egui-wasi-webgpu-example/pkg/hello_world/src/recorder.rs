@@ -12,6 +12,10 @@ impl RecoderInner {
 }
 
 impl example_core::recorder::EguiWidgetRecorder for RecoderInner{
+    fn setup_from(&mut self, _ctx: &egui::Context) {
+        // discard
+    }
+
     fn apply_effect(&mut self, ctx: &egui::Context, effect: &ExampleEffect) {
         match effect {
             ExampleEffect::ImageData{ bytes, url } => {

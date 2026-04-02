@@ -18,7 +18,7 @@ pub mod local {
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
       super::super::super::__link_custom_section_describing_imports;
-      
+
       use super::super::super::_rt;
       pub type Route = _rt::String;
       pub type Url = _rt::String;
@@ -297,12 +297,19 @@ pub mod local {
           f.debug_struct("CompositionBounds").field("left", &self.left).field("top", &self.top).field("width", &self.width).field("height", &self.height).finish()
         }
       }
+      wit_bindgen::rt::bitflags::bitflags! {
+        #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Clone, Copy)]
+        pub struct OpenUrlOptions: u8 {
+          const NEW_TAB = 1 << 0;
+        }
+      }
       #[derive(Clone)]
       pub enum Command {
         OpenWindow(Route),
         RequestImage(_rt::Vec::<Url>),
         Cursor(CursorStyle),
         Clipboard(ClipboardData),
+        OpenUrl((_rt::String,OpenUrlOptions,)),
         ChangeSet(_rt::Vec::<ChangeSpec>),
         CompositionBounds(CompositionBounds),
       }
@@ -320,6 +327,9 @@ pub mod local {
             }
             Command::Clipboard(e) => {
               f.debug_tuple("Command::Clipboard").field(e).finish()
+            }
+            Command::OpenUrl(e) => {
+              f.debug_tuple("Command::OpenUrl").field(e).finish()
             }
             Command::ChangeSet(e) => {
               f.debug_tuple("Command::ChangeSet").field(e).finish()
@@ -345,7 +355,7 @@ pub mod wasi {
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
       super::super::super::__link_custom_section_describing_imports;
-      
+
       use super::super::super::_rt;
 
       #[derive(Debug)]
@@ -372,12 +382,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for Context{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:graphics-context/graphics-context@0.0.1")]
           unsafe extern "C" {
@@ -387,11 +397,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -417,12 +427,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for AbstractBuffer{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:graphics-context/graphics-context@0.0.1")]
           unsafe extern "C" {
@@ -432,11 +442,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       impl Context {
         #[allow(unused_unsafe, clippy::all)]
         #[allow(async_fn_in_trait)]
@@ -510,7 +520,7 @@ pub mod wasi {
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
       super::super::super::__link_custom_section_describing_imports;
-      
+
       use super::super::super::_rt;
       /// `pollable` represents a single I/O event which may be ready, or not.
 
@@ -538,12 +548,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for Pollable{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:io/poll@0.2.9")]
           unsafe extern "C" {
@@ -553,11 +563,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       impl Pollable {
         #[allow(unused_unsafe, clippy::all)]
         /// Return the readiness of a pollable. This function never blocks.
@@ -672,7 +682,7 @@ pub mod wasi {
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
       super::super::super::__link_custom_section_describing_imports;
-      
+
       use super::super::super::_rt;
       pub type Pollable = super::super::super::wasi::io::poll::Pollable;
       pub type Context = super::super::super::wasi::graphics_context::graphics_context::Context;
@@ -702,12 +712,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuSupportedLimits{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -717,11 +727,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -747,12 +757,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuSupportedFeatures{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -762,11 +772,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -792,12 +802,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for WgslLanguageFeatures{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -807,11 +817,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -837,12 +847,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuAdapterInfo{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -852,11 +862,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -882,12 +892,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for Gpu{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -897,11 +907,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuPowerPreference {
@@ -936,7 +946,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[derive(Clone)]
       pub struct GpuRequestAdapterOptions {
         pub feature_level: Option<_rt::String>,
@@ -974,12 +984,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuAdapter{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -989,11 +999,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1019,12 +1029,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for RecordOptionGpuSize64{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1034,11 +1044,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuFeatureName {
@@ -1148,7 +1158,7 @@ pub mod wasi {
           }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1174,12 +1184,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuDevice{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1189,11 +1199,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1219,12 +1229,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuBuffer{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1234,11 +1244,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuBufferMapState {
@@ -1278,7 +1288,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       pub type GpuBufferUsageFlags = u32;
 
       #[derive(Debug)]
@@ -1305,12 +1315,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuBufferUsage{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1320,11 +1330,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       pub type GpuMapModeFlags = u32;
 
       #[derive(Debug)]
@@ -1351,12 +1361,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuMapMode{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1366,11 +1376,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1396,12 +1406,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuTexture{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1411,11 +1421,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuTextureDimension {
@@ -1455,7 +1465,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       pub type GpuTextureUsageFlags = u32;
 
       #[derive(Debug)]
@@ -1482,12 +1492,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuTextureUsage{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1497,11 +1507,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1527,12 +1537,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuTextureView{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1542,11 +1552,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuTextureViewDimension {
@@ -1601,7 +1611,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuTextureAspect {
@@ -1641,7 +1651,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuTextureFormat {
@@ -2141,7 +2151,7 @@ pub mod wasi {
           }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -2167,12 +2177,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuSampler{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2182,11 +2192,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuAddressMode {
@@ -2226,7 +2236,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuFilterMode {
@@ -2261,7 +2271,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuMipmapFilterMode {
@@ -2296,7 +2306,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCompareFunction {
@@ -2361,7 +2371,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[derive(Clone)]
       pub struct GpuSamplerDescriptor {
         pub address_mode_u: Option<GpuAddressMode>,
@@ -2406,12 +2416,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuBindGroupLayout{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2421,11 +2431,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       pub type GpuShaderStageFlags = u32;
 
       #[derive(Debug)]
@@ -2452,12 +2462,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuShaderStage{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2467,11 +2477,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuBufferBindingType {
@@ -2511,7 +2521,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuSamplerBindingType {
@@ -2551,7 +2561,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuSamplerBindingLayout {
@@ -2611,7 +2621,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuTextureBindingLayout {
@@ -2663,7 +2673,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuStorageTextureBindingLayout {
@@ -2701,12 +2711,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuBindGroup{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2716,11 +2726,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -2746,12 +2756,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuPipelineLayout{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2761,11 +2771,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       pub struct GpuPipelineLayoutDescriptor<'a,> {
         pub bind_group_layouts: _rt::Vec::<Option<&'a GpuBindGroupLayout>>,
         pub label: Option<_rt::String>,
@@ -2800,12 +2810,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuShaderModule{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2815,11 +2825,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCompilationMessageType {
@@ -2859,7 +2869,7 @@ pub mod wasi {
           }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -2885,12 +2895,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuCompilationMessage{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2900,11 +2910,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -2930,12 +2940,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuCompilationInfo{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2945,11 +2955,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuPipelineErrorReason {
@@ -2984,7 +2994,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       pub enum GpuLayoutMode<'a,> {
         Specific(&'a GpuPipelineLayout),
         Auto,
@@ -3045,12 +3055,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for RecordGpuPipelineConstantValue{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3060,11 +3070,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       pub struct GpuProgrammableStage<'a,> {
         pub module: &'a GpuShaderModule,
         pub entry_point: Option<_rt::String>,
@@ -3101,12 +3111,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuComputePipeline{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3116,11 +3126,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       pub struct GpuComputePipelineDescriptor<'a,> {
         pub compute: GpuProgrammableStage<'a,>,
         pub layout: GpuLayoutMode<'a,>,
@@ -3156,12 +3166,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuRenderPipeline{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3171,11 +3181,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuPrimitiveTopology {
@@ -3225,7 +3235,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuFrontFace {
@@ -3260,7 +3270,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCullMode {
@@ -3300,7 +3310,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       pub type GpuColorWriteFlags = u32;
 
       #[derive(Debug)]
@@ -3327,12 +3337,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuColorWrite{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3342,11 +3352,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuBlendFactor {
@@ -3456,7 +3466,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuBlendOperation {
@@ -3506,7 +3516,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuBlendComponent {
@@ -3617,7 +3627,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuStencilFaceState {
@@ -3665,7 +3675,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuPrimitiveState {
@@ -3909,7 +3919,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuVertexStepMode {
@@ -3944,7 +3954,7 @@ pub mod wasi {
           }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -3970,12 +3980,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuCommandBuffer{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3985,11 +3995,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[derive(Clone)]
       pub struct GpuCommandBufferDescriptor {
         pub label: Option<_rt::String>,
@@ -4024,12 +4034,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuCommandEncoder{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4039,11 +4049,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[derive(Clone)]
       pub struct GpuCommandEncoderDescriptor {
         pub label: Option<_rt::String>,
@@ -4078,12 +4088,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuComputePassEncoder{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4093,11 +4103,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4123,12 +4133,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuRenderPassEncoder{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4138,11 +4148,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuLoadOp {
@@ -4177,7 +4187,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuStoreOp {
@@ -4212,7 +4222,7 @@ pub mod wasi {
           }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4238,12 +4248,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuRenderBundle{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4253,11 +4263,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[derive(Clone)]
       pub struct GpuRenderBundleDescriptor {
         pub label: Option<_rt::String>,
@@ -4292,12 +4302,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuRenderBundleEncoder{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4307,11 +4317,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[derive(Clone)]
       pub struct GpuQueueDescriptor {
         pub label: Option<_rt::String>,
@@ -4357,12 +4367,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuQueue{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4372,11 +4382,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4402,12 +4412,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuQuerySet{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4417,11 +4427,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuQueryType {
@@ -4456,7 +4466,7 @@ pub mod wasi {
           }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4482,12 +4492,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuCanvasContext{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4497,11 +4507,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCanvasAlphaMode {
@@ -4536,7 +4546,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCanvasToneMappingMode {
@@ -4571,7 +4581,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuCanvasToneMapping {
@@ -4616,7 +4626,7 @@ pub mod wasi {
           }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4642,12 +4652,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuDeviceLostInfo{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4657,11 +4667,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4687,12 +4697,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuError{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4702,11 +4712,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuErrorFilter {
@@ -4746,7 +4756,7 @@ pub mod wasi {
           }
         }
       }
-      
+
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4772,12 +4782,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-      
+
 
       unsafe impl _rt::WasmResource for GpuUncapturedErrorEvent{
         #[inline]
         unsafe fn drop(_handle: u32) {
-          
+
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4787,11 +4797,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-          
+
           unsafe { drop(_handle as i32); }
         }
       }
-      
+
       pub type GpuBufferDynamicOffset = u32;
       pub type GpuStencilValue = u32;
       pub struct GpuRenderPassDepthStencilAttachment<'a,> {
@@ -5216,7 +5226,7 @@ pub mod wasi {
           }
         }
       }
-      
+
       pub struct GpuCanvasConfiguration<'a,> {
         pub device: &'a GpuDevice,
         pub format: GpuTextureFormat,
@@ -14786,7 +14796,7 @@ pub mod wasi {
                                                                                       #[doc(hidden)]
                                                                                       static __FORCE_SECTION_REF: fn() =
                                                                                       super::super::super::super::__link_custom_section_describing_imports;
-                                                                                      
+
                                                                                       use super::super::super::super::_rt;
                                                                                       pub type Command = super::super::super::super::local::immediate_renderer_example::interaction::Command;
                                                                                       pub type Effect = super::super::super::super::local::immediate_renderer_example::interaction::Effect;
@@ -14914,12 +14924,12 @@ pub mod wasi {
                                                                                           self.rep.cast()
                                                                                         }
                                                                                       }
-                                                                                      
+
 
                                                                                       unsafe impl _rt::WasmResource for EventChannel{
                                                                                         #[inline]
                                                                                         unsafe fn drop(_handle: u32) {
-                                                                                          
+
                                                                                           #[cfg(target_arch = "wasm32")]
                                                                                           #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                           unsafe extern "C" {
@@ -14929,11 +14939,11 @@ pub mod wasi {
 
                                                                                           #[cfg(not(target_arch = "wasm32"))]
                                                                                           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-                                                                                          
+
                                                                                           unsafe { drop(_handle as i32); }
                                                                                         }
                                                                                       }
-                                                                                      
+
 
                                                                                       #[derive(Debug)]
                                                                                       #[repr(transparent)]
@@ -15055,12 +15065,12 @@ pub mod wasi {
                                                                                           self.rep.cast()
                                                                                         }
                                                                                       }
-                                                                                      
+
 
                                                                                       unsafe impl _rt::WasmResource for CommandChannel{
                                                                                         #[inline]
                                                                                         unsafe fn drop(_handle: u32) {
-                                                                                          
+
                                                                                           #[cfg(target_arch = "wasm32")]
                                                                                           #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                           unsafe extern "C" {
@@ -15070,11 +15080,11 @@ pub mod wasi {
 
                                                                                           #[cfg(not(target_arch = "wasm32"))]
                                                                                           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-                                                                                          
+
                                                                                           unsafe { drop(_handle as i32); }
                                                                                         }
                                                                                       }
-                                                                                      
+
 
                                                                                       #[derive(Debug)]
                                                                                       #[repr(transparent)]
@@ -15196,12 +15206,12 @@ pub mod wasi {
                                                                                           self.rep.cast()
                                                                                         }
                                                                                       }
-                                                                                      
+
 
                                                                                       unsafe impl _rt::WasmResource for Dispatcher{
                                                                                         #[inline]
                                                                                         unsafe fn drop(_handle: u32) {
-                                                                                          
+
                                                                                           #[cfg(target_arch = "wasm32")]
                                                                                           #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                           unsafe extern "C" {
@@ -15211,11 +15221,11 @@ pub mod wasi {
 
                                                                                           #[cfg(not(target_arch = "wasm32"))]
                                                                                           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-                                                                                          
+
                                                                                           unsafe { drop(_handle as i32); }
                                                                                         }
                                                                                       }
-                                                                                      
+
                                                                                       #[doc(hidden)]
                                                                                       #[allow(non_snake_case, unused_unsafe)]
                                                                                       pub unsafe fn _export_method_event_channel_post_cabi<T_: GuestEventChannel>(arg0: *mut u8,arg1: *mut u8,arg2: usize,) { unsafe {#[cfg(target_arch="wasm32")]
@@ -15774,16 +15784,16 @@ pub mod wasi {
                                                                                 }
                                                                                 *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len23;
                                                                                 *ptr1.add(0).cast::<*mut u8>() = result23;
-                                                                                let vec34 = t2_1;
-                                                                                let len34 = vec34.len();
-                                                                                let layout34 = _rt::alloc::Layout::from_size_align(vec34.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                let (result34, _cleanup34) = wit_bindgen::rt::Cleanup::new(layout34);if let Some(cleanup) = _cleanup34 { cleanup.forget(); }
-                                                                                for (i, e) in vec34.into_iter().enumerate() {
-                                                                                  let base = result34.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                let vec37 = t2_1;
+                                                                                let len37 = vec37.len();
+                                                                                let layout37 = _rt::alloc::Layout::from_size_align(vec37.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                let (result37, _cleanup37) = wit_bindgen::rt::Cleanup::new(layout37);if let Some(cleanup) = _cleanup37 { cleanup.forget(); }
+                                                                                for (i, e) in vec37.into_iter().enumerate() {
+                                                                                  let base = result37.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                   {
-                                                                                    use super::super::super::super::local::immediate_renderer_example::interaction::Command as V33;
+                                                                                    use super::super::super::super::local::immediate_renderer_example::interaction::Command as V36;
                                                                                     match e {
-                                                                                      V33::OpenWindow(e) => {
+                                                                                      V36::OpenWindow(e) => {
                                                                                         *base.add(0).cast::<u8>() = (0i32) as u8;
                                                                                         let vec24 = (e.into_bytes()).into_boxed_slice();
                                                                                         let ptr24 = vec24.as_ptr().cast::<u8>();
@@ -15792,7 +15802,7 @@ pub mod wasi {
                                                                                         *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len24;
                                                                                         *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr24.cast_mut();
                                                                                       },
-                                                                                      V33::RequestImage(e) => {
+                                                                                      V36::RequestImage(e) => {
                                                                                         *base.add(0).cast::<u8>() = (1i32) as u8;
                                                                                         let vec26 = e;
                                                                                         let len26 = vec26.len();
@@ -15812,11 +15822,11 @@ pub mod wasi {
                                                                                         *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len26;
                                                                                         *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result26;
                                                                                       },
-                                                                                      V33::Cursor(e) => {
+                                                                                      V36::Cursor(e) => {
                                                                                         *base.add(0).cast::<u8>() = (2i32) as u8;
                                                                                         *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                       },
-                                                                                      V33::Clipboard(e) => {
+                                                                                      V36::Clipboard(e) => {
                                                                                         *base.add(0).cast::<u8>() = (3i32) as u8;
                                                                                         use super::super::super::super::local::immediate_renderer_example::interaction::ClipboardData as V28;
                                                                                         match e {
@@ -15831,27 +15841,39 @@ pub mod wasi {
                                                                                           },
                                                                                         }
                                                                                       },
-                                                                                      V33::ChangeSet(e) => {
+                                                                                      V36::OpenUrl(e) => {
                                                                                         *base.add(0).cast::<u8>() = (4i32) as u8;
-                                                                                        let vec31 = e;
-                                                                                        let len31 = vec31.len();
-                                                                                        let layout31 = _rt::alloc::Layout::from_size_align(vec31.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                        let (result31, _cleanup31) = wit_bindgen::rt::Cleanup::new(layout31);if let Some(cleanup) = _cleanup31 { cleanup.forget(); }
-                                                                                        for (i, e) in vec31.into_iter().enumerate() {
-                                                                                          let base = result31.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                        let (t29_0, t29_1, ) = e;
+                                                                                        let vec30 = (t29_0.into_bytes()).into_boxed_slice();
+                                                                                        let ptr30 = vec30.as_ptr().cast::<u8>();
+                                                                                        let len30 = vec30.len();
+                                                                                        ::core::mem::forget(vec30);
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len30;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr30.cast_mut();
+                                                                                        let flags31 = t29_1;
+                                                                                        *base.add(3*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags31.bits() >> 0) as i32) as u8;
+                                                                                      },
+                                                                                      V36::ChangeSet(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (5i32) as u8;
+                                                                                        let vec34 = e;
+                                                                                        let len34 = vec34.len();
+                                                                                        let layout34 = _rt::alloc::Layout::from_size_align(vec34.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                        let (result34, _cleanup34) = wit_bindgen::rt::Cleanup::new(layout34);if let Some(cleanup) = _cleanup34 { cleanup.forget(); }
+                                                                                        for (i, e) in vec34.into_iter().enumerate() {
+                                                                                          let base = result34.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                           {
-                                                                                            let super::super::super::super::local::immediate_renderer_example::interaction::ChangeSpec{ offset:offset29, len:len29, new_value:new_value29, } = e;
-                                                                                            *base.add(0).cast::<i32>() = _rt::as_i32(offset29);
-                                                                                            *base.add(4).cast::<i32>() = _rt::as_i32(len29);
-                                                                                            match new_value29 {
+                                                                                            let super::super::super::super::local::immediate_renderer_example::interaction::ChangeSpec{ offset:offset32, len:len32, new_value:new_value32, } = e;
+                                                                                            *base.add(0).cast::<i32>() = _rt::as_i32(offset32);
+                                                                                            *base.add(4).cast::<i32>() = _rt::as_i32(len32);
+                                                                                            match new_value32 {
                                                                                               Some(e) => {
                                                                                                 *base.add(8).cast::<u8>() = (1i32) as u8;
-                                                                                                let vec30 = (e.into_bytes()).into_boxed_slice();
-                                                                                                let ptr30 = vec30.as_ptr().cast::<u8>();
-                                                                                                let len30 = vec30.len();
-                                                                                                ::core::mem::forget(vec30);
-                                                                                                *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len30;
-                                                                                                *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr30.cast_mut();
+                                                                                                let vec33 = (e.into_bytes()).into_boxed_slice();
+                                                                                                let ptr33 = vec33.as_ptr().cast::<u8>();
+                                                                                                let len33 = vec33.len();
+                                                                                                ::core::mem::forget(vec33);
+                                                                                                *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len33;
+                                                                                                *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr33.cast_mut();
                                                                                               },
                                                                                               None => {
                                                                                                 {
@@ -15860,22 +15882,22 @@ pub mod wasi {
                                                                                               },
                                                                                             };}
                                                                                           }
-                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len31;
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result31;
+                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len34;
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result34;
                                                                                         },
-                                                                                        V33::CompositionBounds(e) => {
-                                                                                          *base.add(0).cast::<u8>() = (5i32) as u8;
-                                                                                          let super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds{ left:left32, top:top32, width:width32, height:height32, } = e;
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left32);
-                                                                                          *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top32);
-                                                                                          *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width32);
-                                                                                          *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height32);
+                                                                                        V36::CompositionBounds(e) => {
+                                                                                          *base.add(0).cast::<u8>() = (6i32) as u8;
+                                                                                          let super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds{ left:left35, top:top35, width:width35, height:height35, } = e;
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left35);
+                                                                                          *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top35);
+                                                                                          *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width35);
+                                                                                          *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height35);
                                                                                         },
                                                                                       }
                                                                                     }
                                                                                   }
-                                                                                  *ptr1.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len34;
-                                                                                  *ptr1.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result34;
+                                                                                  *ptr1.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len37;
+                                                                                  *ptr1.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result37;
                                                                                   ptr1
                                                                                 } }
                                                                                 #[doc(hidden)]
@@ -15941,10 +15963,10 @@ pub mod wasi {
                                                                                   _rt::cabi_dealloc(base13, len13 * (8+4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                   let l14 = *arg0.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                   let l15 = *arg0.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                  let base33 = l14;
-                                                                                  let len33 = l15;
-                                                                                  for i in 0..len33 {
-                                                                                    let base = base33.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                  let base35 = l14;
+                                                                                  let len35 = l15;
+                                                                                  for i in 0..len35 {
+                                                                                    let base = base35.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                     {
                                                                                       let l16 = i32::from(*base.add(0).cast::<u8>());
                                                                                       match l16 {
@@ -15982,29 +16004,34 @@ pub mod wasi {
                                                                                         4 => {
                                                                                           let l27 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                           let l28 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                          let base32 = l27;
-                                                                                          let len32 = l28;
-                                                                                          for i in 0..len32 {
-                                                                                            let base = base32.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                          _rt::cabi_dealloc(l27, l28, 1);
+                                                                                        },
+                                                                                        5 => {
+                                                                                          let l29 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                          let l30 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                          let base34 = l29;
+                                                                                          let len34 = l30;
+                                                                                          for i in 0..len34 {
+                                                                                            let base = base34.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                             {
-                                                                                              let l29 = i32::from(*base.add(8).cast::<u8>());
-                                                                                              match l29 {
+                                                                                              let l31 = i32::from(*base.add(8).cast::<u8>());
+                                                                                              match l31 {
                                                                                                 0 => (),
                                                                                                 _ => {
-                                                                                                  let l30 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                  let l31 = *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                  _rt::cabi_dealloc(l30, l31, 1);
+                                                                                                  let l32 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                  let l33 = *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                  _rt::cabi_dealloc(l32, l33, 1);
                                                                                                 },
                                                                                               }
                                                                                             }
                                                                                           }
-                                                                                          _rt::cabi_dealloc(base32, len32 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                          _rt::cabi_dealloc(base34, len34 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                         },
                                                                                         _ => (),
                                                                                       }
                                                                                     }
                                                                                   }
-                                                                                  _rt::cabi_dealloc(base33, len33 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                  _rt::cabi_dealloc(base35, len35 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                 } }
                                                                                 #[doc(hidden)]
                                                                                 #[allow(non_snake_case, unused_unsafe)]
@@ -16027,7 +16054,7 @@ pub mod wasi {
                                                                                 unsafe fn _resource_new(val: *mut u8) -> u32
                                                                                 where Self: Sized
                                                                                 {
-                                                                                  
+
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16037,7 +16064,7 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-                                                                                  
+
                                                                                   unsafe { new(val) as u32 }
                                                                                 }
 
@@ -16045,7 +16072,7 @@ pub mod wasi {
                                                                                 fn _resource_rep(handle: u32) -> *mut u8
                                                                                 where Self: Sized
                                                                                 {
-                                                                                  
+
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16055,11 +16082,11 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-                                                                                  
+
                                                                                   unsafe { rep(handle as i32) }
                                                                                 }
 
-                                                                                
+
                                                                                 #[allow(async_fn_in_trait)]
                                                                                 fn post(&self,events: _rt::Vec::<Event>,) -> ();
                                                                               }
@@ -16069,7 +16096,7 @@ pub mod wasi {
                                                                                 unsafe fn _resource_new(val: *mut u8) -> u32
                                                                                 where Self: Sized
                                                                                 {
-                                                                                  
+
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16079,7 +16106,7 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-                                                                                  
+
                                                                                   unsafe { new(val) as u32 }
                                                                                 }
 
@@ -16087,7 +16114,7 @@ pub mod wasi {
                                                                                 fn _resource_rep(handle: u32) -> *mut u8
                                                                                 where Self: Sized
                                                                                 {
-                                                                                  
+
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16097,11 +16124,11 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-                                                                                  
+
                                                                                   unsafe { rep(handle as i32) }
                                                                                 }
 
-                                                                                
+
                                                                                 #[allow(async_fn_in_trait)]
                                                                                 fn post(&self,effects: _rt::Vec::<Effect>,) -> ();
                                                                               }
@@ -16111,7 +16138,7 @@ pub mod wasi {
                                                                                 unsafe fn _resource_new(val: *mut u8) -> u32
                                                                                 where Self: Sized
                                                                                 {
-                                                                                  
+
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16121,7 +16148,7 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-                                                                                  
+
                                                                                   unsafe { new(val) as u32 }
                                                                                 }
 
@@ -16129,7 +16156,7 @@ pub mod wasi {
                                                                                 fn _resource_rep(handle: u32) -> *mut u8
                                                                                 where Self: Sized
                                                                                 {
-                                                                                  
+
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16139,11 +16166,11 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-                                                                                  
+
                                                                                   unsafe { rep(handle as i32) }
                                                                                 }
 
-                                                                                
+
                                                                                 #[allow(async_fn_in_trait)]
                                                                                 fn event_channel(&self,) -> EventChannel;
                                                                                 #[allow(async_fn_in_trait)]
@@ -16197,7 +16224,7 @@ pub mod wasi {
                                                                                       }
                                                                                     }
                                                                                   };
-                                                                                  
+
 
                                                                                   const _: () = {
                                                                                     #[doc(hidden)]
@@ -16211,7 +16238,7 @@ pub mod wasi {
                                                                                       }
                                                                                     }
                                                                                   };
-                                                                                  
+
 
                                                                                   const _: () = {
                                                                                     #[doc(hidden)]
@@ -16225,7 +16252,7 @@ pub mod wasi {
                                                                                       }
                                                                                     }
                                                                                   };
-                                                                                  
+
                                                                                 };);
                                                                               }
                                                                               #[doc(hidden)]
@@ -16367,7 +16394,7 @@ pub mod wasi {
                                                                             unsafe { core::hint::unreachable_unchecked() }
                                                                           }
                                                                         }
-                                                                        
+
                                                                         pub fn as_i64<T: AsI64>(t: T) -> i64 {
                                                                           t.as_i64()
                                                                         }
@@ -16381,14 +16408,14 @@ pub mod wasi {
                                                                             (*self).as_i64()
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI64 for i64 {
                                                                           #[inline]
                                                                           fn as_i64(self) -> i64 {
                                                                             self as i64
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI64 for u64 {
                                                                           #[inline]
                                                                           fn as_i64(self) -> i64 {
@@ -16404,7 +16431,7 @@ pub mod wasi {
                                                                             alloc::dealloc(ptr, layout);
                                                                           }
                                                                         }
-                                                                        
+
                                                                         pub fn as_i32<T: AsI32>(t: T) -> i32 {
                                                                           t.as_i32()
                                                                         }
@@ -16418,63 +16445,63 @@ pub mod wasi {
                                                                             (*self).as_i32()
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI32 for i32 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI32 for u32 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI32 for i16 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI32 for u16 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI32 for i8 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI32 for u8 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI32 for char {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsI32 for usize {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         pub fn as_f32<T: AsF32>(t: T) -> f32 {
                                                                           t.as_f32()
                                                                         }
@@ -16488,14 +16515,14 @@ pub mod wasi {
                                                                             (*self).as_f32()
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsF32 for f32 {
                                                                           #[inline]
                                                                           fn as_f32(self) -> f32 {
                                                                             self as f32
                                                                           }
                                                                         }
-                                                                        
+
                                                                         pub fn as_f64<T: AsF64>(t: T) -> f64 {
                                                                           t.as_f64()
                                                                         }
@@ -16509,7 +16536,7 @@ pub mod wasi {
                                                                             (*self).as_f64()
                                                                           }
                                                                         }
-                                                                        
+
                                                                         impl AsF64 for f64 {
                                                                           #[inline]
                                                                           fn as_f64(self) -> f64 {
@@ -16554,8 +16581,8 @@ pub mod wasi {
                                                                           #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:imports and exports")]
                                                                           #[doc(hidden)]
                                                                           #[allow(clippy::octal_escapes)]
-                                                                          pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31158] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xb1\xf2\x01\x01A\x02\
+                                                                          pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31208] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xe3\xf2\x01\x01A\x02\
 \x01A\x1a\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -17113,7 +17140,7 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x18\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
+B\x1b\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
 source\x03\x05bytes\x04\x04\0\x0eexternal-asset\x03\0\x05\x01r\x03\x06source\x03\
 \x04names\x05bytes\x04\x04\0\x0dexternal-font\x03\0\x07\x01q\x02\x0aimage-data\x01\
 \x06\0\x09font-data\x01\x08\0\x04\0\x06effect\x03\0\x09\x01m#\x07default\x04none\
@@ -17125,15 +17152,16 @@ esize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07zoom-in\x08zoom-out\x04\0\x0
 cursor-style\x03\0\x0b\x01q\x01\x04text\x01s\0\x04\0\x0eclipboard-data\x03\0\x0d\
 \x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x0f\x04\0\x0bchange-spec\x03\0\x10\
 \x01r\x04\x04leftv\x03topv\x05widthv\x06heightv\x04\0\x12composition-bounds\x03\0\
-\x12\x01p\x03\x01p\x11\x01q\x06\x0bopen-window\x01\x01\0\x0drequest-image\x01\x14\
-\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x0achange-set\x01\x15\0\x12composi\
-tion-bounds\x01\x13\0\x04\0\x07command\x03\0\x16\x03\0,local:immediate-renderer-\
-example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10modifier-p\
-ressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\
-\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\
-\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\
-\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01m\x03\x05enter\x03ta\
-b\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09backspace\x06delete\x04\
+\x12\x01n\x01\x07new-tab\x04\0\x10open-url-options\x03\0\x14\x01p\x03\x01o\x02s\x15\
+\x01p\x11\x01q\x07\x0bopen-window\x01\x01\0\x0drequest-image\x01\x16\0\x06cursor\
+\x01\x0c\0\x09clipboard\x01\x0e\0\x08open-url\x01\x17\0\x0achange-set\x01\x18\0\x12\
+composition-bounds\x01\x13\0\x04\0\x07command\x03\0\x19\x03\0,local:immediate-re\
+nderer-example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10mod\
+ifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\
+\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\
+\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-butto\
+n\x03\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01m\x03\x05enter\x03\
+tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09backspace\x06delete\x04\
 \0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x0e\x01m\x04\x0a\
 arrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x10\x01\
 q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\0\x04navi\x01\x11\0\
@@ -17174,8 +17202,8 @@ by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                       #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world-with-all-of-its-exports-removed:encoded world")]
                                                                       #[doc(hidden)]
                                                                       #[allow(clippy::octal_escapes)]
-                                                                      pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30634] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x85\xee\x01\x01A\x02\
+                                                                      pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30684] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xb7\xee\x01\x01A\x02\
 \x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -17733,7 +17761,7 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x18\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
+B\x1b\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
 source\x03\x05bytes\x04\x04\0\x0eexternal-asset\x03\0\x05\x01r\x03\x06source\x03\
 \x04names\x05bytes\x04\x04\0\x0dexternal-font\x03\0\x07\x01q\x02\x0aimage-data\x01\
 \x06\0\x09font-data\x01\x08\0\x04\0\x06effect\x03\0\x09\x01m#\x07default\x04none\
@@ -17745,15 +17773,16 @@ esize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07zoom-in\x08zoom-out\x04\0\x0
 cursor-style\x03\0\x0b\x01q\x01\x04text\x01s\0\x04\0\x0eclipboard-data\x03\0\x0d\
 \x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x0f\x04\0\x0bchange-spec\x03\0\x10\
 \x01r\x04\x04leftv\x03topv\x05widthv\x06heightv\x04\0\x12composition-bounds\x03\0\
-\x12\x01p\x03\x01p\x11\x01q\x06\x0bopen-window\x01\x01\0\x0drequest-image\x01\x14\
-\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x0achange-set\x01\x15\0\x12composi\
-tion-bounds\x01\x13\0\x04\0\x07command\x03\0\x16\x03\0,local:immediate-renderer-\
-example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10modifier-p\
-ressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\
-\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\
-\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\
-\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01m\x03\x05enter\x03ta\
-b\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09backspace\x06delete\x04\
+\x12\x01n\x01\x07new-tab\x04\0\x10open-url-options\x03\0\x14\x01p\x03\x01o\x02s\x15\
+\x01p\x11\x01q\x07\x0bopen-window\x01\x01\0\x0drequest-image\x01\x16\0\x06cursor\
+\x01\x0c\0\x09clipboard\x01\x0e\0\x08open-url\x01\x17\0\x0achange-set\x01\x18\0\x12\
+composition-bounds\x01\x13\0\x04\0\x07command\x03\0\x19\x03\0,local:immediate-re\
+nderer-example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10mod\
+ifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\
+\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\
+\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-butto\
+n\x03\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01m\x03\x05enter\x03\
+tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09backspace\x06delete\x04\
 \0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x0e\x01m\x04\x0a\
 arrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x10\x01\
 q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\0\x04navi\x01\x11\0\
@@ -17777,4 +17806,3 @@ d-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                       pub fn __link_custom_section_describing_imports() {
                                                                         wit_bindgen::rt::maybe_link_cabi_realloc();
                                                                       }
-                                                                      

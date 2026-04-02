@@ -14,6 +14,10 @@ impl RecoderInner {
 }
 
 impl example_core::recorder::EguiWidgetRecorder for RecoderInner{
+    fn setup_from(&mut self, _ctx: &egui::Context) {
+        // discard
+    }
+
     fn apply_effect(&mut self, _ctx: &egui::Context, _effect: &ExampleEffect) {
         // discard
     }
