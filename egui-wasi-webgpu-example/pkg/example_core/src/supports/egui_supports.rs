@@ -142,7 +142,7 @@ impl<'a> From<MouseButtonW<'a>> for PointerButton {
 }
 
 pub fn push_platform_output(_conetx: &egui::Context, output: egui::PlatformOutput, commands: &mut Vec<crate::ExampleCommand>) {
-    let egui::PlatformOutput{ commands: clipboard_cmds, cursor_icon, ime, events, .. } = output;
+    let egui::PlatformOutput{ commands: output_cmds, cursor_icon, ime, events, .. } = output;
 
     // if !events.is_empty() { println!("Platform output/platform-events/len: {}, mutable_text_under_cursor: {}", events.len(), edit_mutable); }
     for event in events {
@@ -166,13 +166,15 @@ pub fn push_platform_output(_conetx: &egui::Context, output: egui::PlatformOutpu
 
     commands.push(ExampleCommand::Cursor(cursor_icon));
 
-    for cmd in clipboard_cmds {
+    for cmd in output_cmds {
         match cmd {
             egui::OutputCommand::CopyText(text) => {
                 commands.push(ExampleCommand::Clipboard(ClipboardData::Text(text)));
             }
             egui::OutputCommand::CopyImage(_image) => todo!(),
-            egui::OutputCommand::OpenUrl(_url) => (),
+            egui::OutputCommand::OpenUrl(url) => {
+                commands.push(ExampleCommand::OpenUrl(url));
+            }
         }
     }
 }

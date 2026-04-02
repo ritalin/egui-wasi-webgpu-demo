@@ -4,7 +4,7 @@ import type {
   Command,
   CompositionBounds,
   CursorStyle,
-} from "pkg/interfaces/local-immediate-renderer-example-interaction";
+} from "./types/interaction/interfaces/local-immediate-renderer-example-interaction";
 import type { WasmEngine } from "./engine";
 import { DomEventBridge } from "./event-bridge";
 import { EditEventSource } from "./edit-event-source";
@@ -43,6 +43,16 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
         setTimeout(
           async () => await handleHostCommand(engine, route, { tag: "command://app/write-clipboard", data: cmd.val }),
         );
+        break;
+      }
+      case "open-url": {
+        setTimeout(async () => {
+          handleHostCommand(engine, route, {
+            tag: "command://app/write-clipboard",
+            data: { tag: "text", val: cmd.val[0] },
+          });
+          showToast(`Copied URL to the clipboard: ${cmd.val[0]}`);
+        }, 0);
         break;
       }
       case "change-set": {
@@ -149,4 +159,16 @@ function updateCompositionBounds(engine: WasmEngine, route: Route, bounds: Compo
   entry.eventSource.restoreEditMode();
   entry.eventSource.updateCompositionBounds(bounds);
   entry.events.push({ tag: "keep-focus" });
+}
+
+function showToast(message: string) {
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.textContent = message;
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add("show"));
+  setTimeout(() => {
+    el.classList.remove("show");
+    setTimeout(() => el.remove(), 250);
+  }, 2500);
 }
