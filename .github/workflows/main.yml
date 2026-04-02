@@ -39,6 +39,14 @@ jobs:
         with:
           toolchain: stable
           target: wasm32-wasip2
+      - name: Set up Wasm Component toolchain
+        run: |
+          cargo binstall wit-deps-cli
+          wit-deps --version
+      - name: Update wid dependencies
+        run: |
+          cd "$PWD/egui-wasi-webgpu-demo/pkg/wit"
+          wit-deps -m renderer/deps.toml -d renderer/deps -l renderer/deps.lock update
       - name: Set up NodeJS
         uses: actions/setup-node@v6
         with:
