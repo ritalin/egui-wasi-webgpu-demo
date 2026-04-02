@@ -11,10 +11,11 @@ pub struct EguiRecoder<'a, RecorderInner: EguiWidgetRecorder + 'a> {
     _phantom: PhantomData<&'a ()>,
 }
 impl<'a, RecorderInner: EguiWidgetRecorder + 'a> EguiRecoder<'a, RecorderInner> {
-    pub fn new(inner: RecorderInner) -> Self {
+    pub fn new(mut inner: RecorderInner) -> Self {
         let egui_context = egui::Context::default();
         egui_extras::install_image_loaders(&egui_context);
 
+        inner.setup_from(&egui_context);
         Self {
             egui_context,
             in_compositioning: false,
@@ -82,6 +83,7 @@ impl<'a, RecorderInner: EguiWidgetRecorder + 'a> recorder_core::Recorder for Egu
 }
 
 pub trait EguiWidgetRecorder {
+    fn setup_from(&mut self, ctx: &egui::Context);
     fn apply_effect(&mut self, ctx: &egui::Context, effect: &ExampleEffect);
     fn bump_events(&mut self, ctx: &egui::Context, input: &mut egui::RawInput);
     fn record(&mut self, ctx: &egui::Context, input: egui::RawInput, unhandled_event: &UnhandledEvent, commands: &mut Vec<ExampleCommand>) -> egui::FullOutput;
