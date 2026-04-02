@@ -41,7 +41,7 @@ jobs:
           target: wasm32-wasip2
       - name: Set up Wasm Component toolchain
         run: |
-          cargo binstall wit-deps-cli
+          cargo install wit-deps-cli
           wit-deps --version
       - name: Update wid dependencies
         run: |
