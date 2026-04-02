@@ -6,9 +6,9 @@ import type {
   Keys as KeyEventPayload,
   KeyOptions,
   ModifierOptions,
-} from "pkg/interfaces/local-immediate-renderer-types";
+  Event as DispatchEvent,
+} from "./types/event/interfaces/local-immediate-renderer-types";
 import type { Route } from "./command-handler";
-import type { Event as DispatchEvent } from "pkg/interfaces/local-immediate-renderer-example-render";
 import type { EditEventSource } from "./edit-event-source";
 
 export class DomEventBridge {
@@ -71,6 +71,26 @@ export class DomEventBridge {
         },
         {
           tag: "mouse-move",
+        },
+      ]);
+    });
+    eventSource.editHost.addEventListener("wheel", (ev) => {
+      ev.preventDefault();
+      const scaleFactor = window.devicePixelRatio;
+      const rect = eventSource.editHost.getBoundingClientRect();
+      callback([
+        makeModifierOptions(ev),
+        {
+          tag: "pointer",
+          val: { x: (ev.clientX - rect.left) * scaleFactor, y: (ev.clientY - rect.top) * scaleFactor },
+        },
+        {
+          tag: "mouse-wheel",
+          val: {
+            deltaX: ev.deltaX,
+            deltaY: ev.deltaY,
+            wheelUnit: makeWheelUnit(ev.deltaMode),
+          },
         },
       ]);
     });
@@ -291,5 +311,22 @@ function makeKeyEvent(ev: KeyboardEvent): KeyEventPayload | undefined {
       return { tag: "navi", val: "arrow-up" };
     default:
       return undefined;
+  }
+}
+
+function makeWheelUnit(deltaMode: number) {
+  switch (deltaMode) {
+    case WheelEvent.DOM_DELTA_PIXEL: {
+      return "logical-pixel";
+    }
+    case WheelEvent.DOM_DELTA_LINE: {
+      return "line";
+    }
+    case WheelEvent.DOM_DELTA_PAGE: {
+      return "page";
+    }
+    default: {
+      return "logical-pixel";
+    }
   }
 }

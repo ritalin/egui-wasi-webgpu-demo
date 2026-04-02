@@ -18,7 +18,7 @@ pub mod local {
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
       super::super::super::__link_custom_section_describing_imports;
-
+      
       use super::super::super::_rt;
       pub type Route = _rt::String;
       pub type Url = _rt::String;
@@ -355,7 +355,7 @@ pub mod wasi {
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
       super::super::super::__link_custom_section_describing_imports;
-
+      
       use super::super::super::_rt;
 
       #[derive(Debug)]
@@ -382,12 +382,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for Context{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:graphics-context/graphics-context@0.0.1")]
           unsafe extern "C" {
@@ -397,11 +397,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -427,12 +427,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for AbstractBuffer{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:graphics-context/graphics-context@0.0.1")]
           unsafe extern "C" {
@@ -442,11 +442,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       impl Context {
         #[allow(unused_unsafe, clippy::all)]
         #[allow(async_fn_in_trait)]
@@ -520,7 +520,7 @@ pub mod wasi {
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
       super::super::super::__link_custom_section_describing_imports;
-
+      
       use super::super::super::_rt;
       /// `pollable` represents a single I/O event which may be ready, or not.
 
@@ -548,12 +548,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for Pollable{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:io/poll@0.2.9")]
           unsafe extern "C" {
@@ -563,11 +563,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       impl Pollable {
         #[allow(unused_unsafe, clippy::all)]
         /// Return the readiness of a pollable. This function never blocks.
@@ -682,7 +682,7 @@ pub mod wasi {
       #[doc(hidden)]
       static __FORCE_SECTION_REF: fn() =
       super::super::super::__link_custom_section_describing_imports;
-
+      
       use super::super::super::_rt;
       pub type Pollable = super::super::super::wasi::io::poll::Pollable;
       pub type Context = super::super::super::wasi::graphics_context::graphics_context::Context;
@@ -712,12 +712,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuSupportedLimits{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -727,11 +727,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -757,12 +757,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuSupportedFeatures{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -772,11 +772,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -802,12 +802,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for WgslLanguageFeatures{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -817,11 +817,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -847,12 +847,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuAdapterInfo{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -862,11 +862,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -892,12 +892,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for Gpu{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -907,11 +907,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuPowerPreference {
@@ -946,7 +946,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[derive(Clone)]
       pub struct GpuRequestAdapterOptions {
         pub feature_level: Option<_rt::String>,
@@ -984,12 +984,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuAdapter{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -999,11 +999,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1029,12 +1029,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for RecordOptionGpuSize64{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1044,11 +1044,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuFeatureName {
@@ -1158,7 +1158,7 @@ pub mod wasi {
           }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1184,12 +1184,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuDevice{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1199,11 +1199,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1229,12 +1229,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuBuffer{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1244,11 +1244,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuBufferMapState {
@@ -1288,7 +1288,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       pub type GpuBufferUsageFlags = u32;
 
       #[derive(Debug)]
@@ -1315,12 +1315,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuBufferUsage{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1330,11 +1330,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       pub type GpuMapModeFlags = u32;
 
       #[derive(Debug)]
@@ -1361,12 +1361,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuMapMode{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1376,11 +1376,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1406,12 +1406,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuTexture{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1421,11 +1421,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuTextureDimension {
@@ -1465,7 +1465,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       pub type GpuTextureUsageFlags = u32;
 
       #[derive(Debug)]
@@ -1492,12 +1492,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuTextureUsage{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1507,11 +1507,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -1537,12 +1537,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuTextureView{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -1552,11 +1552,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuTextureViewDimension {
@@ -1611,7 +1611,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuTextureAspect {
@@ -1651,7 +1651,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuTextureFormat {
@@ -2151,7 +2151,7 @@ pub mod wasi {
           }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -2177,12 +2177,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuSampler{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2192,11 +2192,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuAddressMode {
@@ -2236,7 +2236,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuFilterMode {
@@ -2271,7 +2271,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuMipmapFilterMode {
@@ -2306,7 +2306,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCompareFunction {
@@ -2371,7 +2371,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[derive(Clone)]
       pub struct GpuSamplerDescriptor {
         pub address_mode_u: Option<GpuAddressMode>,
@@ -2416,12 +2416,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuBindGroupLayout{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2431,11 +2431,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       pub type GpuShaderStageFlags = u32;
 
       #[derive(Debug)]
@@ -2462,12 +2462,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuShaderStage{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2477,11 +2477,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuBufferBindingType {
@@ -2521,7 +2521,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuSamplerBindingType {
@@ -2561,7 +2561,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuSamplerBindingLayout {
@@ -2621,7 +2621,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuTextureBindingLayout {
@@ -2673,7 +2673,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuStorageTextureBindingLayout {
@@ -2711,12 +2711,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuBindGroup{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2726,11 +2726,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -2756,12 +2756,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuPipelineLayout{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2771,11 +2771,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       pub struct GpuPipelineLayoutDescriptor<'a,> {
         pub bind_group_layouts: _rt::Vec::<Option<&'a GpuBindGroupLayout>>,
         pub label: Option<_rt::String>,
@@ -2810,12 +2810,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuShaderModule{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2825,11 +2825,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCompilationMessageType {
@@ -2869,7 +2869,7 @@ pub mod wasi {
           }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -2895,12 +2895,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuCompilationMessage{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2910,11 +2910,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -2940,12 +2940,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuCompilationInfo{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -2955,11 +2955,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuPipelineErrorReason {
@@ -2994,7 +2994,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       pub enum GpuLayoutMode<'a,> {
         Specific(&'a GpuPipelineLayout),
         Auto,
@@ -3055,12 +3055,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for RecordGpuPipelineConstantValue{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3070,11 +3070,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       pub struct GpuProgrammableStage<'a,> {
         pub module: &'a GpuShaderModule,
         pub entry_point: Option<_rt::String>,
@@ -3111,12 +3111,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuComputePipeline{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3126,11 +3126,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       pub struct GpuComputePipelineDescriptor<'a,> {
         pub compute: GpuProgrammableStage<'a,>,
         pub layout: GpuLayoutMode<'a,>,
@@ -3166,12 +3166,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuRenderPipeline{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3181,11 +3181,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuPrimitiveTopology {
@@ -3235,7 +3235,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuFrontFace {
@@ -3270,7 +3270,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCullMode {
@@ -3310,7 +3310,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       pub type GpuColorWriteFlags = u32;
 
       #[derive(Debug)]
@@ -3337,12 +3337,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuColorWrite{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3352,11 +3352,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuBlendFactor {
@@ -3466,7 +3466,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuBlendOperation {
@@ -3516,7 +3516,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuBlendComponent {
@@ -3627,7 +3627,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuStencilFaceState {
@@ -3675,7 +3675,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuPrimitiveState {
@@ -3919,7 +3919,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuVertexStepMode {
@@ -3954,7 +3954,7 @@ pub mod wasi {
           }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -3980,12 +3980,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuCommandBuffer{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -3995,11 +3995,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[derive(Clone)]
       pub struct GpuCommandBufferDescriptor {
         pub label: Option<_rt::String>,
@@ -4034,12 +4034,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuCommandEncoder{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4049,11 +4049,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[derive(Clone)]
       pub struct GpuCommandEncoderDescriptor {
         pub label: Option<_rt::String>,
@@ -4088,12 +4088,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuComputePassEncoder{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4103,11 +4103,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4133,12 +4133,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuRenderPassEncoder{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4148,11 +4148,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuLoadOp {
@@ -4187,7 +4187,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuStoreOp {
@@ -4222,7 +4222,7 @@ pub mod wasi {
           }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4248,12 +4248,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuRenderBundle{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4263,11 +4263,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[derive(Clone)]
       pub struct GpuRenderBundleDescriptor {
         pub label: Option<_rt::String>,
@@ -4302,12 +4302,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuRenderBundleEncoder{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4317,11 +4317,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[derive(Clone)]
       pub struct GpuQueueDescriptor {
         pub label: Option<_rt::String>,
@@ -4367,12 +4367,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuQueue{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4382,11 +4382,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4412,12 +4412,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuQuerySet{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4427,11 +4427,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuQueryType {
@@ -4466,7 +4466,7 @@ pub mod wasi {
           }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4492,12 +4492,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuCanvasContext{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4507,11 +4507,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCanvasAlphaMode {
@@ -4546,7 +4546,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuCanvasToneMappingMode {
@@ -4581,7 +4581,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       #[repr(C)]
       #[derive(Clone, Copy)]
       pub struct GpuCanvasToneMapping {
@@ -4626,7 +4626,7 @@ pub mod wasi {
           }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4652,12 +4652,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuDeviceLostInfo{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4667,11 +4667,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4697,12 +4697,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuError{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4712,11 +4712,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       #[repr(u8)]
       #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
       pub enum GpuErrorFilter {
@@ -4756,7 +4756,7 @@ pub mod wasi {
           }
         }
       }
-
+      
 
       #[derive(Debug)]
       #[repr(transparent)]
@@ -4782,12 +4782,12 @@ pub mod wasi {
           _rt::Resource::handle(&self.handle)
         }
       }
-
+      
 
       unsafe impl _rt::WasmResource for GpuUncapturedErrorEvent{
         #[inline]
         unsafe fn drop(_handle: u32) {
-
+          
           #[cfg(target_arch = "wasm32")]
           #[link(wasm_import_module = "wasi:webgpu/webgpu@0.0.1")]
           unsafe extern "C" {
@@ -4797,11 +4797,11 @@ pub mod wasi {
 
           #[cfg(not(target_arch = "wasm32"))]
           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+          
           unsafe { drop(_handle as i32); }
         }
       }
-
+      
       pub type GpuBufferDynamicOffset = u32;
       pub type GpuStencilValue = u32;
       pub struct GpuRenderPassDepthStencilAttachment<'a,> {
@@ -5226,7 +5226,7 @@ pub mod wasi {
           }
         }
       }
-
+      
       pub struct GpuCanvasConfiguration<'a,> {
         pub device: &'a GpuDevice,
         pub format: GpuTextureFormat,
@@ -14796,7 +14796,7 @@ pub mod wasi {
                                                                                       #[doc(hidden)]
                                                                                       static __FORCE_SECTION_REF: fn() =
                                                                                       super::super::super::super::__link_custom_section_describing_imports;
-
+                                                                                      
                                                                                       use super::super::super::super::_rt;
                                                                                       pub type Command = super::super::super::super::local::immediate_renderer_example::interaction::Command;
                                                                                       pub type Effect = super::super::super::super::local::immediate_renderer_example::interaction::Effect;
@@ -14924,12 +14924,12 @@ pub mod wasi {
                                                                                           self.rep.cast()
                                                                                         }
                                                                                       }
-
+                                                                                      
 
                                                                                       unsafe impl _rt::WasmResource for EventChannel{
                                                                                         #[inline]
                                                                                         unsafe fn drop(_handle: u32) {
-
+                                                                                          
                                                                                           #[cfg(target_arch = "wasm32")]
                                                                                           #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                           unsafe extern "C" {
@@ -14939,11 +14939,11 @@ pub mod wasi {
 
                                                                                           #[cfg(not(target_arch = "wasm32"))]
                                                                                           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+                                                                                          
                                                                                           unsafe { drop(_handle as i32); }
                                                                                         }
                                                                                       }
-
+                                                                                      
 
                                                                                       #[derive(Debug)]
                                                                                       #[repr(transparent)]
@@ -15065,12 +15065,12 @@ pub mod wasi {
                                                                                           self.rep.cast()
                                                                                         }
                                                                                       }
-
+                                                                                      
 
                                                                                       unsafe impl _rt::WasmResource for CommandChannel{
                                                                                         #[inline]
                                                                                         unsafe fn drop(_handle: u32) {
-
+                                                                                          
                                                                                           #[cfg(target_arch = "wasm32")]
                                                                                           #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                           unsafe extern "C" {
@@ -15080,11 +15080,11 @@ pub mod wasi {
 
                                                                                           #[cfg(not(target_arch = "wasm32"))]
                                                                                           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+                                                                                          
                                                                                           unsafe { drop(_handle as i32); }
                                                                                         }
                                                                                       }
-
+                                                                                      
 
                                                                                       #[derive(Debug)]
                                                                                       #[repr(transparent)]
@@ -15206,12 +15206,12 @@ pub mod wasi {
                                                                                           self.rep.cast()
                                                                                         }
                                                                                       }
-
+                                                                                      
 
                                                                                       unsafe impl _rt::WasmResource for Dispatcher{
                                                                                         #[inline]
                                                                                         unsafe fn drop(_handle: u32) {
-
+                                                                                          
                                                                                           #[cfg(target_arch = "wasm32")]
                                                                                           #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                           unsafe extern "C" {
@@ -15221,26 +15221,26 @@ pub mod wasi {
 
                                                                                           #[cfg(not(target_arch = "wasm32"))]
                                                                                           unsafe extern "C" fn drop(_: i32, ) { unreachable!() }
-
+                                                                                          
                                                                                           unsafe { drop(_handle as i32); }
                                                                                         }
                                                                                       }
-
+                                                                                      
                                                                                       #[doc(hidden)]
                                                                                       #[allow(non_snake_case, unused_unsafe)]
                                                                                       pub unsafe fn _export_method_event_channel_post_cabi<T_: GuestEventChannel>(arg0: *mut u8,arg1: *mut u8,arg2: usize,) { unsafe {#[cfg(target_arch="wasm32")]
                                                                                       _rt::run_ctors_once();{
-                                                                                        let base42 = arg1;
-                                                                                        let len42 = arg2;
-                                                                                        let mut result42 = _rt::Vec::with_capacity(len42);
-                                                                                        for i in 0..len42 {
-                                                                                          let base = base42.add(i * (8+3*::core::mem::size_of::<*const u8>()));
-                                                                                          let e42 = {
+                                                                                        let base45 = arg1;
+                                                                                        let len45 = arg2;
+                                                                                        let mut result45 = _rt::Vec::with_capacity(len45);
+                                                                                        for i in 0..len45 {
+                                                                                          let base = base45.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                          let e45 = {
                                                                                             let l0 = i32::from(*base.add(0).cast::<u8>());
-                                                                                            use super::super::super::super::__with_name1::Event as V41;
-                                                                                            let v41 = match l0 {
+                                                                                            use super::super::super::super::__with_name1::Event as V44;
+                                                                                            let v44 = match l0 {
                                                                                               0 => {
-                                                                                                let e41 = {
+                                                                                                let e44 = {
                                                                                                   let l1 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                   let l2 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                   let l3 = i32::from(*base.add(2+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
@@ -15253,10 +15253,10 @@ pub mod wasi {
                                                                                                     super_key: super::super::super::super::__with_name1::ModifierPressed::empty() | super::super::super::super::__with_name1::ModifierPressed::from_bits_retain(((l4 as u8) << 0) as _),
                                                                                                   }
                                                                                                 };
-                                                                                                V41::Modifiers(e41)
+                                                                                                V44::Modifiers(e44)
                                                                                               }
                                                                                               1 => {
-                                                                                                let e41 = {
+                                                                                                let e44 = {
                                                                                                   let l5 = *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>();
                                                                                                   let l6 = *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
 
@@ -15265,136 +15265,150 @@ pub mod wasi {
                                                                                                     y: l6,
                                                                                                   }
                                                                                                 };
-                                                                                                V41::Pointer(e41)
+                                                                                                V44::Pointer(e44)
                                                                                               }
                                                                                               2 => {
-                                                                                                let e41 = {
+                                                                                                let e44 = {
                                                                                                   let l7 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
 
                                                                                                   super::super::super::super::__with_name1::MouseButton::_lift(l7 as u8)
                                                                                                 };
-                                                                                                V41::MouseDown(e41)
+                                                                                                V44::MouseDown(e44)
                                                                                               }
                                                                                               3 => {
-                                                                                                let e41 = {
+                                                                                                let e44 = {
                                                                                                   let l8 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
 
                                                                                                   super::super::super::super::__with_name1::MouseButton::_lift(l8 as u8)
                                                                                                 };
-                                                                                                V41::MouseUp(e41)
+                                                                                                V44::MouseUp(e44)
                                                                                               }
                                                                                               4 => {
-                                                                                                V41::MouseMove
+                                                                                                V44::MouseMove
                                                                                               }
                                                                                               5 => {
-                                                                                                let e41 = {
-                                                                                                  let l9 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::Keys as V14;
-                                                                                                  let v14 = match l9 {
-                                                                                                    0 => {
-                                                                                                      let e14 = {
-                                                                                                        let l10 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                let e44 = {
+                                                                                                  let l9 = *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                  let l10 = *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                  let l11 = i32::from(*base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::WhitespaceKey::_lift(l10 as u8)
-                                                                                                      };
-                                                                                                      V14::Whitespace(e14)
-                                                                                                    }
-                                                                                                    1 => {
-                                                                                                      let e14 = {
-                                                                                                        let l11 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                        super::super::super::super::__with_name1::EditKey::_lift(l11 as u8)
-                                                                                                      };
-                                                                                                      V14::Edit(e14)
-                                                                                                    }
-                                                                                                    2 => {
-                                                                                                      let e14 = {
-                                                                                                        let l12 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                        super::super::super::super::__with_name1::UiKey::_lift(l12 as u8)
-                                                                                                      };
-                                                                                                      V14::Ui(e14)
-                                                                                                    }
-                                                                                                    n => {
-                                                                                                      debug_assert_eq!(n, 3, "invalid enum discriminant");
-                                                                                                      let e14 = {
-                                                                                                        let l13 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                        super::super::super::super::__with_name1::NaviKey::_lift(l13 as u8)
-                                                                                                      };
-                                                                                                      V14::Navi(e14)
-                                                                                                    }
-                                                                                                  };
-                                                                                                  let l15 = i32::from(*base.add(2+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                  (v14, super::super::super::super::__with_name1::KeyOptions::empty() | super::super::super::super::__with_name1::KeyOptions::from_bits_retain(((l15 as u8) << 0) as _))
+                                                                                                  super::super::super::super::__with_name1::MouseWheel{
+                                                                                                    delta_x: l9,
+                                                                                                    delta_y: l10,
+                                                                                                    wheel_unit: super::super::super::super::__with_name1::MouseWheelUnit::_lift(l11 as u8),
+                                                                                                  }
                                                                                                 };
-                                                                                                V41::KeyDown(e41)
+                                                                                                V44::MouseWheel(e44)
                                                                                               }
                                                                                               6 => {
-                                                                                                let e41 = {
-                                                                                                  let l16 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::Keys as V21;
-                                                                                                  let v21 = match l16 {
+                                                                                                let e44 = {
+                                                                                                  let l12 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::Keys as V17;
+                                                                                                  let v17 = match l12 {
                                                                                                     0 => {
-                                                                                                      let e21 = {
-                                                                                                        let l17 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e17 = {
+                                                                                                        let l13 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::WhitespaceKey::_lift(l17 as u8)
+                                                                                                        super::super::super::super::__with_name1::WhitespaceKey::_lift(l13 as u8)
                                                                                                       };
-                                                                                                      V21::Whitespace(e21)
+                                                                                                      V17::Whitespace(e17)
                                                                                                     }
                                                                                                     1 => {
-                                                                                                      let e21 = {
-                                                                                                        let l18 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e17 = {
+                                                                                                        let l14 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::EditKey::_lift(l18 as u8)
+                                                                                                        super::super::super::super::__with_name1::EditKey::_lift(l14 as u8)
                                                                                                       };
-                                                                                                      V21::Edit(e21)
+                                                                                                      V17::Edit(e17)
                                                                                                     }
                                                                                                     2 => {
-                                                                                                      let e21 = {
-                                                                                                        let l19 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e17 = {
+                                                                                                        let l15 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::UiKey::_lift(l19 as u8)
+                                                                                                        super::super::super::super::__with_name1::UiKey::_lift(l15 as u8)
                                                                                                       };
-                                                                                                      V21::Ui(e21)
+                                                                                                      V17::Ui(e17)
                                                                                                     }
                                                                                                     n => {
                                                                                                       debug_assert_eq!(n, 3, "invalid enum discriminant");
-                                                                                                      let e21 = {
+                                                                                                      let e17 = {
+                                                                                                        let l16 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                        super::super::super::super::__with_name1::NaviKey::_lift(l16 as u8)
+                                                                                                      };
+                                                                                                      V17::Navi(e17)
+                                                                                                    }
+                                                                                                  };
+                                                                                                  let l18 = i32::from(*base.add(2+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                  (v17, super::super::super::super::__with_name1::KeyOptions::empty() | super::super::super::super::__with_name1::KeyOptions::from_bits_retain(((l18 as u8) << 0) as _))
+                                                                                                };
+                                                                                                V44::KeyDown(e44)
+                                                                                              }
+                                                                                              7 => {
+                                                                                                let e44 = {
+                                                                                                  let l19 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::Keys as V24;
+                                                                                                  let v24 = match l19 {
+                                                                                                    0 => {
+                                                                                                      let e24 = {
                                                                                                         let l20 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::NaviKey::_lift(l20 as u8)
+                                                                                                        super::super::super::super::__with_name1::WhitespaceKey::_lift(l20 as u8)
                                                                                                       };
-                                                                                                      V21::Navi(e21)
+                                                                                                      V24::Whitespace(e24)
+                                                                                                    }
+                                                                                                    1 => {
+                                                                                                      let e24 = {
+                                                                                                        let l21 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                        super::super::super::super::__with_name1::EditKey::_lift(l21 as u8)
+                                                                                                      };
+                                                                                                      V24::Edit(e24)
+                                                                                                    }
+                                                                                                    2 => {
+                                                                                                      let e24 = {
+                                                                                                        let l22 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                        super::super::super::super::__with_name1::UiKey::_lift(l22 as u8)
+                                                                                                      };
+                                                                                                      V24::Ui(e24)
+                                                                                                    }
+                                                                                                    n => {
+                                                                                                      debug_assert_eq!(n, 3, "invalid enum discriminant");
+                                                                                                      let e24 = {
+                                                                                                        let l23 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                        super::super::super::super::__with_name1::NaviKey::_lift(l23 as u8)
+                                                                                                      };
+                                                                                                      V24::Navi(e24)
                                                                                                     }
                                                                                                   };
 
-                                                                                                  v21
+                                                                                                  v24
                                                                                                 };
-                                                                                                V41::KeyUp(e41)
+                                                                                                V44::KeyUp(e44)
                                                                                               }
-                                                                                              7 => {
-                                                                                                let e41 = {
-                                                                                                  let l22 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::CompositionBoundsReq as V26;
-                                                                                                  let v26 = match l22 {
+                                                                                              8 => {
+                                                                                                let e44 = {
+                                                                                                  let l25 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::CompositionBoundsReq as V29;
+                                                                                                  let v29 = match l25 {
                                                                                                     n => {
                                                                                                       debug_assert_eq!(n, 0, "invalid enum discriminant");
-                                                                                                      let e26 = {
-                                                                                                        let l23 = i32::from(*base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e29 = {
+                                                                                                        let l26 = i32::from(*base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        match l23 {
+                                                                                                        match l26 {
                                                                                                           0 => None,
                                                                                                           1 => {
                                                                                                             let e = {
-                                                                                                              let l24 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
-                                                                                                              let l25 = *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                              let l27 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                              let l28 = *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
 
                                                                                                               super::super::super::super::__with_name1::CompositionRange{
-                                                                                                                offset: l24 as u32,
-                                                                                                                len: l25 as u32,
+                                                                                                                offset: l27 as u32,
+                                                                                                                len: l28 as u32,
                                                                                                               }
                                                                                                             };
                                                                                                             Some(e)
@@ -15402,48 +15416,36 @@ pub mod wasi {
                                                                                                           _ => _rt::invalid_enum_discriminant(),
                                                                                                         }
                                                                                                       };
-                                                                                                      V26::CharacterBounds(e26)
+                                                                                                      V29::CharacterBounds(e29)
                                                                                                     }
                                                                                                   };
 
-                                                                                                  v26
+                                                                                                  v29
                                                                                                 };
-                                                                                                V41::RequestCompositionBounds(e41)
+                                                                                                V44::RequestCompositionBounds(e44)
                                                                                               }
-                                                                                              8 => {
-                                                                                                let e41 = {
-                                                                                                  let l27 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::CompositionState as V36;
-                                                                                                  let v36 = match l27 {
+                                                                                              9 => {
+                                                                                                let e44 = {
+                                                                                                  let l30 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::CompositionState as V39;
+                                                                                                  let v39 = match l30 {
                                                                                                     0 => {
-                                                                                                      V36::Start
+                                                                                                      V39::Start
                                                                                                     }
                                                                                                     1 => {
-                                                                                                      let e36 = {
-                                                                                                        let l28 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<i32>();
-                                                                                                        let l29 = *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                      let e39 = {
+                                                                                                        let l31 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                        let l32 = *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<i32>();
 
                                                                                                         super::super::super::super::__with_name1::CompositionRange{
-                                                                                                          offset: l28 as u32,
-                                                                                                          len: l29 as u32,
+                                                                                                          offset: l31 as u32,
+                                                                                                          len: l32 as u32,
                                                                                                         }
                                                                                                       };
-                                                                                                      V36::SelectionRange(e36)
+                                                                                                      V39::SelectionRange(e39)
                                                                                                     }
                                                                                                     2 => {
-                                                                                                      let e36 = {
-                                                                                                        let l30 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                        let l31 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                        let len32 = l31;
-                                                                                                        let bytes32 = _rt::Vec::from_raw_parts(l30.cast(), len32, len32);
-
-                                                                                                        _rt::string_lift(bytes32)
-                                                                                                      };
-                                                                                                      V36::PreEdit(e36)
-                                                                                                    }
-                                                                                                    n => {
-                                                                                                      debug_assert_eq!(n, 3, "invalid enum discriminant");
-                                                                                                      let e36 = {
+                                                                                                      let e39 = {
                                                                                                         let l33 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                                         let l34 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                                         let len35 = l34;
@@ -15451,54 +15453,66 @@ pub mod wasi {
 
                                                                                                         _rt::string_lift(bytes35)
                                                                                                       };
-                                                                                                      V36::Commit(e36)
+                                                                                                      V39::PreEdit(e39)
+                                                                                                    }
+                                                                                                    n => {
+                                                                                                      debug_assert_eq!(n, 3, "invalid enum discriminant");
+                                                                                                      let e39 = {
+                                                                                                        let l36 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                        let l37 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                        let len38 = l37;
+                                                                                                        let bytes38 = _rt::Vec::from_raw_parts(l36.cast(), len38, len38);
+
+                                                                                                        _rt::string_lift(bytes38)
+                                                                                                      };
+                                                                                                      V39::Commit(e39)
                                                                                                     }
                                                                                                   };
 
-                                                                                                  v36
+                                                                                                  v39
                                                                                                 };
-                                                                                                V41::UpdateCompositionState(e41)
-                                                                                              }
-                                                                                              9 => {
-                                                                                                let e41 = {
-                                                                                                  let l37 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                  super::super::super::super::__with_name1::HistoryOps::_lift(l37 as u8)
-                                                                                                };
-                                                                                                V41::History(e41)
+                                                                                                V44::UpdateCompositionState(e44)
                                                                                               }
                                                                                               10 => {
-                                                                                                V41::Cut
+                                                                                                let e44 = {
+                                                                                                  let l40 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                  super::super::super::super::__with_name1::HistoryOps::_lift(l40 as u8)
+                                                                                                };
+                                                                                                V44::History(e44)
                                                                                               }
                                                                                               11 => {
-                                                                                                V41::Copy
+                                                                                                V44::Cut
                                                                                               }
                                                                                               12 => {
-                                                                                                let e41 = {
-                                                                                                  let l38 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                  let l39 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                  let len40 = l39;
-                                                                                                  let bytes40 = _rt::Vec::from_raw_parts(l38.cast(), len40, len40);
-
-                                                                                                  _rt::string_lift(bytes40)
-                                                                                                };
-                                                                                                V41::Paste(e41)
+                                                                                                V44::Copy
                                                                                               }
                                                                                               13 => {
-                                                                                                V41::Activate
+                                                                                                let e44 = {
+                                                                                                  let l41 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                  let l42 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                  let len43 = l42;
+                                                                                                  let bytes43 = _rt::Vec::from_raw_parts(l41.cast(), len43, len43);
+
+                                                                                                  _rt::string_lift(bytes43)
+                                                                                                };
+                                                                                                V44::Paste(e44)
+                                                                                              }
+                                                                                              14 => {
+                                                                                                V44::Activate
                                                                                               }
                                                                                               n => {
-                                                                                                debug_assert_eq!(n, 14, "invalid enum discriminant");
-                                                                                                V41::KeepFocus
+                                                                                                debug_assert_eq!(n, 15, "invalid enum discriminant");
+                                                                                                V44::KeepFocus
                                                                                               }
                                                                                             };
 
-                                                                                            v41
+                                                                                            v44
                                                                                           };
-                                                                                          result42.push(e42);
+                                                                                          result45.push(e45);
                                                                                         }
-                                                                                        _rt::cabi_dealloc(base42, len42 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                                        T_::post(EventChannelBorrow::lift(arg0 as u32 as usize).get(), result42)
+                                                                                        _rt::cabi_dealloc(base45, len45 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                        T_::post(EventChannelBorrow::lift(arg0 as u32 as usize).get(), result45)
                                                                                       };
                                                                                     } }
                                                                                     #[doc(hidden)]
@@ -15588,20 +15602,20 @@ pub mod wasi {
                                                                               };
                                                                               let ptr1 = (&raw mut _RET_AREA.0).cast::<u8>();
                                                                               let (t2_0, t2_1, ) = result0;
-                                                                              let vec23 = t2_0;
-                                                                              let len23 = vec23.len();
-                                                                              let layout23 = _rt::alloc::Layout::from_size_align(vec23.len() * (8+4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                              let (result23, _cleanup23) = wit_bindgen::rt::Cleanup::new(layout23);if let Some(cleanup) = _cleanup23 { cleanup.forget(); }
-                                                                              for (i, e) in vec23.into_iter().enumerate() {
-                                                                                let base = result23.add(i * (8+4*::core::mem::size_of::<*const u8>()));
+                                                                              let vec24 = t2_0;
+                                                                              let len24 = vec24.len();
+                                                                              let layout24 = _rt::alloc::Layout::from_size_align(vec24.len() * (8+4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                              let (result24, _cleanup24) = wit_bindgen::rt::Cleanup::new(layout24);if let Some(cleanup) = _cleanup24 { cleanup.forget(); }
+                                                                              for (i, e) in vec24.into_iter().enumerate() {
+                                                                                let base = result24.add(i * (8+4*::core::mem::size_of::<*const u8>()));
                                                                                 {
-                                                                                  use super::super::super::super::__with_name1::UnhandleEvent as V22;
+                                                                                  use super::super::super::super::__with_name1::UnhandleEvent as V23;
                                                                                   match e {
-                                                                                    V22::Event(e) => {
+                                                                                    V23::Event(e) => {
                                                                                       *base.add(0).cast::<u8>() = (0i32) as u8;
-                                                                                      use super::super::super::super::__with_name1::Event as V20;
+                                                                                      use super::super::super::super::__with_name1::Event as V21;
                                                                                       match e {
-                                                                                        V20::Modifiers(e) => {
+                                                                                        V21::Modifiers(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
                                                                                           let super::super::super::super::__with_name1::ModifierOptions{ ctrl:ctrl3, shift:shift3, alt:alt3, super_key:super_key3, } = e;
                                                                                           let flags4 = ctrl3;
@@ -15613,84 +15627,91 @@ pub mod wasi {
                                                                                           let flags7 = super_key3;
                                                                                           *base.add(3+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags7.bits() >> 0) as i32) as u8;
                                                                                         },
-                                                                                        V20::Pointer(e) => {
+                                                                                        V21::Pointer(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
                                                                                           let super::super::super::super::__with_name1::Location{ x:x8, y:y8, } = e;
                                                                                           *base.add(2*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(x8);
                                                                                           *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(y8);
                                                                                         },
-                                                                                        V20::MouseDown(e) => {
+                                                                                        V21::MouseDown(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
                                                                                           *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                         },
-                                                                                        V20::MouseUp(e) => {
+                                                                                        V21::MouseUp(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
                                                                                           *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                         },
-                                                                                        V20::MouseMove=> {
+                                                                                        V21::MouseMove=> {
                                                                                           {
                                                                                             *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (4i32) as u8;
                                                                                           }
                                                                                         }
-                                                                                        V20::KeyDown(e) => {
+                                                                                        V21::MouseWheel(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (5i32) as u8;
-                                                                                          let (t9_0, t9_1, ) = e;
-                                                                                          use super::super::super::super::__with_name1::Keys as V10;
-                                                                                          match t9_0 {
-                                                                                            V10::Whitespace(e) => {
-                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
-                                                                                              *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
-                                                                                            },
-                                                                                            V10::Edit(e) => {
-                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
-                                                                                              *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
-                                                                                            },
-                                                                                            V10::Ui(e) => {
-                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
-                                                                                              *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
-                                                                                            },
-                                                                                            V10::Navi(e) => {
-                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
-                                                                                              *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
-                                                                                            },
-                                                                                          }
-                                                                                          let flags11 = t9_1;
-                                                                                          *base.add(2+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags11.bits() >> 0) as i32) as u8;
+                                                                                          let super::super::super::super::__with_name1::MouseWheel{ delta_x:delta_x9, delta_y:delta_y9, wheel_unit:wheel_unit9, } = e;
+                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(delta_x9);
+                                                                                          *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(delta_y9);
+                                                                                          *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (wheel_unit9.clone() as i32) as u8;
                                                                                         },
-                                                                                        V20::KeyUp(e) => {
+                                                                                        V21::KeyDown(e) => {
                                                                                           *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (6i32) as u8;
-                                                                                          use super::super::super::super::__with_name1::Keys as V12;
-                                                                                          match e {
-                                                                                            V12::Whitespace(e) => {
+                                                                                          let (t10_0, t10_1, ) = e;
+                                                                                          use super::super::super::super::__with_name1::Keys as V11;
+                                                                                          match t10_0 {
+                                                                                            V11::Whitespace(e) => {
                                                                                               *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
                                                                                               *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                             },
-                                                                                            V12::Edit(e) => {
+                                                                                            V11::Edit(e) => {
                                                                                               *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
                                                                                               *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                             },
-                                                                                            V12::Ui(e) => {
+                                                                                            V11::Ui(e) => {
                                                                                               *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
                                                                                               *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                             },
-                                                                                            V12::Navi(e) => {
+                                                                                            V11::Navi(e) => {
+                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
+                                                                                              *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
+                                                                                            },
+                                                                                          }
+                                                                                          let flags12 = t10_1;
+                                                                                          *base.add(2+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags12.bits() >> 0) as i32) as u8;
+                                                                                        },
+                                                                                        V21::KeyUp(e) => {
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (7i32) as u8;
+                                                                                          use super::super::super::super::__with_name1::Keys as V13;
+                                                                                          match e {
+                                                                                            V13::Whitespace(e) => {
+                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
+                                                                                              *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
+                                                                                            },
+                                                                                            V13::Edit(e) => {
+                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
+                                                                                              *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
+                                                                                            },
+                                                                                            V13::Ui(e) => {
+                                                                                              *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
+                                                                                              *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
+                                                                                            },
+                                                                                            V13::Navi(e) => {
                                                                                               *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
                                                                                               *base.add(1+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                             },
                                                                                           }
                                                                                         },
-                                                                                        V20::RequestCompositionBounds(e) => {
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (7i32) as u8;
-                                                                                          use super::super::super::super::__with_name1::CompositionBoundsReq as V14;
+                                                                                        V21::RequestCompositionBounds(e) => {
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (8i32) as u8;
+                                                                                          use super::super::super::super::__with_name1::CompositionBoundsReq as V15;
                                                                                           match e {
-                                                                                            V14::CharacterBounds(e) => {
+                                                                                            V15::CharacterBounds(e) => {
                                                                                               *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
                                                                                               match e {
                                                                                                 Some(e) => {
                                                                                                   *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
-                                                                                                  let super::super::super::super::__with_name1::CompositionRange{ offset:offset13, len:len13, } = e;
-                                                                                                  *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(offset13);
-                                                                                                  *base.add(12+2*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(len13);
+                                                                                                  let super::super::super::super::__with_name1::CompositionRange{ offset:offset14, len:len14, } = e;
+                                                                                                  *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(offset14);
+                                                                                                  *base.add(12+2*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(len14);
                                                                                                 },
                                                                                                 None => {
                                                                                                   {
@@ -15700,32 +15721,23 @@ pub mod wasi {
                                                                                               };},
                                                                                             }
                                                                                           },
-                                                                                          V20::UpdateCompositionState(e) => {
-                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (8i32) as u8;
-                                                                                            use super::super::super::super::__with_name1::CompositionState as V18;
+                                                                                          V21::UpdateCompositionState(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (9i32) as u8;
+                                                                                            use super::super::super::super::__with_name1::CompositionState as V19;
                                                                                             match e {
-                                                                                              V18::Start=> {
+                                                                                              V19::Start=> {
                                                                                                 {
                                                                                                   *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
                                                                                                 }
                                                                                               }
-                                                                                              V18::SelectionRange(e) => {
+                                                                                              V19::SelectionRange(e) => {
                                                                                                 *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
-                                                                                                let super::super::super::super::__with_name1::CompositionRange{ offset:offset15, len:len15, } = e;
-                                                                                                *base.add(3*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(offset15);
-                                                                                                *base.add(4+3*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(len15);
+                                                                                                let super::super::super::super::__with_name1::CompositionRange{ offset:offset16, len:len16, } = e;
+                                                                                                *base.add(3*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(offset16);
+                                                                                                *base.add(4+3*::core::mem::size_of::<*const u8>()).cast::<i32>() = _rt::as_i32(len16);
                                                                                               },
-                                                                                              V18::PreEdit(e) => {
+                                                                                              V19::PreEdit(e) => {
                                                                                                 *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
-                                                                                                let vec16 = (e.into_bytes()).into_boxed_slice();
-                                                                                                let ptr16 = vec16.as_ptr().cast::<u8>();
-                                                                                                let len16 = vec16.len();
-                                                                                                ::core::mem::forget(vec16);
-                                                                                                *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>() = len16;
-                                                                                                *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr16.cast_mut();
-                                                                                              },
-                                                                                              V18::Commit(e) => {
-                                                                                                *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
                                                                                                 let vec17 = (e.into_bytes()).into_boxed_slice();
                                                                                                 let ptr17 = vec17.as_ptr().cast::<u8>();
                                                                                                 let len17 = vec17.len();
@@ -15733,147 +15745,156 @@ pub mod wasi {
                                                                                                 *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>() = len17;
                                                                                                 *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr17.cast_mut();
                                                                                               },
+                                                                                              V19::Commit(e) => {
+                                                                                                *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
+                                                                                                let vec18 = (e.into_bytes()).into_boxed_slice();
+                                                                                                let ptr18 = vec18.as_ptr().cast::<u8>();
+                                                                                                let len18 = vec18.len();
+                                                                                                ::core::mem::forget(vec18);
+                                                                                                *base.add(4*::core::mem::size_of::<*const u8>()).cast::<usize>() = len18;
+                                                                                                *base.add(3*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr18.cast_mut();
+                                                                                              },
                                                                                             }
                                                                                           },
-                                                                                          V20::History(e) => {
-                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (9i32) as u8;
+                                                                                          V21::History(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (10i32) as u8;
                                                                                             *base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                           },
-                                                                                          V20::Cut=> {
-                                                                                            {
-                                                                                              *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (10i32) as u8;
-                                                                                            }
-                                                                                          }
-                                                                                          V20::Copy=> {
+                                                                                          V21::Cut=> {
                                                                                             {
                                                                                               *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (11i32) as u8;
                                                                                             }
                                                                                           }
-                                                                                          V20::Paste(e) => {
-                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (12i32) as u8;
-                                                                                            let vec19 = (e.into_bytes()).into_boxed_slice();
-                                                                                            let ptr19 = vec19.as_ptr().cast::<u8>();
-                                                                                            let len19 = vec19.len();
-                                                                                            ::core::mem::forget(vec19);
-                                                                                            *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len19;
-                                                                                            *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr19.cast_mut();
-                                                                                          },
-                                                                                          V20::Activate=> {
+                                                                                          V21::Copy=> {
                                                                                             {
-                                                                                              *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (13i32) as u8;
+                                                                                              *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (12i32) as u8;
                                                                                             }
                                                                                           }
-                                                                                          V20::KeepFocus=> {
+                                                                                          V21::Paste(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (13i32) as u8;
+                                                                                            let vec20 = (e.into_bytes()).into_boxed_slice();
+                                                                                            let ptr20 = vec20.as_ptr().cast::<u8>();
+                                                                                            let len20 = vec20.len();
+                                                                                            ::core::mem::forget(vec20);
+                                                                                            *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len20;
+                                                                                            *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr20.cast_mut();
+                                                                                          },
+                                                                                          V21::Activate=> {
                                                                                             {
                                                                                               *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (14i32) as u8;
                                                                                             }
                                                                                           }
+                                                                                          V21::KeepFocus=> {
+                                                                                            {
+                                                                                              *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (15i32) as u8;
+                                                                                            }
+                                                                                          }
                                                                                         }
                                                                                       },
-                                                                                      V22::OpenWindow(e) => {
+                                                                                      V23::OpenWindow(e) => {
                                                                                         *base.add(0).cast::<u8>() = (1i32) as u8;
-                                                                                        let vec21 = (e.into_bytes()).into_boxed_slice();
-                                                                                        let ptr21 = vec21.as_ptr().cast::<u8>();
-                                                                                        let len21 = vec21.len();
-                                                                                        ::core::mem::forget(vec21);
-                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len21;
-                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr21.cast_mut();
+                                                                                        let vec22 = (e.into_bytes()).into_boxed_slice();
+                                                                                        let ptr22 = vec22.as_ptr().cast::<u8>();
+                                                                                        let len22 = vec22.len();
+                                                                                        ::core::mem::forget(vec22);
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len22;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr22.cast_mut();
                                                                                       },
                                                                                     }
                                                                                   }
                                                                                 }
-                                                                                *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len23;
-                                                                                *ptr1.add(0).cast::<*mut u8>() = result23;
-                                                                                let vec37 = t2_1;
-                                                                                let len37 = vec37.len();
-                                                                                let layout37 = _rt::alloc::Layout::from_size_align(vec37.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                let (result37, _cleanup37) = wit_bindgen::rt::Cleanup::new(layout37);if let Some(cleanup) = _cleanup37 { cleanup.forget(); }
-                                                                                for (i, e) in vec37.into_iter().enumerate() {
-                                                                                  let base = result37.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len24;
+                                                                                *ptr1.add(0).cast::<*mut u8>() = result24;
+                                                                                let vec38 = t2_1;
+                                                                                let len38 = vec38.len();
+                                                                                let layout38 = _rt::alloc::Layout::from_size_align(vec38.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                let (result38, _cleanup38) = wit_bindgen::rt::Cleanup::new(layout38);if let Some(cleanup) = _cleanup38 { cleanup.forget(); }
+                                                                                for (i, e) in vec38.into_iter().enumerate() {
+                                                                                  let base = result38.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                   {
-                                                                                    use super::super::super::super::local::immediate_renderer_example::interaction::Command as V36;
+                                                                                    use super::super::super::super::local::immediate_renderer_example::interaction::Command as V37;
                                                                                     match e {
-                                                                                      V36::OpenWindow(e) => {
+                                                                                      V37::OpenWindow(e) => {
                                                                                         *base.add(0).cast::<u8>() = (0i32) as u8;
-                                                                                        let vec24 = (e.into_bytes()).into_boxed_slice();
-                                                                                        let ptr24 = vec24.as_ptr().cast::<u8>();
-                                                                                        let len24 = vec24.len();
-                                                                                        ::core::mem::forget(vec24);
-                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len24;
-                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr24.cast_mut();
+                                                                                        let vec25 = (e.into_bytes()).into_boxed_slice();
+                                                                                        let ptr25 = vec25.as_ptr().cast::<u8>();
+                                                                                        let len25 = vec25.len();
+                                                                                        ::core::mem::forget(vec25);
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len25;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr25.cast_mut();
                                                                                       },
-                                                                                      V36::RequestImage(e) => {
+                                                                                      V37::RequestImage(e) => {
                                                                                         *base.add(0).cast::<u8>() = (1i32) as u8;
-                                                                                        let vec26 = e;
-                                                                                        let len26 = vec26.len();
-                                                                                        let layout26 = _rt::alloc::Layout::from_size_align(vec26.len() * (2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                        let (result26, _cleanup26) = wit_bindgen::rt::Cleanup::new(layout26);if let Some(cleanup) = _cleanup26 { cleanup.forget(); }
-                                                                                        for (i, e) in vec26.into_iter().enumerate() {
-                                                                                          let base = result26.add(i * (2*::core::mem::size_of::<*const u8>()));
+                                                                                        let vec27 = e;
+                                                                                        let len27 = vec27.len();
+                                                                                        let layout27 = _rt::alloc::Layout::from_size_align(vec27.len() * (2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                        let (result27, _cleanup27) = wit_bindgen::rt::Cleanup::new(layout27);if let Some(cleanup) = _cleanup27 { cleanup.forget(); }
+                                                                                        for (i, e) in vec27.into_iter().enumerate() {
+                                                                                          let base = result27.add(i * (2*::core::mem::size_of::<*const u8>()));
                                                                                           {
-                                                                                            let vec25 = (e.into_bytes()).into_boxed_slice();
-                                                                                            let ptr25 = vec25.as_ptr().cast::<u8>();
-                                                                                            let len25 = vec25.len();
-                                                                                            ::core::mem::forget(vec25);
-                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len25;
-                                                                                            *base.add(0).cast::<*mut u8>() = ptr25.cast_mut();
+                                                                                            let vec26 = (e.into_bytes()).into_boxed_slice();
+                                                                                            let ptr26 = vec26.as_ptr().cast::<u8>();
+                                                                                            let len26 = vec26.len();
+                                                                                            ::core::mem::forget(vec26);
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len26;
+                                                                                            *base.add(0).cast::<*mut u8>() = ptr26.cast_mut();
                                                                                           }
                                                                                         }
-                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len26;
-                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result26;
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len27;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result27;
                                                                                       },
-                                                                                      V36::Cursor(e) => {
+                                                                                      V37::Cursor(e) => {
                                                                                         *base.add(0).cast::<u8>() = (2i32) as u8;
                                                                                         *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                       },
-                                                                                      V36::Clipboard(e) => {
+                                                                                      V37::Clipboard(e) => {
                                                                                         *base.add(0).cast::<u8>() = (3i32) as u8;
-                                                                                        use super::super::super::super::local::immediate_renderer_example::interaction::ClipboardData as V28;
+                                                                                        use super::super::super::super::local::immediate_renderer_example::interaction::ClipboardData as V29;
                                                                                         match e {
-                                                                                          V28::Text(e) => {
+                                                                                          V29::Text(e) => {
                                                                                             *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
-                                                                                            let vec27 = (e.into_bytes()).into_boxed_slice();
-                                                                                            let ptr27 = vec27.as_ptr().cast::<u8>();
-                                                                                            let len27 = vec27.len();
-                                                                                            ::core::mem::forget(vec27);
-                                                                                            *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len27;
-                                                                                            *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr27.cast_mut();
+                                                                                            let vec28 = (e.into_bytes()).into_boxed_slice();
+                                                                                            let ptr28 = vec28.as_ptr().cast::<u8>();
+                                                                                            let len28 = vec28.len();
+                                                                                            ::core::mem::forget(vec28);
+                                                                                            *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len28;
+                                                                                            *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr28.cast_mut();
                                                                                           },
                                                                                         }
                                                                                       },
-                                                                                      V36::OpenUrl(e) => {
+                                                                                      V37::OpenUrl(e) => {
                                                                                         *base.add(0).cast::<u8>() = (4i32) as u8;
-                                                                                        let (t29_0, t29_1, ) = e;
-                                                                                        let vec30 = (t29_0.into_bytes()).into_boxed_slice();
-                                                                                        let ptr30 = vec30.as_ptr().cast::<u8>();
-                                                                                        let len30 = vec30.len();
-                                                                                        ::core::mem::forget(vec30);
-                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len30;
-                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr30.cast_mut();
-                                                                                        let flags31 = t29_1;
-                                                                                        *base.add(3*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags31.bits() >> 0) as i32) as u8;
+                                                                                        let (t30_0, t30_1, ) = e;
+                                                                                        let vec31 = (t30_0.into_bytes()).into_boxed_slice();
+                                                                                        let ptr31 = vec31.as_ptr().cast::<u8>();
+                                                                                        let len31 = vec31.len();
+                                                                                        ::core::mem::forget(vec31);
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len31;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr31.cast_mut();
+                                                                                        let flags32 = t30_1;
+                                                                                        *base.add(3*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags32.bits() >> 0) as i32) as u8;
                                                                                       },
-                                                                                      V36::ChangeSet(e) => {
+                                                                                      V37::ChangeSet(e) => {
                                                                                         *base.add(0).cast::<u8>() = (5i32) as u8;
-                                                                                        let vec34 = e;
-                                                                                        let len34 = vec34.len();
-                                                                                        let layout34 = _rt::alloc::Layout::from_size_align(vec34.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                        let (result34, _cleanup34) = wit_bindgen::rt::Cleanup::new(layout34);if let Some(cleanup) = _cleanup34 { cleanup.forget(); }
-                                                                                        for (i, e) in vec34.into_iter().enumerate() {
-                                                                                          let base = result34.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                        let vec35 = e;
+                                                                                        let len35 = vec35.len();
+                                                                                        let layout35 = _rt::alloc::Layout::from_size_align(vec35.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                        let (result35, _cleanup35) = wit_bindgen::rt::Cleanup::new(layout35);if let Some(cleanup) = _cleanup35 { cleanup.forget(); }
+                                                                                        for (i, e) in vec35.into_iter().enumerate() {
+                                                                                          let base = result35.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                           {
-                                                                                            let super::super::super::super::local::immediate_renderer_example::interaction::ChangeSpec{ offset:offset32, len:len32, new_value:new_value32, } = e;
-                                                                                            *base.add(0).cast::<i32>() = _rt::as_i32(offset32);
-                                                                                            *base.add(4).cast::<i32>() = _rt::as_i32(len32);
-                                                                                            match new_value32 {
+                                                                                            let super::super::super::super::local::immediate_renderer_example::interaction::ChangeSpec{ offset:offset33, len:len33, new_value:new_value33, } = e;
+                                                                                            *base.add(0).cast::<i32>() = _rt::as_i32(offset33);
+                                                                                            *base.add(4).cast::<i32>() = _rt::as_i32(len33);
+                                                                                            match new_value33 {
                                                                                               Some(e) => {
                                                                                                 *base.add(8).cast::<u8>() = (1i32) as u8;
-                                                                                                let vec33 = (e.into_bytes()).into_boxed_slice();
-                                                                                                let ptr33 = vec33.as_ptr().cast::<u8>();
-                                                                                                let len33 = vec33.len();
-                                                                                                ::core::mem::forget(vec33);
-                                                                                                *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len33;
-                                                                                                *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr33.cast_mut();
+                                                                                                let vec34 = (e.into_bytes()).into_boxed_slice();
+                                                                                                let ptr34 = vec34.as_ptr().cast::<u8>();
+                                                                                                let len34 = vec34.len();
+                                                                                                ::core::mem::forget(vec34);
+                                                                                                *base.add(8+2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len34;
+                                                                                                *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr34.cast_mut();
                                                                                               },
                                                                                               None => {
                                                                                                 {
@@ -15882,22 +15903,22 @@ pub mod wasi {
                                                                                               },
                                                                                             };}
                                                                                           }
-                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len34;
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result34;
+                                                                                          *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len35;
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result35;
                                                                                         },
-                                                                                        V36::CompositionBounds(e) => {
+                                                                                        V37::CompositionBounds(e) => {
                                                                                           *base.add(0).cast::<u8>() = (6i32) as u8;
-                                                                                          let super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds{ left:left35, top:top35, width:width35, height:height35, } = e;
-                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left35);
-                                                                                          *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top35);
-                                                                                          *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width35);
-                                                                                          *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height35);
+                                                                                          let super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds{ left:left36, top:top36, width:width36, height:height36, } = e;
+                                                                                          *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left36);
+                                                                                          *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top36);
+                                                                                          *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width36);
+                                                                                          *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height36);
                                                                                         },
                                                                                       }
                                                                                     }
                                                                                   }
-                                                                                  *ptr1.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len37;
-                                                                                  *ptr1.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result37;
+                                                                                  *ptr1.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>() = len38;
+                                                                                  *ptr1.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result38;
                                                                                   ptr1
                                                                                 } }
                                                                                 #[doc(hidden)]
@@ -15923,7 +15944,8 @@ pub mod wasi {
                                                                                             5 => (),
                                                                                             6 => (),
                                                                                             7 => (),
-                                                                                            8 => {
+                                                                                            8 => (),
+                                                                                            9 => {
                                                                                               let l4 = i32::from(*base.add(2*::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                               match l4 {
                                                                                                 0 => (),
@@ -15940,15 +15962,15 @@ pub mod wasi {
                                                                                                 },
                                                                                               }
                                                                                             },
-                                                                                            9 => (),
                                                                                             10 => (),
                                                                                             11 => (),
-                                                                                            12 => {
+                                                                                            12 => (),
+                                                                                            13 => {
                                                                                               let l9 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                               let l10 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                               _rt::cabi_dealloc(l9, l10, 1);
                                                                                             },
-                                                                                            13 => (),
+                                                                                            14 => (),
                                                                                             _ => (),
                                                                                           }
                                                                                         },
@@ -16054,7 +16076,7 @@ pub mod wasi {
                                                                                 unsafe fn _resource_new(val: *mut u8) -> u32
                                                                                 where Self: Sized
                                                                                 {
-
+                                                                                  
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16064,7 +16086,7 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-
+                                                                                  
                                                                                   unsafe { new(val) as u32 }
                                                                                 }
 
@@ -16072,7 +16094,7 @@ pub mod wasi {
                                                                                 fn _resource_rep(handle: u32) -> *mut u8
                                                                                 where Self: Sized
                                                                                 {
-
+                                                                                  
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16082,11 +16104,11 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-
+                                                                                  
                                                                                   unsafe { rep(handle as i32) }
                                                                                 }
 
-
+                                                                                
                                                                                 #[allow(async_fn_in_trait)]
                                                                                 fn post(&self,events: _rt::Vec::<Event>,) -> ();
                                                                               }
@@ -16096,7 +16118,7 @@ pub mod wasi {
                                                                                 unsafe fn _resource_new(val: *mut u8) -> u32
                                                                                 where Self: Sized
                                                                                 {
-
+                                                                                  
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16106,7 +16128,7 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-
+                                                                                  
                                                                                   unsafe { new(val) as u32 }
                                                                                 }
 
@@ -16114,7 +16136,7 @@ pub mod wasi {
                                                                                 fn _resource_rep(handle: u32) -> *mut u8
                                                                                 where Self: Sized
                                                                                 {
-
+                                                                                  
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16124,11 +16146,11 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-
+                                                                                  
                                                                                   unsafe { rep(handle as i32) }
                                                                                 }
 
-
+                                                                                
                                                                                 #[allow(async_fn_in_trait)]
                                                                                 fn post(&self,effects: _rt::Vec::<Effect>,) -> ();
                                                                               }
@@ -16138,7 +16160,7 @@ pub mod wasi {
                                                                                 unsafe fn _resource_new(val: *mut u8) -> u32
                                                                                 where Self: Sized
                                                                                 {
-
+                                                                                  
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16148,7 +16170,7 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn new(_: *mut u8, ) -> i32 { unreachable!() }
-
+                                                                                  
                                                                                   unsafe { new(val) as u32 }
                                                                                 }
 
@@ -16156,7 +16178,7 @@ pub mod wasi {
                                                                                 fn _resource_rep(handle: u32) -> *mut u8
                                                                                 where Self: Sized
                                                                                 {
-
+                                                                                  
                                                                                   #[cfg(target_arch = "wasm32")]
                                                                                   #[link(wasm_import_module = "[export]local:immediate-renderer-example/render")]
                                                                                   unsafe extern "C" {
@@ -16166,11 +16188,11 @@ pub mod wasi {
 
                                                                                   #[cfg(not(target_arch = "wasm32"))]
                                                                                   unsafe extern "C" fn rep(_: i32, ) -> *mut u8 { unreachable!() }
-
+                                                                                  
                                                                                   unsafe { rep(handle as i32) }
                                                                                 }
 
-
+                                                                                
                                                                                 #[allow(async_fn_in_trait)]
                                                                                 fn event_channel(&self,) -> EventChannel;
                                                                                 #[allow(async_fn_in_trait)]
@@ -16224,7 +16246,7 @@ pub mod wasi {
                                                                                       }
                                                                                     }
                                                                                   };
-
+                                                                                  
 
                                                                                   const _: () = {
                                                                                     #[doc(hidden)]
@@ -16238,7 +16260,7 @@ pub mod wasi {
                                                                                       }
                                                                                     }
                                                                                   };
-
+                                                                                  
 
                                                                                   const _: () = {
                                                                                     #[doc(hidden)]
@@ -16252,7 +16274,7 @@ pub mod wasi {
                                                                                       }
                                                                                     }
                                                                                   };
-
+                                                                                  
                                                                                 };);
                                                                               }
                                                                               #[doc(hidden)]
@@ -16394,7 +16416,7 @@ pub mod wasi {
                                                                             unsafe { core::hint::unreachable_unchecked() }
                                                                           }
                                                                         }
-
+                                                                        
                                                                         pub fn as_i64<T: AsI64>(t: T) -> i64 {
                                                                           t.as_i64()
                                                                         }
@@ -16408,14 +16430,14 @@ pub mod wasi {
                                                                             (*self).as_i64()
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI64 for i64 {
                                                                           #[inline]
                                                                           fn as_i64(self) -> i64 {
                                                                             self as i64
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI64 for u64 {
                                                                           #[inline]
                                                                           fn as_i64(self) -> i64 {
@@ -16431,7 +16453,7 @@ pub mod wasi {
                                                                             alloc::dealloc(ptr, layout);
                                                                           }
                                                                         }
-
+                                                                        
                                                                         pub fn as_i32<T: AsI32>(t: T) -> i32 {
                                                                           t.as_i32()
                                                                         }
@@ -16445,63 +16467,63 @@ pub mod wasi {
                                                                             (*self).as_i32()
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI32 for i32 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI32 for u32 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI32 for i16 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI32 for u16 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI32 for i8 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI32 for u8 {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI32 for char {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsI32 for usize {
                                                                           #[inline]
                                                                           fn as_i32(self) -> i32 {
                                                                             self as i32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         pub fn as_f32<T: AsF32>(t: T) -> f32 {
                                                                           t.as_f32()
                                                                         }
@@ -16515,14 +16537,14 @@ pub mod wasi {
                                                                             (*self).as_f32()
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsF32 for f32 {
                                                                           #[inline]
                                                                           fn as_f32(self) -> f32 {
                                                                             self as f32
                                                                           }
                                                                         }
-
+                                                                        
                                                                         pub fn as_f64<T: AsF64>(t: T) -> f64 {
                                                                           t.as_f64()
                                                                         }
@@ -16536,7 +16558,7 @@ pub mod wasi {
                                                                             (*self).as_f64()
                                                                           }
                                                                         }
-
+                                                                        
                                                                         impl AsF64 for f64 {
                                                                           #[inline]
                                                                           fn as_f64(self) -> f64 {
@@ -16581,8 +16603,8 @@ pub mod wasi {
                                                                           #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:imports and exports")]
                                                                           #[doc(hidden)]
                                                                           #[allow(clippy::octal_escapes)]
-                                                                          pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31208] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xe3\xf2\x01\x01A\x02\
+                                                                          pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31322] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xd5\xf3\x01\x01A\x02\
 \x01A\x1a\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -17156,42 +17178,45 @@ cursor-style\x03\0\x0b\x01q\x01\x04text\x01s\0\x04\0\x0eclipboard-data\x03\0\x0d
 \x01p\x11\x01q\x07\x0bopen-window\x01\x01\0\x0drequest-image\x01\x16\0\x06cursor\
 \x01\x0c\0\x09clipboard\x01\x0e\0\x08open-url\x01\x17\0\x0achange-set\x01\x18\0\x12\
 composition-bounds\x01\x13\0\x04\0\x07command\x03\0\x19\x03\0,local:immediate-re\
-nderer-example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10mod\
-ifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\
+nderer-example/interaction\x05\x0b\x01B&\x01n\x02\x04left\x05right\x04\0\x10modi\
+fier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\
 \x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\
 \x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-butto\
-n\x03\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01m\x03\x05enter\x03\
-tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09backspace\x06delete\x04\
-\0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x0e\x01m\x04\x0a\
-arrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x10\x01\
-q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\0\x04navi\x01\x11\0\
-\x04\0\x04keys\x03\0\x12\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x14\
-\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x16\x01q\x04\x05st\
-art\0\0\x0fselection-range\x01\x17\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11\
-composition-state\x03\0\x18\x01k\x17\x01q\x01\x10character-bounds\x01\x1a\0\x04\0\
-\x16composition-bounds-req\x03\0\x1b\x01o\x02\x13\x09\x01q\x0f\x09modifiers\x01\x03\
+n\x03\0\x06\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10mouse-wheel-unit\x03\
+\0\x08\x01r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\x04\0\x0bmouse-wheel\x03\
+\0\x0a\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\x01m\x03\x05enter\x03ta\
+b\x05space\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09backspace\x06delete\x04\
+\0\x08edit-key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x12\x01m\x04\x0a\
+arrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x14\x01\
+q\x04\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02ui\x01\x13\0\x04navi\x01\x15\0\
+\x04\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x18\
+\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x1a\x01q\x04\x05st\
+art\0\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11\
+composition-state\x03\0\x1c\x01k\x1b\x01q\x01\x10character-bounds\x01\x1e\0\x04\0\
+\x16composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\x01q\x10\x09modifiers\x01\x03\
 \0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-m\
-ove\0\0\x08key-down\x01\x1d\0\x06key-up\x01\x13\0\x1arequest-composition-bounds\x01\
-\x1c\0\x18update-composition-state\x01\x19\0\x07history\x01\x15\0\x03cut\0\0\x04\
-copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\x1e\
-\x01q\x02\x05event\x01\x1f\0\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0\
-\x20\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x02\x03\0\x04\x07command\x02\
-\x03\0\x04\x06effect\x02\x03\0\x03\x0erender-context\x02\x03\0\x05\x05event\x02\x03\
-\0\x05\x0eunhandle-event\x01B%\x02\x03\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\
-\x02\x01\x0e\x04\0\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\x04\0\x0erender-conte\
-xt\x03\0\x04\x02\x03\x02\x01\x10\x04\0\x05event\x03\0\x06\x02\x03\x02\x01\x11\x04\
-\0\x0eunhandle-event\x03\0\x08\x04\0\x0devent-channel\x03\x01\x04\0\x0fcommand-c\
-hannel\x03\x01\x04\0\x0adispatcher\x03\x01\x01h\x0a\x01p\x07\x01@\x02\x04self\x0d\
-\x06events\x0e\x01\0\x04\0\x1a[method]event-channel.post\x01\x0f\x01h\x0b\x01p\x03\
-\x01@\x02\x04self\x10\x07effects\x11\x01\0\x04\0\x1c[method]command-channel.post\
-\x01\x12\x01h\x0c\x01i\x0a\x01@\x01\x04self\x13\0\x14\x04\0\x20[method]dispatche\
-r.event-channel\x01\x15\x01i\x0b\x01@\x01\x04self\x13\0\x16\x04\0\"[method]dispa\
-tcher.command-channel\x01\x17\x01p\x09\x01p\x01\x01o\x02\x18\x19\x01@\x01\x04sel\
-f\x13\0\x1a\x04\0\x1b[method]dispatcher.dispatch\x01\x1b\x01i\x05\x01i\x0c\x01@\x01\
-\x07context\x1c\0\x1d\x04\0\x0fcreate-renderer\x01\x1e\x04\0'local:immediate-ren\
-derer-example/render\x05\x12\x04\0.local:immediate-renderer-example/example-worl\
-d\x04\0\x0b\x13\x01\0\x0dexample-world\x03\0\0\0G\x09producers\x01\x0cprocessed-\
-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+ove\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\x06key-up\x01\x17\0\x1areque\
+st-composition-bounds\x01\x20\0\x18update-composition-state\x01\x1d\0\x07history\
+\x01\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\
+\0\x04\0\x05event\x03\0\"\x01q\x02\x05event\x01#\0\x0bopen-window\x01s\0\x04\0\x0e\
+unhandle-event\x03\0$\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x02\x03\0\x04\
+\x07command\x02\x03\0\x04\x06effect\x02\x03\0\x03\x0erender-context\x02\x03\0\x05\
+\x05event\x02\x03\0\x05\x0eunhandle-event\x01B%\x02\x03\x02\x01\x0d\x04\0\x07com\
+mand\x03\0\0\x02\x03\x02\x01\x0e\x04\0\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\x04\
+\0\x0erender-context\x03\0\x04\x02\x03\x02\x01\x10\x04\0\x05event\x03\0\x06\x02\x03\
+\x02\x01\x11\x04\0\x0eunhandle-event\x03\0\x08\x04\0\x0devent-channel\x03\x01\x04\
+\0\x0fcommand-channel\x03\x01\x04\0\x0adispatcher\x03\x01\x01h\x0a\x01p\x07\x01@\
+\x02\x04self\x0d\x06events\x0e\x01\0\x04\0\x1a[method]event-channel.post\x01\x0f\
+\x01h\x0b\x01p\x03\x01@\x02\x04self\x10\x07effects\x11\x01\0\x04\0\x1c[method]co\
+mmand-channel.post\x01\x12\x01h\x0c\x01i\x0a\x01@\x01\x04self\x13\0\x14\x04\0\x20\
+[method]dispatcher.event-channel\x01\x15\x01i\x0b\x01@\x01\x04self\x13\0\x16\x04\
+\0\"[method]dispatcher.command-channel\x01\x17\x01p\x09\x01p\x01\x01o\x02\x18\x19\
+\x01@\x01\x04self\x13\0\x1a\x04\0\x1b[method]dispatcher.dispatch\x01\x1b\x01i\x05\
+\x01i\x0c\x01@\x01\x07context\x1c\0\x1d\x04\0\x0fcreate-renderer\x01\x1e\x04\0'l\
+ocal:immediate-renderer-example/render\x05\x12\x04\0.local:immediate-renderer-ex\
+ample/example-world\x04\0\x0b\x13\x01\0\x0dexample-world\x03\0\0\0G\x09producers\
+\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53\
+.1";
                                                                         };
                                                                         )
                                                                       }
@@ -17202,8 +17227,8 @@ by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                       #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world-with-all-of-its-exports-removed:encoded world")]
                                                                       #[doc(hidden)]
                                                                       #[allow(clippy::octal_escapes)]
-                                                                      pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30684] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xb7\xee\x01\x01A\x02\
+                                                                      pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30798] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xa9\xef\x01\x01A\x02\
 \x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -17777,32 +17802,36 @@ cursor-style\x03\0\x0b\x01q\x01\x04text\x01s\0\x04\0\x0eclipboard-data\x03\0\x0d
 \x01p\x11\x01q\x07\x0bopen-window\x01\x01\0\x0drequest-image\x01\x16\0\x06cursor\
 \x01\x0c\0\x09clipboard\x01\x0e\0\x08open-url\x01\x17\0\x0achange-set\x01\x18\0\x12\
 composition-bounds\x01\x13\0\x04\0\x07command\x03\0\x19\x03\0,local:immediate-re\
-nderer-example/interaction\x05\x0b\x01B\"\x01n\x02\x04left\x05right\x04\0\x10mod\
-ifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\
+nderer-example/interaction\x05\x0b\x01B&\x01n\x02\x04left\x05right\x04\0\x10modi\
+fier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\
 \x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\
 \x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-butto\
-n\x03\0\x06\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x08\x01m\x03\x05enter\x03\
-tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0a\x01m\x02\x09backspace\x06delete\x04\
-\0\x08edit-key\x03\0\x0c\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x0e\x01m\x04\x0a\
-arrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x10\x01\
-q\x04\x0awhitespace\x01\x0b\0\x04edit\x01\x0d\0\x02ui\x01\x0f\0\x04navi\x01\x11\0\
-\x04\0\x04keys\x03\0\x12\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x14\
-\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x16\x01q\x04\x05st\
-art\0\0\x0fselection-range\x01\x17\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11\
-composition-state\x03\0\x18\x01k\x17\x01q\x01\x10character-bounds\x01\x1a\0\x04\0\
-\x16composition-bounds-req\x03\0\x1b\x01o\x02\x13\x09\x01q\x0f\x09modifiers\x01\x03\
+n\x03\0\x06\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10mouse-wheel-unit\x03\
+\0\x08\x01r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\x04\0\x0bmouse-wheel\x03\
+\0\x0a\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\x01m\x03\x05enter\x03ta\
+b\x05space\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09backspace\x06delete\x04\
+\0\x08edit-key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x12\x01m\x04\x0a\
+arrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x14\x01\
+q\x04\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02ui\x01\x13\0\x04navi\x01\x15\0\
+\x04\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x18\
+\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x1a\x01q\x04\x05st\
+art\0\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11\
+composition-state\x03\0\x1c\x01k\x1b\x01q\x01\x10character-bounds\x01\x1e\0\x04\0\
+\x16composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\x01q\x10\x09modifiers\x01\x03\
 \0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-m\
-ove\0\0\x08key-down\x01\x1d\0\x06key-up\x01\x13\0\x1arequest-composition-bounds\x01\
-\x1c\0\x18update-composition-state\x01\x19\0\x07history\x01\x15\0\x03cut\0\0\x04\
-copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\x1e\
-\x01q\x02\x05event\x01\x1f\0\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0\
-\x20\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x04\0Nlocal:immediate-rende\
-rer-example/example-world-with-all-of-its-exports-removed\x04\0\x0b3\x01\0-examp\
-le-world-with-all-of-its-exports-removed\x03\0\0\0G\x09producers\x01\x0cprocesse\
-d-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+ove\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\x06key-up\x01\x17\0\x1areque\
+st-composition-bounds\x01\x20\0\x18update-composition-state\x01\x1d\0\x07history\
+\x01\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\
+\0\x04\0\x05event\x03\0\"\x01q\x02\x05event\x01#\0\x0bopen-window\x01s\0\x04\0\x0e\
+unhandle-event\x03\0$\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x04\0Nloca\
+l:immediate-renderer-example/example-world-with-all-of-its-exports-removed\x04\0\
+\x0b3\x01\0-example-world-with-all-of-its-exports-removed\x03\0\0\0G\x09producer\
+s\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.5\
+3.1";
 
                                                                       #[inline(never)]
                                                                       #[doc(hidden)]
                                                                       pub fn __link_custom_section_describing_imports() {
                                                                         wit_bindgen::rt::maybe_link_cabi_realloc();
                                                                       }
+                                                                      
