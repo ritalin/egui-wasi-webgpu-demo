@@ -36,8 +36,8 @@ impl recorder_core::Recorder for CounterWidgetRecorder {
 
         let unhandled_event = vec![];
 
-        let output = self.egui_context.run(input, |cx| {
-            egui::CentralPanel::default().show(cx, |ui| {
+        let output = self.egui_context.run_ui(input, |cx| {
+            egui::CentralPanel::default().show_inside(cx, |ui| {
                 ui.with_layout(egui::Layout::top_down_justified(egui::Align::Min), |ui| {
                     for (i, value) in self.values.iter_mut().enumerate() {
                         egui::Frame::group(ui.style()).show(ui, |ui| {
@@ -48,7 +48,7 @@ impl recorder_core::Recorder for CounterWidgetRecorder {
                                     Vec2::new(64.0, 24.0),
                                     egui::TextEdit::singleline(&mut value.to_string())
                                         .horizontal_align(egui::Align::Max)
-                                        .frame(false)
+                                        .frame(egui::Frame::NONE)
                                         .background_color(egui::Color32::TRANSPARENT)
                                         .font(egui::TextStyle::Heading)
                                         .interactive(false)

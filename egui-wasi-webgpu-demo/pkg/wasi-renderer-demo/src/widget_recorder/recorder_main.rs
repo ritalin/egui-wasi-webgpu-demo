@@ -39,8 +39,8 @@ impl recorder_core::Recorder for MainWidgetRecorder {
 
         // log::debug!("ppp: {:?}", input.viewports.get(&egui::ViewportId::ROOT).unwrap().native_pixels_per_point);
 
-        let output = self.egui_context.run(input, |cx| {
-            egui::CentralPanel::default().show(cx, |ui| {
+        let output = self.egui_context.run_ui(input, |cx| {
+            egui::CentralPanel::default().show_inside(cx, |ui| {
                 ui.with_layout(egui::Layout::top_down_justified(egui::Align::Min), |ui| {
                     ui.label(egui::RichText::new("Menu").size(16.0));
 

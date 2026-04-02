@@ -1,5 +1,5 @@
 [package]
-name = "hello_world"
+name = "custom_keypad"
 version = "0.1.0"
 edition = "2024"
 
@@ -10,4 +10,3 @@ crate-type = ["cdylib"]
 wasi-renderer.workspace = true
 example_core.workspace = true
 egui.workspace = true
-image.workspace = true

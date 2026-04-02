@@ -1,15 +1,14 @@
 use std::{cell::RefCell, rc::Rc};
 
-use wasi_renderer::{ScreenDescriptor, bindings::{surface::FrameSize, types, webgpu}, recorder_core::{self, RecordOutput}, render_core};
+use wasi_renderer::{ScreenDescriptor, bindings::{types, webgpu}, recorder_core::{self, RecordOutput}, render_core};
 
-use crate::{ExampleEffect, recorder};
-use example_world::exports::local::immediate_renderer_example::render;
+use crate::ExampleEffect;
 
-mod example_world;
-
+pub mod example_world;
 pub use example_world::local::immediate_renderer_example::interaction;
+pub use example_world::exports::local::immediate_renderer_example::render;
 
-struct DispatcherInner {
+pub struct DispatcherInner {
     context: render::RenderContext,
     canvas: webgpu::GpuCanvasContext,
     engine: DispatcherEngineWrapper,
@@ -103,7 +102,7 @@ where
 }
 
 #[derive(Clone)]
-struct DispatcherEngineWrapper(Rc<RefCell<dyn EngineApi>>);
+pub struct DispatcherEngineWrapper(Rc<RefCell<dyn EngineApi>>);
 
 impl render::GuestEventChannel for DispatcherEngineWrapper {
     fn post(&self,events: Vec::<render::Event>,) -> () {
@@ -141,18 +140,3 @@ impl render::GuestDispatcher for DispatcherInner {
         }
     }
 }
-
-struct Component;
-
-impl render::Guest for Component {
-    type EventChannel = DispatcherEngineWrapper;
-    type CommandChannel = DispatcherEngineWrapper;
-    type Dispatcher = DispatcherInner;
-
-    fn create_renderer(context: render::RenderContext,) -> render::Dispatcher {
-        context.request_set_size(FrameSize{ width: 512, height: 512 });
-        render::Dispatcher::new(DispatcherInner::new(context, recorder::RecoderInner::new()))
-    }
-}
-
-example_world::export!(Component);

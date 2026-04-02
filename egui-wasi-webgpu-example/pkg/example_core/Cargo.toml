@@ -1,0 +1,14 @@
+[package]
+name = "example_core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+wasi-renderer.workspace = true
+wit-bindgen.workspace = true
+anyhow.workspace = true
+bytemuck.workspace = true
+egui.workspace = true
+image.workspace = true
+egui_extras.workspace = true
+similar.workspace = true
