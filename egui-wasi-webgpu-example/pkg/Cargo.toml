@@ -4,6 +4,7 @@ members = [
     "custom_keypad",
     "custom_style",
     "custom_font_style",
+    "keyboard_events",
 ]
 resolver = "2"
 
