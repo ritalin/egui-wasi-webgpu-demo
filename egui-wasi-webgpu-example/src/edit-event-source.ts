@@ -1,8 +1,8 @@
-import type { CompositionBounds } from "pkg/interfaces/local-immediate-renderer-example-interaction";
+import type { CompositionBounds } from "./types/interaction/interfaces/local-immediate-renderer-example-interaction";
 
 export class EditEventSource {
   #editHost: HTMLCanvasElement;
-  #context: globalThis.EditContext;
+  #context: EditContext;
   ontextupdate?: (event: TextUpdateEvent) => any;
   oncompositionstart?: () => any;
   oncompositionend?: (event: TextUpdateEvent) => any;

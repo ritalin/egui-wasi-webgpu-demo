@@ -7,6 +7,7 @@ interface types {
         mouse-down(mouse-button),
         mouse-up(mouse-button),
         mouse-move,
+        mouse-wheel(mouse-wheel),
         key-down(tuple<keys, key-options>),
         key-up(keys),
         request-composition-bounds(composition-bounds-req),
@@ -47,6 +48,18 @@ interface types {
         middle,
         back,
         forward,
+    }
+
+    record mouse-wheel {
+        delta-x: f32,
+        delta-y: f32,
+        wheel-unit: mouse-wheel-unit,
+    }
+
+    enum mouse-wheel-unit {
+        logical-pixel,
+        line,
+        page,
     }
 
     flags key-options {
@@ -106,6 +119,10 @@ interface types {
         offset: u32,
         len: u32,
     }
+}
+
+world immediate-renderer-types-world {
+    export types;
 }
 
 world immediate-renderer-world {

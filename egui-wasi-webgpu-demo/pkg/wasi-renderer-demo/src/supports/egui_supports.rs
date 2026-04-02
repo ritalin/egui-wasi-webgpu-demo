@@ -36,6 +36,9 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
             types::Event::MouseMove => {
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
+            types::Event::MouseWheel(types::MouseWheel{ delta_x, delta_y, wheel_unit }) => {
+                input.events.push(egui::Event::MouseWheel { unit: MouseWheelUnitW(wheel_unit).into(), delta: egui::vec2(*delta_x, *delta_y), modifiers, phase: egui::TouchPhase::Move });
+            }
             types::Event::KeyDown((key, opts)) => {
                 input.events.push(egui::Event::Key {
                     key: supports::KeyWrapper(key).into(),
@@ -108,6 +111,18 @@ impl<'a> From<MouseButtonW<'a>> for PointerButton {
             types::MouseButton::Middle => Self::Middle,
             types::MouseButton::Back => Self::Extra1,
             types::MouseButton::Forward => Self::Extra2,
+        }
+    }
+}
+
+pub struct MouseWheelUnitW<'a>(&'a types::MouseWheelUnit);
+
+impl<'a> From<MouseWheelUnitW<'a>> for egui::MouseWheelUnit {
+    fn from(MouseWheelUnitW(value): MouseWheelUnitW) -> Self {
+        match value {
+            types::MouseWheelUnit::LogicalPixel => Self::Point,
+            types::MouseWheelUnit::Line => Self::Line,
+            types::MouseWheelUnit::Page => Self::Page,
         }
     }
 }

@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "./scripts/serve-dev.sh",
     "build:shim": "pnpm --filter wasi-webgpu-runtime run build",
-    "build:types": "jco types pkg/wit/interaction.wit -o ./src/types/interaction",
+    "build:types": "./scripts/transpile-types.sh",
     "build:pkg": "./scripts/transpile.sh",
     "build:dist": "node ./scripts/build-dist.ts",
     "build": "pnpm run build:shim && pnpm run build:types && pnpm run build:dist",

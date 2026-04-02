@@ -1,5 +1,5 @@
 declare global {
-  interface EditContext extends EventTarget {
+  interface EditContext {
     // Sync with text content on egui
     updateText(rangeStart: number, rangeEnd: number, text: string): void;
     // Sync with selection range on egui
@@ -9,7 +9,7 @@ declare global {
     // Update IME window position
     updateSelectionBounds(selectionBounds: DOMRect): void;
     // Update Preedit bounds
-    updateCharacterBounds(rangeStart: number, characterBounds: DOMRect[]);
+    updateCharacterBounds(rangeStart: number, characterBounds: DOMRect[]): void;
     // Handle event
     addEventListener(type: "compositionstart", listener: (ev: CompositionEvent) => void): void;
     addEventListener(type: "textupdate", listener: (ev: TextUpdateEvent) => void): void;

@@ -38,6 +38,9 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, in_co
             types::Event::MouseMove => {
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
+            types::Event::MouseWheel(types::MouseWheel{ delta_x, delta_y, wheel_unit }) => {
+                input.events.push(egui::Event::MouseWheel { unit: MouseWheelUnitW(wheel_unit).into(), delta: egui::vec2(*delta_x, *delta_y), modifiers, phase: egui::TouchPhase::Move });
+            }
             types::Event::KeyDown((types::Keys::Whitespace(types::WhitespaceKey::Enter), _)) |
             types::Event::KeyUp(types::Keys::Whitespace(types::WhitespaceKey::Enter)) if *in_compositioning => {
                 // discard
@@ -218,4 +221,16 @@ pub fn create_text_change_set(old_text: &str, new_text: &str) -> Vec<crate::Chan
             similar::DiffOp::Equal { .. } => None,
         })
         .collect()
+}
+
+pub struct MouseWheelUnitW<'a>(&'a types::MouseWheelUnit);
+
+impl<'a> From<MouseWheelUnitW<'a>> for egui::MouseWheelUnit {
+    fn from(MouseWheelUnitW(value): MouseWheelUnitW) -> Self {
+        match value {
+            types::MouseWheelUnit::LogicalPixel => Self::Point,
+            types::MouseWheelUnit::Line => Self::Line,
+            types::MouseWheelUnit::Page => Self::Page,
+        }
+    }
 }
