@@ -1,10 +1,10 @@
-import type { Root } from "pkg/egui-renderer";
 import type {
   Dispatcher,
   Effect,
   RenderContext,
   Event as DispatchEvent,
-} from "pkg/interfaces/local-immediate-renderer-example-render";
+} from "./types/dispatcher/interfaces/local-immediate-renderer-example-render";
+import type { ExampleWorld as Root } from "./types/dispatcher/example-world";
 
 import type { WebGpuRuntime } from "wasi-webgpu-runtime/host";
 import { queueCommand, type Route } from "./command-handler";
@@ -84,6 +84,15 @@ export class WasmEngine {
 
   entry(route: Route): RouteEntry | undefined {
     return this.dispatchers.get(route);
+  }
+
+  removeRoute(route: Route) {
+    const entry = this.entry(route);
+    if (entry) {
+      this.dispatchers.delete(route);
+      entry.eventSource.editHost.remove();
+      console.log(`Route: ${route} is closed`);
+    }
   }
 
   dispatch() {

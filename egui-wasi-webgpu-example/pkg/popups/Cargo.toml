@@ -1,0 +1,12 @@
+[package]
+name = "popups"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasi-renderer.workspace = true
+example_core.workspace = true
+egui.workspace = true

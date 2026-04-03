@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use egui::{Modifiers, PointerButton, Pos2};
 use wasi_renderer::{ScreenDescriptor, bindings::types};
 
@@ -177,6 +179,55 @@ pub fn push_platform_output(_conetx: &egui::Context, output: egui::PlatformOutpu
             egui::OutputCommand::CopyImage(_image) => todo!(),
             egui::OutputCommand::OpenUrl(url) => {
                 commands.push(ExampleCommand::OpenUrl(url));
+            }
+        }
+    }
+}
+
+pub fn push_viewport_output(_conetx: &egui::Context, outputs: BTreeMap<egui::ViewportId, egui::ViewportOutput>, commands: &mut Vec<crate::ExampleCommand>) {
+    if let Some(output) = outputs.get(&egui::ViewportId::ROOT) {
+        for cmd in &output.commands {
+            match cmd {
+                egui::ViewportCommand::Close => {
+                    commands.push(ExampleCommand::CloseWindow{ with_query: false });
+                }
+                egui::ViewportCommand::CancelClose => {
+                    commands.push(ExampleCommand::CloseWindow{ with_query: true });
+                }
+                // egui::ViewportCommand::Title(_) => todo!(),
+                // egui::ViewportCommand::Transparent(_) => todo!(),
+                // egui::ViewportCommand::Visible(_) => todo!(),
+                // egui::ViewportCommand::StartDrag => todo!(),
+                // egui::ViewportCommand::OuterPosition(pos2) => todo!(),
+                // egui::ViewportCommand::InnerSize(vec2) => todo!(),
+                // egui::ViewportCommand::MinInnerSize(vec2) => todo!(),
+                // egui::ViewportCommand::MaxInnerSize(vec2) => todo!(),
+                // egui::ViewportCommand::ResizeIncrements(vec2) => todo!(),
+                // egui::ViewportCommand::BeginResize(resize_direction) => todo!(),
+                // egui::ViewportCommand::Resizable(_) => todo!(),
+                // egui::ViewportCommand::EnableButtons { close, minimized, maximize } => todo!(),
+                // egui::ViewportCommand::Minimized(_) => todo!(),
+                // egui::ViewportCommand::Maximized(_) => todo!(),
+                // egui::ViewportCommand::Fullscreen(_) => todo!(),
+                // egui::ViewportCommand::Decorations(_) => todo!(),
+                // egui::ViewportCommand::WindowLevel(window_level) => todo!(),
+                // egui::ViewportCommand::Icon(icon_data) => todo!(),
+                // egui::ViewportCommand::IMERect(rect) => todo!(),
+                // egui::ViewportCommand::IMEAllowed(_) => todo!(),
+                // egui::ViewportCommand::IMEPurpose(imepurpose) => todo!(),
+                // egui::ViewportCommand::Focus => todo!(),
+                // egui::ViewportCommand::RequestUserAttention(user_attention_type) => todo!(),
+                // egui::ViewportCommand::SetTheme(system_theme) => todo!(),
+                // egui::ViewportCommand::ContentProtected(_) => todo!(),
+                // egui::ViewportCommand::CursorPosition(pos2) => todo!(),
+                // egui::ViewportCommand::CursorGrab(cursor_grab) => todo!(),
+                // egui::ViewportCommand::CursorVisible(_) => todo!(),
+                // egui::ViewportCommand::MousePassthrough(_) => todo!(),
+                // egui::ViewportCommand::Screenshot(user_data) => todo!(),
+                // egui::ViewportCommand::RequestCut => todo!(),
+                // egui::ViewportCommand::RequestCopy => todo!(),
+                // egui::ViewportCommand::RequestPaste => todo!(),
+                _ => (),
             }
         }
     }
