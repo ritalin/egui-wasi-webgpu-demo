@@ -14462,7 +14462,23 @@ pub mod wasi {
                                                                                       use super::super::super::super::_rt;
                                                                                       pub type RenderContext = super::super::super::super::__with_name0::RenderContext;
                                                                                       pub type Event = super::super::super::super::__with_name1::Event;
-                                                                                      pub type UnhandleEvent = super::super::super::super::__with_name1::UnhandleEvent;
+                                                                                      #[derive(Clone)]
+                                                                                      pub enum UnhandleEvent {
+                                                                                        Event(Event),
+                                                                                        OpenWindow(_rt::String),
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for UnhandleEvent {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          match self {
+                                                                                            UnhandleEvent::Event(e) => {
+                                                                                              f.debug_tuple("UnhandleEvent::Event").field(e).finish()
+                                                                                            }
+                                                                                            UnhandleEvent::OpenWindow(e) => {
+                                                                                              f.debug_tuple("UnhandleEvent::OpenWindow").field(e).finish()
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
 
                                                                                       #[derive(Debug)]
                                                                                       #[repr(transparent)]
@@ -15089,16 +15105,15 @@ pub mod wasi {
                                                                                     T_::dispatch(DispatcherBorrow::lift(arg0 as u32 as usize).get())
                                                                                   };
                                                                                   let ptr1 = (&raw mut _RET_AREA.0).cast::<u8>();
-                                                                                  let vec23 = result0;
-                                                                                  let len23 = vec23.len();
-                                                                                  let layout23 = _rt::alloc::Layout::from_size_align(vec23.len() * (8+4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                  let (result23, _cleanup23) = wit_bindgen::rt::Cleanup::new(layout23);if let Some(cleanup) = _cleanup23 { cleanup.forget(); }
-                                                                                  for (i, e) in vec23.into_iter().enumerate() {
-                                                                                    let base = result23.add(i * (8+4*::core::mem::size_of::<*const u8>()));
+                                                                                  let vec22 = result0;
+                                                                                  let len22 = vec22.len();
+                                                                                  let layout22 = _rt::alloc::Layout::from_size_align(vec22.len() * (8+4*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                  let (result22, _cleanup22) = wit_bindgen::rt::Cleanup::new(layout22);if let Some(cleanup) = _cleanup22 { cleanup.forget(); }
+                                                                                  for (i, e) in vec22.into_iter().enumerate() {
+                                                                                    let base = result22.add(i * (8+4*::core::mem::size_of::<*const u8>()));
                                                                                     {
-                                                                                      use super::super::super::super::__with_name1::UnhandleEvent as V22;
                                                                                       match e {
-                                                                                        V22::Event(e) => {
+                                                                                        UnhandleEvent::Event(e) => {
                                                                                           *base.add(0).cast::<u8>() = (0i32) as u8;
                                                                                           use super::super::super::super::__with_name1::Event as V20;
                                                                                           match e {
@@ -15278,7 +15293,7 @@ pub mod wasi {
                                                                                               }
                                                                                             }
                                                                                           },
-                                                                                          V22::OpenWindow(e) => {
+                                                                                          UnhandleEvent::OpenWindow(e) => {
                                                                                             *base.add(0).cast::<u8>() = (1i32) as u8;
                                                                                             let vec21 = (e.into_bytes()).into_boxed_slice();
                                                                                             let ptr21 = vec21.as_ptr().cast::<u8>();
@@ -15290,8 +15305,8 @@ pub mod wasi {
                                                                                         }
                                                                                       }
                                                                                     }
-                                                                                    *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len23;
-                                                                                    *ptr1.add(0).cast::<*mut u8>() = result23;
+                                                                                    *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len22;
+                                                                                    *ptr1.add(0).cast::<*mut u8>() = result22;
                                                                                     ptr1
                                                                                   } }
                                                                                   #[doc(hidden)]
@@ -15814,9 +15829,9 @@ pub mod wasi {
                                                                     #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-demo:demo-world:encoded world")]
                                                                     #[doc(hidden)]
                                                                     #[allow(clippy::octal_escapes)]
-                                                                    pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30336] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xfe\xeb\x01\x01A\x02\
-\x01A\x16\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
+                                                                    pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30292] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xd2\xeb\x01\x01A\x02\
+\x01A\x15\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
 \x06\x03\0\x12wasi:io/poll@0.2.9\x05\0\x01B\x0b\x04\0\x07context\x03\x01\x04\0\x0f\
@@ -16373,7 +16388,7 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B&\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\
+B$\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\
 \x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\x02\x01\
 r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\x05\x04left\x05right\x06middl\
 e\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\x01m\x03\x0dlogical-pixel\x04\
@@ -16392,21 +16407,20 @@ edit\x01\x11\0\x02ui\x01\x13\0\x04navi\x01\x15\0\x04\0\x04keys\x03\0\x16\x01m\x0
 use-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-move\0\0\x0bmouse-wheel\x01\x0b\
 \0\x08key-down\x01!\0\x06key-up\x01\x17\0\x1arequest-composition-bounds\x01\x20\0\
 \x18update-composition-state\x01\x1d\0\x07history\x01\x19\0\x03cut\0\0\x04copy\0\
-\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\"\x01q\
-\x02\x05event\x01#\0\x0bopen-window\x01s\0\x04\0\x0eunhandle-event\x03\0$\x03\0\x1e\
-local:immediate-renderer/types\x05\x0b\x02\x03\0\x03\x0erender-context\x02\x03\0\
-\x04\x05event\x02\x03\0\x04\x0eunhandle-event\x01B\x16\x02\x03\x02\x01\x0c\x04\0\
-\x0erender-context\x03\0\0\x02\x03\x02\x01\x0d\x04\0\x05event\x03\0\x02\x02\x03\x02\
-\x01\x0e\x04\0\x0eunhandle-event\x03\0\x04\x04\0\x0adispatcher\x03\x01\x01h\x06\x01\
-@\x02\x04self\x07\x05event\x03\x01\0\x04\0\x1d[method]dispatcher.push-event\x01\x08\
-\x01p\x03\x01@\x02\x04self\x07\x05event\x09\x01\0\x04\0![method]dispatcher.push-\
-event-all\x01\x0a\x01p\x05\x01@\x01\x04self\x07\0\x0b\x04\0\x1b[method]dispatche\
-r.dispatch\x01\x0c\x01i\x01\x01i\x06\x01@\x01\x07context\x0d\0\x0e\x04\0\x14crea\
-te-main-renderer\x01\x0f\x04\0\x18create-triangle-renderer\x01\x0f\x04\0\x17crea\
-te-counter-renderer\x01\x0f\x04\0$local:immediate-renderer-demo/render\x05\x0f\x04\
-\0(local:immediate-renderer-demo/demo-world\x04\0\x0b\x10\x01\0\x0ademo-world\x03\
-\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-\
-bindgen-rust\x060.53.1";
+\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\"\x03\0\
+\x1elocal:immediate-renderer/types\x05\x0b\x02\x03\0\x03\x0erender-context\x02\x03\
+\0\x04\x05event\x01B\x16\x02\x03\x02\x01\x0c\x04\0\x0erender-context\x03\0\0\x02\
+\x03\x02\x01\x0d\x04\0\x05event\x03\0\x02\x01q\x02\x05event\x01\x03\0\x0bopen-wi\
+ndow\x01s\0\x04\0\x0eunhandle-event\x03\0\x04\x04\0\x0adispatcher\x03\x01\x01h\x06\
+\x01@\x02\x04self\x07\x05event\x03\x01\0\x04\0\x1d[method]dispatcher.push-event\x01\
+\x08\x01p\x03\x01@\x02\x04self\x07\x05event\x09\x01\0\x04\0![method]dispatcher.p\
+ush-event-all\x01\x0a\x01p\x05\x01@\x01\x04self\x07\0\x0b\x04\0\x1b[method]dispa\
+tcher.dispatch\x01\x0c\x01i\x01\x01i\x06\x01@\x01\x07context\x0d\0\x0e\x04\0\x14\
+create-main-renderer\x01\x0f\x04\0\x18create-triangle-renderer\x01\x0f\x04\0\x17\
+create-counter-renderer\x01\x0f\x04\0$local:immediate-renderer-demo/render\x05\x0e\
+\x04\0(local:immediate-renderer-demo/demo-world\x04\0\x0b\x10\x01\0\x0ademo-worl\
+d\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10\
+wit-bindgen-rust\x060.53.1";
 
                                                                     #[inline(never)]
                                                                     #[doc(hidden)]

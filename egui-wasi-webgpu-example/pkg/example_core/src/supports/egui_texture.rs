@@ -1,5 +1,5 @@
 use wasi_renderer::{recorder_core::RecordOutput, ScreenDescriptor};
-use wasi_renderer::{render_core, bindings::{types, surface, webgpu}};
+use wasi_renderer::{render_core, bindings::{surface, webgpu}};
 
 use crate::ExampleCommand;
 
@@ -7,7 +7,6 @@ pub struct EguiOutput {
     screen: ScreenDescriptor,
     shapes: Vec<egui::ClippedPrimitive>,
     textures: egui::epaint::textures::TexturesDelta,
-    events: Vec<types::UnhandleEvent>,
     commands: Vec<ExampleCommand>,
 }
 impl EguiOutput {
@@ -15,10 +14,9 @@ impl EguiOutput {
         screen: ScreenDescriptor,
         shapes: Vec<egui::ClippedPrimitive>,
         textures: egui::TexturesDelta,
-        unhandled_event: Vec<types::UnhandleEvent>,
         commands: Vec<ExampleCommand>) -> Self
     {
-        Self { screen, shapes, textures, events: unhandled_event, commands }
+        Self { screen, shapes, textures, commands }
     }
 }
 
@@ -63,10 +61,6 @@ impl<'a> RecordOutput for EguiOutput {
                 egui::TextureId::User(_) => render_core::TextureKey::Default,
             })
             .collect()
-    }
-
-    fn unhandle_events(&self) -> Vec<types::UnhandleEvent> {
-        self.events.clone()
     }
 
     fn command_requests(&self) -> Vec<Self::RequestCommand> {

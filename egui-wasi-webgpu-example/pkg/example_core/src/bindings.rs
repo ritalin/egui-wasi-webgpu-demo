@@ -37,7 +37,7 @@ trait EngineApi: 'static {
     fn render(
         &mut self,
         canvas: &webgpu::GpuCanvasContext,
-        screen: ScreenDescriptor) -> Result<(Vec::<render::UnhandleEvent>, Vec::<render::Command>), anyhow::Error>;
+        screen: ScreenDescriptor) -> Result<Vec::<render::Command>, anyhow::Error>;
 }
 
 struct DispatcherEngine<Recorder>
@@ -83,7 +83,7 @@ where
     fn render(
         &mut self,
         canvas: &webgpu::GpuCanvasContext,
-        screen: ScreenDescriptor) -> Result<(Vec::<render::UnhandleEvent>, Vec::<render::Command>), anyhow::Error>
+        screen: ScreenDescriptor) -> Result<Vec::<render::Command>, anyhow::Error>
     {
         self.renderer
             .send_uniform(
@@ -97,7 +97,7 @@ where
         self.renderer.render(canvas.get_current_texture(), output.clear_color(), resolved)?;
         self.renderer.remove_textures(&output.removed_textures());
 
-        Ok((output.unhandle_events(), output.command_requests().into_iter().map(render::Command::from).collect()))
+        Ok(output.command_requests().into_iter().map(render::Command::from).collect())
     }
 }
 
@@ -125,17 +125,17 @@ impl render::GuestDispatcher for DispatcherInner {
         render::CommandChannel::new(self.engine.clone())
     }
 
-    fn dispatch(&self,) -> (Vec::<render::UnhandleEvent>, Vec::<render::Command>,) {
+    fn dispatch(&self,) -> Vec::<render::Command> {
         let screen_size = self.context.size();
         let scale_factor = self.context.scale_factor();
 
         let mut engine = self.engine.0.borrow_mut();
 
         match engine.render(&self.canvas, ScreenDescriptor { size: screen_size, scale_factor }) {
-            Ok((events, commands)) => (events, commands),
+            Ok(commands) => commands,
             Err(err) => {
                 eprintln!("{err}");
-                (vec![], vec![])
+                vec![]
             }
         }
     }

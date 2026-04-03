@@ -1,7 +1,7 @@
 use egui::RawInput;
 use wasi_renderer::{ScreenDescriptor, recorder_core, bindings::types};
 
-use crate::{supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}}};
+use crate::{bindings::demo_world::exports::local::immediate_renderer_demo::render, supports::{egui_supports, egui_texture::{EguiOutput, EguiTexture, EguiTextureSet}}};
 
 pub struct MainWidgetRecorder {
     egui_context: egui::Context,
@@ -47,11 +47,11 @@ impl recorder_core::Recorder for MainWidgetRecorder {
                     let b = egui::Button::new(egui::RichText::new("Show Triangle").size(24.0).strong()).min_size(egui::Vec2::new(0.0, 60.0));
                     if ui.add(b).clicked() {
                         // println!("CLICKED: Show Triangle");
-                        unhandled_event.push(types::UnhandleEvent::OpenWindow("route://app/polygon".into()));
+                        unhandled_event.push(render::UnhandleEvent::OpenWindow("route://app/polygon".into()));
                     }
                     let b = egui::Button::new(egui::RichText::new("Counter app").size(24.0).strong()).min_size(egui::Vec2::new(0.0, 60.0));
                     if ui.add(b).clicked() {
-                        unhandled_event.push(types::UnhandleEvent::OpenWindow("route://app/counter".into()));
+                        unhandled_event.push(render::UnhandleEvent::OpenWindow("route://app/counter".into()));
                     }
                 });
             });
@@ -66,7 +66,6 @@ impl recorder_core::Recorder for MainWidgetRecorder {
             screen,
             shapes,
             output.textures_delta,
-            unhandled_event,
         ))
     }
 }

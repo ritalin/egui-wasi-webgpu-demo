@@ -97,10 +97,6 @@ impl recorder_core::RecordOutput for TriangleOutput {
         vec![]
     }
 
-    fn unhandle_events(&self) -> Vec<types::UnhandleEvent> {
-        vec![]
-    }
-
     fn command_requests(&self) -> Vec<Self::RequestCommand> {
         vec![]
     }
