@@ -3,10 +3,16 @@ pub mod demo_world;
 use std::{cell::RefCell, marker::PhantomData};
 use anyhow::Context;
 
-use wasi_renderer::{EngineCore, ScreenDescriptor, bindings::{surface, types, webgpu}, recorder_core, render_core};
+use wasi_renderer::{ScreenDescriptor, bindings::{surface, types, webgpu}, recorder_core, render_core};
 use wasi_renderer::recorder_core::RecordOutput;
 
 use crate::{bindings::demo_world::exports::local::immediate_renderer_demo::render, widget_recorder};
+
+pub trait EngineCore<EngineError: std::error::Error> {
+    fn push_event(&mut self, events: types::Event);
+    fn push_event_all(&mut self, events: Vec<types::Event>);
+    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<render::UnhandleEvent>, EngineError>;
+}
 
 struct DispatcherEngine<'a, Recorder: recorder_core::Recorder<Effect = ()>> {
     events: Vec<types::Event>,
@@ -39,7 +45,7 @@ impl<'a, Recorder: recorder_core::Recorder<Effect = ()> + 'a, > EngineCore<EguiE
         self.events.extend(events);
     }
 
-    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<types::UnhandleEvent>, EguiEngineError> {
+    fn render(&mut self, canvas: &webgpu::GpuCanvasContext, screen: ScreenDescriptor) -> Result<Vec<render::UnhandleEvent>, EguiEngineError> {
         self.renderer
             .send_uniform(
                 render_core::UniformInfo::from_size(screen.size, screen.scale_factor)
@@ -52,7 +58,7 @@ impl<'a, Recorder: recorder_core::Recorder<Effect = ()> + 'a, > EngineCore<EguiE
         self.renderer.render(canvas.get_current_texture(), output.clear_color(), resolved)?;
         self.renderer.remove_textures(&output.removed_textures());
 
-        Ok(output.unhandle_events())
+        Ok(vec![])
     }
 }
 
@@ -74,7 +80,7 @@ impl DispatcherImpl {
         }
     }
 
-    fn render(&self) -> Result<Vec<types::UnhandleEvent>, anyhow::Error> {
+    fn render(&self) -> Result<Vec<render::UnhandleEvent>, anyhow::Error> {
         let screen_size = self.context.size();
         let scale_factor = self.context.scale_factor();
 
@@ -94,7 +100,7 @@ impl render::GuestDispatcher for DispatcherImpl {
         engine.push_event_all(events);
     }
 
-    fn dispatch(&self,) -> Vec::<types::UnhandleEvent> {
+    fn dispatch(&self,) -> Vec::<render::UnhandleEvent> {
         match self.render() {
             Ok(events) => events,
             Err(err) => {

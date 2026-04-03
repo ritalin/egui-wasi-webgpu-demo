@@ -191,12 +191,3 @@ export interface EventActivate {
 export interface EventKeepFocus {
   tag: 'keep-focus',
 }
-export type UnhandleEvent = UnhandleEventEvent | UnhandleEventOpenWindow;
-export interface UnhandleEventEvent {
-  tag: 'event',
-  val: Event,
-}
-export interface UnhandleEventOpenWindow {
-  tag: 'open-window',
-  val: string,
-}

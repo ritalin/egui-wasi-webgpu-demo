@@ -34,8 +34,6 @@ impl recorder_core::Recorder for CounterWidgetRecorder {
         let mut input = RawInput::default();
         egui_supports::populate_events(events, &screen, &mut input);
 
-        let unhandled_event = vec![];
-
         let output = self.egui_context.run_ui(input, |cx| {
             egui::CentralPanel::default().show_inside(cx, |ui| {
                 ui.with_layout(egui::Layout::top_down_justified(egui::Align::Min), |ui| {
@@ -86,7 +84,6 @@ impl recorder_core::Recorder for CounterWidgetRecorder {
             screen,
             shapes,
             output.textures_delta,
-            unhandled_event,
         ))
     }
 }

@@ -103,7 +103,7 @@ export class WasmEngine {
         dispatcher.eventChannel().post(events.splice(0));
         dispatcher.commandChannel().post(effects.splice(0));
       }
-      const [_unhandled, commands] = dispatcher.dispatch();
+      const commands = dispatcher.dispatch();
 
       queueCommand(this, route, commands);
     }

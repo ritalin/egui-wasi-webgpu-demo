@@ -15174,23 +15174,6 @@ pub mod wasi {
                                                                                           }
                                                                                         }
                                                                                       }
-                                                                                      #[derive(Clone)]
-                                                                                      pub enum UnhandleEvent {
-                                                                                        Event(Event),
-                                                                                        OpenWindow(_rt::String),
-                                                                                      }
-                                                                                      impl ::core::fmt::Debug for UnhandleEvent {
-                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                                                                                          match self {
-                                                                                            UnhandleEvent::Event(e) => {
-                                                                                              f.debug_tuple("UnhandleEvent::Event").field(e).finish()
-                                                                                            }
-                                                                                            UnhandleEvent::OpenWindow(e) => {
-                                                                                              f.debug_tuple("UnhandleEvent::OpenWindow").field(e).finish()
-                                                                                            }
-                                                                                          }
-                                                                                        }
-                                                                                      }
                                                                                       #[doc(hidden)]
                                                                                       #[macro_export]
                                                                                       macro_rules! __export_local_immediate_renderer_types_cabi{
@@ -15878,8 +15861,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer:immediate-renderer-world:imports and exports")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30547] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xc3\xed\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30500] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x94\xed\x01\x01A\x02\
 \x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16449,7 +16432,7 @@ self\x0b\x04size\x09\x01\0\x04\0'[method]render-context.request-set-size\x01\x0e
 \x01\x12\x01i\x05\x01@\x01\x04self\x0b\0\x13\x04\0#[method]render-context.get-pi\
 peline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\x04\0)[method]render-context.\
 get-uniform-layout\x01\x16\x04\0)[method]render-context.get-texture-layout\x01\x16\
-\x04\0\x1clocal:webgpu-runtime/surface\x05\x0b\x01B&\x01n\x02\x04left\x05right\x04\
+\x04\0\x1clocal:webgpu-runtime/surface\x05\x0b\x01B$\x01n\x02\x04left\x05right\x04\
 \0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09s\
 uper-key\x01\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08l\
 ocation\x03\0\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0c\
@@ -16469,11 +16452,10 @@ bounds\x01\x1e\0\x04\0\x16composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\x01q
 e-up\x01\x07\0\x0amouse-move\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\x06\
 key-up\x01\x17\0\x1arequest-composition-bounds\x01\x20\0\x18update-composition-s\
 tate\x01\x1d\0\x07history\x01\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08ac\
-tivate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\"\x01q\x02\x05event\x01#\0\x0b\
-open-window\x01s\0\x04\0\x0eunhandle-event\x03\0$\x04\0\x1elocal:immediate-rende\
-rer/types\x05\x0c\x04\01local:immediate-renderer/immediate-renderer-world\x04\0\x0b\
-\x1e\x01\0\x18immediate-renderer-world\x03\0\0\0G\x09producers\x01\x0cprocessed-\
-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+tivate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\"\x04\0\x1elocal:immediate-ren\
+derer/types\x05\x0c\x04\01local:immediate-renderer/immediate-renderer-world\x04\0\
+\x0b\x1e\x01\0\x18immediate-renderer-world\x03\0\0\0G\x09producers\x01\x0cproces\
+sed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                 };
                                                                 )
                                                               }
