@@ -71,7 +71,7 @@ impl<'a, RecorderInner: EguiWidgetRecorder + 'a> recorder_core::Recorder for Egu
         let shapes = self.egui_context.tessellate(output.shapes, screen.scale_factor);
 
         supports::push_platform_output(&self.egui_context, output.platform_output, &mut commands);
-
+        supports::push_viewport_output(&self.egui_context, output.viewport_output, &mut commands);
         Ok(EguiOutput::new(
             screen,
             shapes,

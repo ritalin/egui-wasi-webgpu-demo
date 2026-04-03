@@ -7,6 +7,11 @@ impl From<ExampleCommand> for interaction::Command {
     fn from(value: ExampleCommand) -> Self {
         match value {
             ExampleCommand::OpenWindow(route) => interaction::Command::OpenWindow(route),
+            ExampleCommand::CloseWindow { with_query } => {
+                let mut options = interaction::CloseOptions::empty();
+                options.set(interaction::CloseOptions::WITH_QUERY, with_query);
+                interaction::Command::CloseWindow(options)
+            }
             ExampleCommand::RequestImage { paths } => interaction::Command::RequestImage(paths),
             ExampleCommand::Cursor(cursor) => interaction::Command::Cursor(cursor.into()),
             ExampleCommand::Clipboard(data) => interaction::Command::Clipboard(data.into()),
@@ -31,6 +36,9 @@ impl From<interaction::Effect> for ExampleEffect {
             }
             interaction::Effect::FontData(interaction::ExternalFont{source, name, bytes}) => {
                 ExampleEffect::FontData { url: source, name, bytes: bytes.into() }
+            }
+            interaction::Effect::RequestCloseQuery => {
+                ExampleEffect::RequestCloseQuery
             }
         }
     }

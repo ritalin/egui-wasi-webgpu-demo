@@ -6,6 +6,7 @@ interface interaction {
 
     variant command {
         open-window(route),
+        close-window(close-options),
         request-image(list<url>),
         cursor(cursor-style),
         clipboard(clipboard-data),
@@ -17,6 +18,7 @@ interface interaction {
     variant effect {
         image-data(external-asset),
         font-data(external-font),
+        request-close-query,
     }
 
     record external-asset {
@@ -87,6 +89,10 @@ interface interaction {
 
     flags open-url-options {
         new-tab,
+    }
+
+    flags close-options {
+        with-query,
     }
 }
 
