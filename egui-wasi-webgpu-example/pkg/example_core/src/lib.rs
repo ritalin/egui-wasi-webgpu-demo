@@ -7,6 +7,7 @@ pub mod recorder;
 #[derive(Debug, Clone)]
 pub enum ExampleCommand {
     OpenWindow(String),
+    CloseWindow { with_query: bool },
     RequestImage { paths: Vec<String> },
     Cursor(egui::CursorIcon),
     Clipboard(ClipboardData),
@@ -20,10 +21,11 @@ pub enum ClipboardData {
     Text(String),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ExampleEffect {
     ImageData{ url: String, bytes: Vec<u8> },
     FontData{ url: String, name: String, bytes: Vec<u8> },
+    RequestCloseQuery,
 }
 
 #[derive(Debug, Clone, Default)]

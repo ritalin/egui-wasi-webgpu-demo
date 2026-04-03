@@ -13,6 +13,7 @@ export type Route = "route://app/main";
 export type HostCommand =
   | { tag: "command://app/new-window" }
   | { tag: "command://app/open-window" }
+  | { tag: "command://app/close-window"; withQuery: boolean }
   | { tag: "command://app/load-image"; paths: string[] }
   | { tag: "command://app/write-clipboard"; data: ClipboardData };
 
@@ -24,6 +25,17 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
       case "open-window": {
         setTimeout(
           async () => await handleHostCommand(engine, cmd.val as Route, { tag: "command://app/open-window" }),
+          0,
+        );
+        break;
+      }
+      case "close-window": {
+        setTimeout(
+          async () =>
+            await handleHostCommand(engine, route, {
+              tag: "command://app/close-window",
+              withQuery: cmd.val.withQuery ?? false,
+            }),
           0,
         );
         break;
@@ -96,6 +108,14 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
 
       if (engine.launch(route, canvas, eventSource)) {
         DomEventBridge.bind(eventSource, (events) => engine.addEvent(route, events));
+      }
+      break;
+    }
+    case "command://app/close-window": {
+      if (cmd.withQuery) {
+        engine.entry(route)?.effects.push({ tag: "request-close-query" });
+      } else {
+        engine.removeRoute(route);
       }
       break;
     }
