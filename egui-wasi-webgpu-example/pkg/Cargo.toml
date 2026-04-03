@@ -4,7 +4,7 @@ members = [
     "custom_keypad",
     "custom_style",
     "custom_font_style",
-    "keyboard_events",
+    "keyboard_events", "popups",
 ]
 resolver = "2"
 
