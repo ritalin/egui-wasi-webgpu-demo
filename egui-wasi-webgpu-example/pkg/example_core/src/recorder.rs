@@ -76,7 +76,6 @@ impl<'a, RecorderInner: EguiWidgetRecorder + 'a> recorder_core::Recorder for Egu
             screen,
             shapes,
             output.textures_delta,
-            vec![],
             commands
         ))
     }

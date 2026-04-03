@@ -32,6 +32,5 @@ pub trait RecordOutput {
     fn meshes<'s>(&'s self) -> Vec<Option<render_core::Mesh<'s>>>;
     fn textures<'s>(&'s self) -> Self::Textures<'s>;
     fn removed_textures(&self) -> Vec<render_core::TextureKey>;
-    fn unhandle_events(&self) -> Vec<types::UnhandleEvent>;
     fn command_requests(&self) -> Vec<Self::RequestCommand>;
 }

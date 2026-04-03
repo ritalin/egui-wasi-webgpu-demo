@@ -7,11 +7,10 @@ pub struct EguiOutput {
     screen: ScreenDescriptor,
     shapes: Vec<egui::ClippedPrimitive>,
     textures: egui::epaint::textures::TexturesDelta,
-    events: Vec<types::UnhandleEvent>,
 }
 impl EguiOutput {
-    pub fn new(screen: ScreenDescriptor, shapes: Vec<egui::ClippedPrimitive>, textures: egui::TexturesDelta, unhandled_event: Vec<types::UnhandleEvent>) -> Self {
-        Self { screen, shapes, textures, events: unhandled_event }
+    pub fn new(screen: ScreenDescriptor, shapes: Vec<egui::ClippedPrimitive>, textures: egui::TexturesDelta) -> Self {
+        Self { screen, shapes, textures }
     }
 }
 
@@ -56,10 +55,6 @@ impl<'a> RecordOutput for EguiOutput {
                 egui::TextureId::User(_) => render_core::TextureKey::Default,
             })
             .collect()
-    }
-
-    fn unhandle_events(&self) -> Vec<types::UnhandleEvent> {
-        self.events.clone()
     }
 
     fn command_requests(&self) -> Vec<Self::RequestCommand> {

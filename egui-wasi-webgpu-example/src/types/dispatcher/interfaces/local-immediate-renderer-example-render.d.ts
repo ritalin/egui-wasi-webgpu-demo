@@ -4,7 +4,6 @@ export type Command = import('./local-immediate-renderer-example-interaction.js'
 export type Effect = import('./local-immediate-renderer-example-interaction.js').Effect;
 export type RenderContext = import('./local-webgpu-runtime-surface.js').RenderContext;
 export type Event = import('./local-immediate-renderer-types.js').Event;
-export type UnhandleEvent = import('./local-immediate-renderer-types.js').UnhandleEvent;
 
 export class CommandChannel {
   /**
@@ -21,7 +20,7 @@ export class Dispatcher {
   private constructor();
   eventChannel(): EventChannel;
   commandChannel(): CommandChannel;
-  dispatch(): [Array<UnhandleEvent>, Array<Command>];
+  dispatch(): Array<Command>;
 }
 
 export class EventChannel {

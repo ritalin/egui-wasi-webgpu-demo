@@ -2,7 +2,12 @@ package local:immediate-renderer-demo;
 
 interface render {
     use local:webgpu-runtime/surface.{render-context};
-    use local:immediate-renderer/types.{event, unhandle-event};
+    use local:immediate-renderer/types.{event};
+
+    variant unhandle-event {
+        event(event),
+        open-window(string),
+    }
 
     resource dispatcher {
         push-event: func(event: event);
@@ -17,6 +22,5 @@ interface render {
 
 world demo-world {
     import local:webgpu-runtime/surface;
-//    export local:webgpu-runtime/surface;
     export render;
 }
