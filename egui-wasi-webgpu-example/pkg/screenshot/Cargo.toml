@@ -10,3 +10,4 @@ crate-type = ["cdylib"]
 wasi-renderer.workspace = true
 example_core.workspace = true
 egui.workspace = true
+image.workspace = true

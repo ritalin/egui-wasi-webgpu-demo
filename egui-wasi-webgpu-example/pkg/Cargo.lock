@@ -984,6 +984,7 @@ version = "0.1.0"
 dependencies = [
  "egui",
  "example_core",
+ "image",
  "wasi-renderer",
 ]
 

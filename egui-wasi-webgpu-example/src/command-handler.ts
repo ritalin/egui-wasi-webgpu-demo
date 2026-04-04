@@ -156,7 +156,6 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
       break;
     }
     case "command://app/screenshot": {
-      console.log("Screenshot requested");
       const entry = engine.entry(route);
       if (entry) {
         takeScreenShot(engine, entry, cmd.dests);
@@ -210,29 +209,33 @@ function showToast(message: string) {
 }
 
 function takeScreenShot(engine: WasmEngine, entry: RouteEntry, dests: Destination[]) {
-  entry.eventSource.editHost.toBlob(async (data) => {
-    if (!data) {
+  entry.eventSource.editHost.toBlob(async (blob) => {
+    if (!blob) {
       console.error("Screenshot failed");
       return;
     }
-    console.log("Screenshot created", `size: ${data.size}`, `type: ${data.type}`);
 
     for (const d of dests) {
       switch (d.tag) {
         case "origin": {
-          console.log("screenshot", "Send to origin");
-          entry.effects.push({ tag: "image-data", val: { source: "", bytes: await data.bytes() } });
+          entry.effects.push({
+            tag: "image-data",
+            val: { source: "", bytes: await blob.bytes() },
+          });
           break;
         }
         case "route": {
           const other = engine.entry(d.val as Route);
           if (other) {
-            other.effects.push({ tag: "image-data", val: { source: "", bytes: await data.bytes() } });
+            other.effects.push({
+              tag: "image-data",
+              val: { source: "", bytes: await blob.bytes() },
+            });
           }
           break;
         }
         case "clipboard": {
-          window.navigator.clipboard.write([new ClipboardItem({ [data.type]: data })]);
+          window.navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
           showToast("Copy screenshot to clipboard");
           break;
         }
