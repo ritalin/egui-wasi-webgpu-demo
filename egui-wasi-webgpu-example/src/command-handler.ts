@@ -4,8 +4,9 @@ import type {
   Command,
   CompositionBounds,
   CursorStyle,
+  Destination,
 } from "./types/interaction/interfaces/local-immediate-renderer-example-interaction";
-import type { WasmEngine } from "./engine";
+import type { RouteEntry, WasmEngine } from "./engine";
 import { DomEventBridge } from "./event-bridge";
 import { EditEventSource } from "./edit-event-source";
 
@@ -15,7 +16,8 @@ export type HostCommand =
   | { tag: "command://app/open-window" }
   | { tag: "command://app/close-window"; withQuery: boolean }
   | { tag: "command://app/load-image"; paths: string[] }
-  | { tag: "command://app/write-clipboard"; data: ClipboardData };
+  | { tag: "command://app/write-clipboard"; data: ClipboardData }
+  | { tag: "command://app/screenshot"; dests: Destination[] };
 
 export type AppEffect = "effect://app/image-data";
 
@@ -73,6 +75,12 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
       }
       case "composition-bounds": {
         updateCompositionBounds(engine, route, cmd.val);
+        break;
+      }
+      case "screenshot": {
+        setTimeout(
+          async () => await handleHostCommand(engine, route, { tag: "command://app/screenshot", dests: cmd.val }),
+        );
         break;
       }
     }
@@ -147,6 +155,14 @@ export async function handleHostCommand(engine: WasmEngine, route: Route, cmd: H
       }
       break;
     }
+    case "command://app/screenshot": {
+      console.log("Screenshot requested");
+      const entry = engine.entry(route);
+      if (entry) {
+        takeScreenShot(engine, entry, cmd.dests);
+      }
+      break;
+    }
   }
 }
 
@@ -191,4 +207,36 @@ function showToast(message: string) {
     el.classList.remove("show");
     setTimeout(() => el.remove(), 250);
   }, 2500);
+}
+
+function takeScreenShot(engine: WasmEngine, entry: RouteEntry, dests: Destination[]) {
+  entry.eventSource.editHost.toBlob(async (data) => {
+    if (!data) {
+      console.error("Screenshot failed");
+      return;
+    }
+    console.log("Screenshot created", `size: ${data.size}`, `type: ${data.type}`);
+
+    for (const d of dests) {
+      switch (d.tag) {
+        case "origin": {
+          console.log("screenshot", "Send to origin");
+          entry.effects.push({ tag: "image-data", val: { source: "", bytes: await data.bytes() } });
+          break;
+        }
+        case "route": {
+          const other = engine.entry(d.val as Route);
+          if (other) {
+            other.effects.push({ tag: "image-data", val: { source: "", bytes: await data.bytes() } });
+          }
+          break;
+        }
+        case "clipboard": {
+          window.navigator.clipboard.write([new ClipboardItem({ [data.type]: data })]);
+          showToast("Copy screenshot to clipboard");
+          break;
+        }
+      }
+    }
+  });
 }

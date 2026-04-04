@@ -118,7 +118,18 @@ export interface OpenUrlOptions {
 export interface CloseOptions {
   withQuery?: boolean,
 }
-export type Command = CommandOpenWindow | CommandCloseWindow | CommandRequestImage | CommandCursor | CommandClipboard | CommandOpenUrl | CommandChangeSet | CommandCompositionBounds;
+export type Destination = DestinationOrigin | DestinationRoute | DestinationClipboard;
+export interface DestinationOrigin {
+  tag: 'origin',
+}
+export interface DestinationRoute {
+  tag: 'route',
+  val: Route,
+}
+export interface DestinationClipboard {
+  tag: 'clipboard',
+}
+export type Command = CommandOpenWindow | CommandCloseWindow | CommandRequestImage | CommandCursor | CommandClipboard | CommandOpenUrl | CommandChangeSet | CommandCompositionBounds | CommandScreenshot;
 export interface CommandOpenWindow {
   tag: 'open-window',
   val: Route,
@@ -150,4 +161,8 @@ export interface CommandChangeSet {
 export interface CommandCompositionBounds {
   tag: 'composition-bounds',
   val: CompositionBounds,
+}
+export interface CommandScreenshot {
+  tag: 'screenshot',
+  val: Array<Destination>,
 }

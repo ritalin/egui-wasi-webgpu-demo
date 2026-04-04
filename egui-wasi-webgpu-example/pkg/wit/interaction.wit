@@ -12,7 +12,8 @@ interface interaction {
         clipboard(clipboard-data),
         open-url(tuple<string, open-url-options>),
         change-set(list<change-spec>),
-        composition-bounds(composition-bounds)
+        composition-bounds(composition-bounds),
+        screenshot(list<destination>)
     }
 
     variant effect {
@@ -93,6 +94,12 @@ interface interaction {
 
     flags close-options {
         with-query,
+    }
+
+    variant destination {
+        origin,
+        route(route),
+        clipboard,
     }
 }
 
