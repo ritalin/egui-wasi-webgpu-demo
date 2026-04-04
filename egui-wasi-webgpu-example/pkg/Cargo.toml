@@ -6,7 +6,7 @@ members = [
     "custom_font_style",
     "keyboard_events",
     "popups",
-    "confirm_exit",
+    "confirm_exit", "screenshot",
 ]
 resolver = "2"
 

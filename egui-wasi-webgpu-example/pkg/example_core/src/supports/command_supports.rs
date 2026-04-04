@@ -24,6 +24,9 @@ impl From<ExampleCommand> for interaction::Command {
                 interaction::Command::ChangeSet(change_specs.into_iter().map(Into::into).collect::<Vec<_>>())
             }
             ExampleCommand::CompositionBounds(bounds) =>interaction::Command::CompositionBounds(bounds.into()),
+            ExampleCommand::Screenshot(dests) => {
+                interaction::Command::Screenshot(dests.into_iter().map(Into::into).collect::<Vec<_>>())
+            }
         }
     }
 }
@@ -128,6 +131,16 @@ impl From<egui::Rect> for interaction::CompositionBounds {
             top: value.top(),
             width: value.width(),
             height: value.height(),
+        }
+    }
+}
+
+impl From<crate::Destination> for interaction::Destination {
+    fn from(value: crate::Destination) -> Self {
+        match value {
+            crate::Destination::Origin => Self::Origin,
+            crate::Destination::Route(route) => Self::Route(route),
+            crate::Destination::Clipboard => Self::Clipboard,
         }
     }
 }
