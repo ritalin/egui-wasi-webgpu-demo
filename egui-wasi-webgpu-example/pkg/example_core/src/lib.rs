@@ -14,6 +14,7 @@ pub enum ExampleCommand {
     OpenUrl(egui::OpenUrl),
     ChangeSet(Vec<ChangeSpec>),
     CompositionBounds(egui::Rect),
+    Screenshot(Vec<Destination>),
 }
 
 #[derive(Debug, Clone)]
@@ -39,6 +40,13 @@ pub struct ChangeSpec {
     pub offset: u32,
     pub len: u32,
     pub new_value: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub enum Destination {
+    Origin,
+    Route(String),
+    Clipboard,
 }
 
 pub use bindings::example_world::export;

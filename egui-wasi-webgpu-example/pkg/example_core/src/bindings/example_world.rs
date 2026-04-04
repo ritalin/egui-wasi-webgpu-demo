@@ -314,6 +314,27 @@ pub mod local {
         }
       }
       #[derive(Clone)]
+      pub enum Destination {
+        Origin,
+        Route(Route),
+        Clipboard,
+      }
+      impl ::core::fmt::Debug for Destination {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          match self {
+            Destination::Origin => {
+              f.debug_tuple("Destination::Origin").finish()
+            }
+            Destination::Route(e) => {
+              f.debug_tuple("Destination::Route").field(e).finish()
+            }
+            Destination::Clipboard => {
+              f.debug_tuple("Destination::Clipboard").finish()
+            }
+          }
+        }
+      }
+      #[derive(Clone)]
       pub enum Command {
         OpenWindow(Route),
         CloseWindow(CloseOptions),
@@ -323,6 +344,7 @@ pub mod local {
         OpenUrl((_rt::String,OpenUrlOptions,)),
         ChangeSet(_rt::Vec::<ChangeSpec>),
         CompositionBounds(CompositionBounds),
+        Screenshot(_rt::Vec::<Destination>),
       }
       impl ::core::fmt::Debug for Command {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
@@ -350,6 +372,9 @@ pub mod local {
             }
             Command::CompositionBounds(e) => {
               f.debug_tuple("Command::CompositionBounds").field(e).finish()
+            }
+            Command::Screenshot(e) => {
+              f.debug_tuple("Command::Screenshot").field(e).finish()
             }
           }
         }
@@ -15617,16 +15642,16 @@ pub mod wasi {
                                                                                 T_::dispatch(DispatcherBorrow::lift(arg0 as u32 as usize).get())
                                                                               };
                                                                               let ptr1 = (&raw mut _RET_AREA.0).cast::<u8>();
-                                                                              let vec16 = result0;
-                                                                              let len16 = vec16.len();
-                                                                              let layout16 = _rt::alloc::Layout::from_size_align(vec16.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                              let (result16, _cleanup16) = wit_bindgen::rt::Cleanup::new(layout16);if let Some(cleanup) = _cleanup16 { cleanup.forget(); }
-                                                                              for (i, e) in vec16.into_iter().enumerate() {
-                                                                                let base = result16.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                              let vec19 = result0;
+                                                                              let len19 = vec19.len();
+                                                                              let layout19 = _rt::alloc::Layout::from_size_align(vec19.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                              let (result19, _cleanup19) = wit_bindgen::rt::Cleanup::new(layout19);if let Some(cleanup) = _cleanup19 { cleanup.forget(); }
+                                                                              for (i, e) in vec19.into_iter().enumerate() {
+                                                                                let base = result19.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                 {
-                                                                                  use super::super::super::super::local::immediate_renderer_example::interaction::Command as V15;
+                                                                                  use super::super::super::super::local::immediate_renderer_example::interaction::Command as V18;
                                                                                   match e {
-                                                                                    V15::OpenWindow(e) => {
+                                                                                    V18::OpenWindow(e) => {
                                                                                       *base.add(0).cast::<u8>() = (0i32) as u8;
                                                                                       let vec2 = (e.into_bytes()).into_boxed_slice();
                                                                                       let ptr2 = vec2.as_ptr().cast::<u8>();
@@ -15635,12 +15660,12 @@ pub mod wasi {
                                                                                       *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len2;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr2.cast_mut();
                                                                                     },
-                                                                                    V15::CloseWindow(e) => {
+                                                                                    V18::CloseWindow(e) => {
                                                                                       *base.add(0).cast::<u8>() = (1i32) as u8;
                                                                                       let flags3 = e;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags3.bits() >> 0) as i32) as u8;
                                                                                     },
-                                                                                    V15::RequestImage(e) => {
+                                                                                    V18::RequestImage(e) => {
                                                                                       *base.add(0).cast::<u8>() = (2i32) as u8;
                                                                                       let vec5 = e;
                                                                                       let len5 = vec5.len();
@@ -15660,11 +15685,11 @@ pub mod wasi {
                                                                                       *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len5;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result5;
                                                                                     },
-                                                                                    V15::Cursor(e) => {
+                                                                                    V18::Cursor(e) => {
                                                                                       *base.add(0).cast::<u8>() = (3i32) as u8;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                     },
-                                                                                    V15::Clipboard(e) => {
+                                                                                    V18::Clipboard(e) => {
                                                                                       *base.add(0).cast::<u8>() = (4i32) as u8;
                                                                                       use super::super::super::super::local::immediate_renderer_example::interaction::ClipboardData as V7;
                                                                                       match e {
@@ -15679,7 +15704,7 @@ pub mod wasi {
                                                                                         },
                                                                                       }
                                                                                     },
-                                                                                    V15::OpenUrl(e) => {
+                                                                                    V18::OpenUrl(e) => {
                                                                                       *base.add(0).cast::<u8>() = (5i32) as u8;
                                                                                       let (t8_0, t8_1, ) = e;
                                                                                       let vec9 = (t8_0.into_bytes()).into_boxed_slice();
@@ -15691,7 +15716,7 @@ pub mod wasi {
                                                                                       let flags10 = t8_1;
                                                                                       *base.add(3*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags10.bits() >> 0) as i32) as u8;
                                                                                     },
-                                                                                    V15::ChangeSet(e) => {
+                                                                                    V18::ChangeSet(e) => {
                                                                                       *base.add(0).cast::<u8>() = (6i32) as u8;
                                                                                       let vec13 = e;
                                                                                       let len13 = vec13.len();
@@ -15723,7 +15748,7 @@ pub mod wasi {
                                                                                         *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len13;
                                                                                         *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result13;
                                                                                       },
-                                                                                      V15::CompositionBounds(e) => {
+                                                                                      V18::CompositionBounds(e) => {
                                                                                         *base.add(0).cast::<u8>() = (7i32) as u8;
                                                                                         let super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds{ left:left14, top:top14, width:width14, height:height14, } = e;
                                                                                         *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left14);
@@ -15731,11 +15756,47 @@ pub mod wasi {
                                                                                         *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width14);
                                                                                         *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height14);
                                                                                       },
+                                                                                      V18::Screenshot(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (8i32) as u8;
+                                                                                        let vec17 = e;
+                                                                                        let len17 = vec17.len();
+                                                                                        let layout17 = _rt::alloc::Layout::from_size_align(vec17.len() * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                        let (result17, _cleanup17) = wit_bindgen::rt::Cleanup::new(layout17);if let Some(cleanup) = _cleanup17 { cleanup.forget(); }
+                                                                                        for (i, e) in vec17.into_iter().enumerate() {
+                                                                                          let base = result17.add(i * (3*::core::mem::size_of::<*const u8>()));
+                                                                                          {
+                                                                                            use super::super::super::super::local::immediate_renderer_example::interaction::Destination as V16;
+                                                                                            match e {
+                                                                                              V16::Origin=> {
+                                                                                                {
+                                                                                                  *base.add(0).cast::<u8>() = (0i32) as u8;
+                                                                                                }
+                                                                                              }
+                                                                                              V16::Route(e) => {
+                                                                                                *base.add(0).cast::<u8>() = (1i32) as u8;
+                                                                                                let vec15 = (e.into_bytes()).into_boxed_slice();
+                                                                                                let ptr15 = vec15.as_ptr().cast::<u8>();
+                                                                                                let len15 = vec15.len();
+                                                                                                ::core::mem::forget(vec15);
+                                                                                                *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len15;
+                                                                                                *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr15.cast_mut();
+                                                                                              },
+                                                                                              V16::Clipboard=> {
+                                                                                                {
+                                                                                                  *base.add(0).cast::<u8>() = (2i32) as u8;
+                                                                                                }
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len17;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result17;
+                                                                                      },
                                                                                     }
                                                                                   }
                                                                                 }
-                                                                                *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len16;
-                                                                                *ptr1.add(0).cast::<*mut u8>() = result16;
+                                                                                *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len19;
+                                                                                *ptr1.add(0).cast::<*mut u8>() = result19;
                                                                                 ptr1
                                                                               } }
                                                                               #[doc(hidden)]
@@ -15743,10 +15804,10 @@ pub mod wasi {
                                                                               pub unsafe fn __post_return_method_dispatcher_dispatch<T_: GuestDispatcher>(arg0: *mut u8,) { unsafe {
                                                                                 let l0 = *arg0.add(0).cast::<*mut u8>();
                                                                                 let l1 = *arg0.add(::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                let base21 = l0;
-                                                                                let len21 = l1;
-                                                                                for i in 0..len21 {
-                                                                                  let base = base21.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                let base27 = l0;
+                                                                                let len27 = l1;
+                                                                                for i in 0..len27 {
+                                                                                  let base = base27.add(i * (8+3*::core::mem::size_of::<*const u8>()));
                                                                                   {
                                                                                     let l2 = i32::from(*base.add(0).cast::<u8>());
                                                                                     match l2 {
@@ -15808,11 +15869,33 @@ pub mod wasi {
                                                                                         }
                                                                                         _rt::cabi_dealloc(base20, len20 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                       },
-                                                                                      _ => (),
+                                                                                      7 => (),
+                                                                                      _ => {
+                                                                                        let l21 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                        let l22 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                        let base26 = l21;
+                                                                                        let len26 = l22;
+                                                                                        for i in 0..len26 {
+                                                                                          let base = base26.add(i * (3*::core::mem::size_of::<*const u8>()));
+                                                                                          {
+                                                                                            let l23 = i32::from(*base.add(0).cast::<u8>());
+                                                                                            match l23 {
+                                                                                              0 => (),
+                                                                                              1 => {
+                                                                                                let l24 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                let l25 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                _rt::cabi_dealloc(l24, l25, 1);
+                                                                                              },
+                                                                                              _ => (),
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                        _rt::cabi_dealloc(base26, len26 * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                      },
                                                                                     }
                                                                                   }
                                                                                 }
-                                                                                _rt::cabi_dealloc(base21, len21 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                _rt::cabi_dealloc(base27, len27 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                               } }
                                                                               #[doc(hidden)]
                                                                               #[allow(non_snake_case, unused_unsafe)]
@@ -16362,8 +16445,8 @@ pub mod wasi {
                                                                         #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:imports and exports")]
                                                                         #[doc(hidden)]
                                                                         #[allow(clippy::octal_escapes)]
-                                                                        pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31294] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xb9\xf3\x01\x01A\x02\
+                                                                        pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31361] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xfc\xf3\x01\x01A\x02\
 \x01A\x19\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16921,7 +17004,7 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x1d\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
+B\x20\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
 source\x03\x05bytes\x04\x04\0\x0eexternal-asset\x03\0\x05\x01r\x03\x06source\x03\
 \x04names\x05bytes\x04\x04\0\x0dexternal-font\x03\0\x07\x01q\x03\x0aimage-data\x01\
 \x06\0\x09font-data\x01\x08\0\x13request-close-query\0\0\x04\0\x06effect\x03\0\x09\
@@ -16934,47 +17017,48 @@ ize\x09sw-resize\x09ew-resize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07zoom
 clipboard-data\x03\0\x0d\x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x0f\x04\0\
 \x0bchange-spec\x03\0\x10\x01r\x04\x04leftv\x03topv\x05widthv\x06heightv\x04\0\x12\
 composition-bounds\x03\0\x12\x01n\x01\x07new-tab\x04\0\x10open-url-options\x03\0\
-\x14\x01n\x01\x0awith-query\x04\0\x0dclose-options\x03\0\x16\x01p\x03\x01o\x02s\x15\
-\x01p\x11\x01q\x08\x0bopen-window\x01\x01\0\x0cclose-window\x01\x17\0\x0drequest\
--image\x01\x18\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x08open-url\x01\x19\0\
-\x0achange-set\x01\x1a\0\x12composition-bounds\x01\x13\0\x04\0\x07command\x03\0\x1b\
-\x03\0,local:immediate-renderer-example/interaction\x05\x0b\x01B$\x01n\x02\x04le\
-ft\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03\
-alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01y\
-v\x04\0\x08location\x03\0\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07for\
-ward\x04\0\x0cmouse-button\x03\0\x06\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\
-\0\x10mouse-wheel-unit\x03\0\x08\x01r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\
-\x04\0\x0bmouse-wheel\x03\0\x0a\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\
-\x01m\x03\x05enter\x03tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09\
-backspace\x06delete\x04\0\x08edit-key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-k\
-ey\x03\0\x12\x01m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\
-\0\x08navi-key\x03\0\x14\x01q\x04\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02u\
-i\x01\x13\0\x04navi\x01\x15\0\x04\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\
-\0\x0bhistory-ops\x03\0\x18\x01r\x02\x06offsety\x03leny\x04\0\x11composition-ran\
-ge\x03\0\x1a\x01q\x04\x05start\0\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\
-\0\x06commit\x01s\0\x04\0\x11composition-state\x03\0\x1c\x01k\x1b\x01q\x01\x10ch\
-aracter-bounds\x01\x1e\0\x04\0\x16composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\
-\x01q\x10\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08\
-mouse-up\x01\x07\0\x0amouse-move\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\
-\x06key-up\x01\x17\0\x1arequest-composition-bounds\x01\x20\0\x18update-compositi\
-on-state\x01\x1d\0\x07history\x01\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08\
-activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\"\x03\0\x1elocal:immediate-r\
-enderer/types\x05\x0c\x02\x03\0\x04\x07command\x02\x03\0\x04\x06effect\x02\x03\0\
-\x03\x0erender-context\x02\x03\0\x05\x05event\x01B!\x02\x03\x02\x01\x0d\x04\0\x07\
-command\x03\0\0\x02\x03\x02\x01\x0e\x04\0\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\
-\x04\0\x0erender-context\x03\0\x04\x02\x03\x02\x01\x10\x04\0\x05event\x03\0\x06\x04\
-\0\x0devent-channel\x03\x01\x04\0\x0fcommand-channel\x03\x01\x04\0\x0adispatcher\
-\x03\x01\x01h\x08\x01p\x07\x01@\x02\x04self\x0b\x06events\x0c\x01\0\x04\0\x1a[me\
-thod]event-channel.post\x01\x0d\x01h\x09\x01p\x03\x01@\x02\x04self\x0e\x07effect\
-s\x0f\x01\0\x04\0\x1c[method]command-channel.post\x01\x10\x01h\x0a\x01i\x08\x01@\
-\x01\x04self\x11\0\x12\x04\0\x20[method]dispatcher.event-channel\x01\x13\x01i\x09\
-\x01@\x01\x04self\x11\0\x14\x04\0\"[method]dispatcher.command-channel\x01\x15\x01\
-p\x01\x01@\x01\x04self\x11\0\x16\x04\0\x1b[method]dispatcher.dispatch\x01\x17\x01\
-i\x05\x01i\x0a\x01@\x01\x07context\x18\0\x19\x04\0\x0fcreate-renderer\x01\x1a\x04\
-\0'local:immediate-renderer-example/render\x05\x11\x04\0.local:immediate-rendere\
-r-example/example-world\x04\0\x0b\x13\x01\0\x0dexample-world\x03\0\0\0G\x09produ\
-cers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x06\
-0.53.1";
+\x14\x01n\x01\x0awith-query\x04\0\x0dclose-options\x03\0\x16\x01q\x03\x06origin\0\
+\0\x05route\x01\x01\0\x09clipboard\0\0\x04\0\x0bdestination\x03\0\x18\x01p\x03\x01\
+o\x02s\x15\x01p\x11\x01p\x19\x01q\x09\x0bopen-window\x01\x01\0\x0cclose-window\x01\
+\x17\0\x0drequest-image\x01\x1a\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x08\
+open-url\x01\x1b\0\x0achange-set\x01\x1c\0\x12composition-bounds\x01\x13\0\x0asc\
+reenshot\x01\x1d\0\x04\0\x07command\x03\0\x1e\x03\0,local:immediate-renderer-exa\
+mple/interaction\x05\x0b\x01B$\x01n\x02\x04left\x05right\x04\0\x10modifier-press\
+ed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10\
+modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\
+\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\
+\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10mouse-wheel-unit\x03\0\x08\x01\
+r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\x04\0\x0bmouse-wheel\x03\0\x0a\x01\
+n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\x01m\x03\x05enter\x03tab\x05space\
+\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09backspace\x06delete\x04\0\x08edit\
+-key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x12\x01m\x04\x0aarrow-do\
+wn\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x14\x01q\x04\
+\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02ui\x01\x13\0\x04navi\x01\x15\0\x04\
+\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x18\x01\
+r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x1a\x01q\x04\x05start\0\
+\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11com\
+position-state\x03\0\x1c\x01k\x1b\x01q\x01\x10character-bounds\x01\x1e\0\x04\0\x16\
+composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\x01q\x10\x09modifiers\x01\x03\0\
+\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-mov\
+e\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\x06key-up\x01\x17\0\x1arequest\
+-composition-bounds\x01\x20\0\x18update-composition-state\x01\x1d\0\x07history\x01\
+\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\
+\0\x05event\x03\0\"\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x02\x03\0\x04\
+\x07command\x02\x03\0\x04\x06effect\x02\x03\0\x03\x0erender-context\x02\x03\0\x05\
+\x05event\x01B!\x02\x03\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\x0e\
+\x04\0\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\x04\0\x0erender-context\x03\0\x04\
+\x02\x03\x02\x01\x10\x04\0\x05event\x03\0\x06\x04\0\x0devent-channel\x03\x01\x04\
+\0\x0fcommand-channel\x03\x01\x04\0\x0adispatcher\x03\x01\x01h\x08\x01p\x07\x01@\
+\x02\x04self\x0b\x06events\x0c\x01\0\x04\0\x1a[method]event-channel.post\x01\x0d\
+\x01h\x09\x01p\x03\x01@\x02\x04self\x0e\x07effects\x0f\x01\0\x04\0\x1c[method]co\
+mmand-channel.post\x01\x10\x01h\x0a\x01i\x08\x01@\x01\x04self\x11\0\x12\x04\0\x20\
+[method]dispatcher.event-channel\x01\x13\x01i\x09\x01@\x01\x04self\x11\0\x14\x04\
+\0\"[method]dispatcher.command-channel\x01\x15\x01p\x01\x01@\x01\x04self\x11\0\x16\
+\x04\0\x1b[method]dispatcher.dispatch\x01\x17\x01i\x05\x01i\x0a\x01@\x01\x07cont\
+ext\x18\0\x19\x04\0\x0fcreate-renderer\x01\x1a\x04\0'local:immediate-renderer-ex\
+ample/render\x05\x11\x04\0.local:immediate-renderer-example/example-world\x04\0\x0b\
+\x13\x01\0\x0dexample-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dw\
+it-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                       };
                                                                       )
                                                                     }
@@ -16985,8 +17069,8 @@ cers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x06
                                                                     #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world-with-all-of-its-exports-removed:encoded world")]
                                                                     #[doc(hidden)]
                                                                     #[allow(clippy::octal_escapes)]
-                                                                    pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30822] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xc1\xef\x01\x01A\x02\
+                                                                    pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30889] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x84\xf0\x01\x01A\x02\
 \x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -17544,7 +17628,7 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x1d\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
+B\x20\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
 source\x03\x05bytes\x04\x04\0\x0eexternal-asset\x03\0\x05\x01r\x03\x06source\x03\
 \x04names\x05bytes\x04\x04\0\x0dexternal-font\x03\0\x07\x01q\x03\x0aimage-data\x01\
 \x06\0\x09font-data\x01\x08\0\x13request-close-query\0\0\x04\0\x06effect\x03\0\x09\
@@ -17557,35 +17641,36 @@ ize\x09sw-resize\x09ew-resize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07zoom
 clipboard-data\x03\0\x0d\x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x0f\x04\0\
 \x0bchange-spec\x03\0\x10\x01r\x04\x04leftv\x03topv\x05widthv\x06heightv\x04\0\x12\
 composition-bounds\x03\0\x12\x01n\x01\x07new-tab\x04\0\x10open-url-options\x03\0\
-\x14\x01n\x01\x0awith-query\x04\0\x0dclose-options\x03\0\x16\x01p\x03\x01o\x02s\x15\
-\x01p\x11\x01q\x08\x0bopen-window\x01\x01\0\x0cclose-window\x01\x17\0\x0drequest\
--image\x01\x18\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x08open-url\x01\x19\0\
-\x0achange-set\x01\x1a\0\x12composition-bounds\x01\x13\0\x04\0\x07command\x03\0\x1b\
-\x03\0,local:immediate-renderer-example/interaction\x05\x0b\x01B$\x01n\x02\x04le\
-ft\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03\
-alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01y\
-v\x04\0\x08location\x03\0\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07for\
-ward\x04\0\x0cmouse-button\x03\0\x06\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\
-\0\x10mouse-wheel-unit\x03\0\x08\x01r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\
-\x04\0\x0bmouse-wheel\x03\0\x0a\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\
-\x01m\x03\x05enter\x03tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09\
-backspace\x06delete\x04\0\x08edit-key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-k\
-ey\x03\0\x12\x01m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\
-\0\x08navi-key\x03\0\x14\x01q\x04\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02u\
-i\x01\x13\0\x04navi\x01\x15\0\x04\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\
-\0\x0bhistory-ops\x03\0\x18\x01r\x02\x06offsety\x03leny\x04\0\x11composition-ran\
-ge\x03\0\x1a\x01q\x04\x05start\0\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\
-\0\x06commit\x01s\0\x04\0\x11composition-state\x03\0\x1c\x01k\x1b\x01q\x01\x10ch\
-aracter-bounds\x01\x1e\0\x04\0\x16composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\
-\x01q\x10\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08\
-mouse-up\x01\x07\0\x0amouse-move\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\
-\x06key-up\x01\x17\0\x1arequest-composition-bounds\x01\x20\0\x18update-compositi\
-on-state\x01\x1d\0\x07history\x01\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08\
-activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\"\x03\0\x1elocal:immediate-r\
-enderer/types\x05\x0c\x04\0Nlocal:immediate-renderer-example/example-world-with-\
-all-of-its-exports-removed\x04\0\x0b3\x01\0-example-world-with-all-of-its-export\
-s-removed\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.\
-245.1\x10wit-bindgen-rust\x060.53.1";
+\x14\x01n\x01\x0awith-query\x04\0\x0dclose-options\x03\0\x16\x01q\x03\x06origin\0\
+\0\x05route\x01\x01\0\x09clipboard\0\0\x04\0\x0bdestination\x03\0\x18\x01p\x03\x01\
+o\x02s\x15\x01p\x11\x01p\x19\x01q\x09\x0bopen-window\x01\x01\0\x0cclose-window\x01\
+\x17\0\x0drequest-image\x01\x1a\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x08\
+open-url\x01\x1b\0\x0achange-set\x01\x1c\0\x12composition-bounds\x01\x13\0\x0asc\
+reenshot\x01\x1d\0\x04\0\x07command\x03\0\x1e\x03\0,local:immediate-renderer-exa\
+mple/interaction\x05\x0b\x01B$\x01n\x02\x04left\x05right\x04\0\x10modifier-press\
+ed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10\
+modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\
+\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\
+\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10mouse-wheel-unit\x03\0\x08\x01\
+r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\x04\0\x0bmouse-wheel\x03\0\x0a\x01\
+n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\x01m\x03\x05enter\x03tab\x05space\
+\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09backspace\x06delete\x04\0\x08edit\
+-key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x12\x01m\x04\x0aarrow-do\
+wn\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x14\x01q\x04\
+\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02ui\x01\x13\0\x04navi\x01\x15\0\x04\
+\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x18\x01\
+r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x1a\x01q\x04\x05start\0\
+\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11com\
+position-state\x03\0\x1c\x01k\x1b\x01q\x01\x10character-bounds\x01\x1e\0\x04\0\x16\
+composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\x01q\x10\x09modifiers\x01\x03\0\
+\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-mov\
+e\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\x06key-up\x01\x17\0\x1arequest\
+-composition-bounds\x01\x20\0\x18update-composition-state\x01\x1d\0\x07history\x01\
+\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\
+\0\x05event\x03\0\"\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x04\0Nlocal:\
+immediate-renderer-example/example-world-with-all-of-its-exports-removed\x04\0\x0b\
+3\x01\0-example-world-with-all-of-its-exports-removed\x03\0\0\0G\x09producers\x01\
+\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
 
                                                                     #[inline(never)]
                                                                     #[doc(hidden)]
