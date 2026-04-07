@@ -118,6 +118,13 @@ impl WindowFrame {
 
         let button_height = Self::FRAME_BUTTON_HEIGHT;
 
+        let close_response = ui
+            .add(Button::new(RichText::new("❌").size(button_height)))
+            .on_hover_text("Close the window");
+        if close_response.clicked() {
+            ui.send_viewport_cmd(egui::ViewportCommand::Close);
+        }
+
         let is_maximized = ui.input(|i| i.viewport().maximized.unwrap_or(false));
         let button = Button::new(RichText::new("🗗").size(button_height));
         if is_maximized {
@@ -150,7 +157,9 @@ impl WindowFrame {
 
         for cmd in &output.commands {
             match cmd {
-                egui::ViewportCommand::Close => todo!(),
+                egui::ViewportCommand::Close => {
+                    // use default handling
+                }
                 // egui::ViewportCommand::CancelClose => todo!(),
                 // egui::ViewportCommand::Title(_) => todo!(),
                 // egui::ViewportCommand::Transparent(_) => todo!(),
