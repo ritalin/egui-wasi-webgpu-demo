@@ -97,6 +97,10 @@ button:focus-visible {
     position: relative;
 }
 
+canvas {
+    outline: none;
+}
+
 .toast {
     position: fixed;
     bottom: 16px;

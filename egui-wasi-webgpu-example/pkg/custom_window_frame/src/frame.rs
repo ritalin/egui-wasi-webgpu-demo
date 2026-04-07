@@ -34,15 +34,17 @@ impl WindowFrame {
             };
             self.title_bar_ui(ui, title_bar_rect, title);
 
-            // Add the contents:
-            let content_rect = {
-                let mut rect = app_rect;
-                rect.min.y = title_bar_rect.max.y;
-                rect
+            if !self.is_minimized() {
+                // Add the contents:
+                let content_rect = {
+                    let mut rect = app_rect;
+                    rect.min.y = title_bar_rect.max.y;
+                    rect
+                }
+                .shrink(4.0);
+                let mut content_ui = ui.new_child(UiBuilder::new().max_rect(content_rect));
+                add_contents(&mut content_ui);
             }
-            .shrink(4.0);
-            let mut content_ui = ui.new_child(UiBuilder::new().max_rect(content_rect));
-            add_contents(&mut content_ui);
         });
     }
 
@@ -117,19 +119,28 @@ impl WindowFrame {
         let button_height = Self::FRAME_BUTTON_HEIGHT;
 
         let is_maximized = ui.input(|i| i.viewport().maximized.unwrap_or(false));
+        let button = Button::new(RichText::new("🗗").size(button_height));
         if is_maximized {
-            let maximized_response = ui
-                .add(Button::new(RichText::new("🗗").size(button_height)))
-                .on_hover_text("Restore window");
-            if maximized_response.clicked() {
+            if ui.add(button).on_hover_text("Restore window").clicked() {
                 ui.send_viewport_cmd(egui::ViewportCommand::Maximized(false));
             }
-        } else {
-            let maximized_response = ui
-                .add(Button::new(RichText::new("🗗").size(button_height)))
-                .on_hover_text("Maximize window");
-            if maximized_response.clicked() {
+        }
+        else {
+            if ui.add(button).on_hover_text("Maximize window").clicked() {
                 ui.send_viewport_cmd(egui::ViewportCommand::Maximized(true));
+            }
+        }
+
+        let is_minimized = ui.input(|i| i.viewport().minimized.unwrap_or(false));
+        let button = Button::new(RichText::new("🗕").size(button_height));
+        if is_minimized {
+            if ui.add(button).on_hover_text("Restore window").clicked() {
+                ui.send_viewport_cmd(egui::ViewportCommand::Minimized(false));
+            }
+        }
+        else {
+            if ui.add(button).on_hover_text("Minimize the window").clicked() {
+                ui.send_viewport_cmd(egui::ViewportCommand::Minimized(true));
             }
         }
     }

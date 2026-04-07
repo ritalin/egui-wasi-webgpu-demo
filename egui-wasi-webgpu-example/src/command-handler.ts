@@ -315,16 +315,12 @@ function updateCustomFrameState(engine: WasmEngine, route: Route, info: CustomFr
       {
         console.log("custom-frame", "Maximize");
 
-        flashCurrentBounds(canvas);
-
         canvas.style.width = "100%";
         canvas.style.height = "100%";
         canvas.style.left = "0px";
         canvas.style.top = "0px";
-        canvas.offsetWidth;
 
         setTimeout(() => {
-          canvas.style.removeProperty("transition");
           const rect = canvas.getBoundingClientRect();
           console.log("custom-frame/Maximize", "new-size", rect);
           entry.surface.requestSetSize({ width: rect.width, height: rect.height });
@@ -341,6 +337,19 @@ function updateCustomFrameState(engine: WasmEngine, route: Route, info: CustomFr
       break;
     case "minimize": {
       console.log("custom-frame", "Minimize");
+
+      canvas.style.width = `${info.val.width}px`;
+      canvas.style.height = `${info.val.height}px`;
+      canvas.style.left = "0";
+      canvas.style.top = "auto";
+      canvas.style.bottom = "0";
+
+      setTimeout(() => {
+        canvas.style.removeProperty("transition");
+        const rect = canvas.getBoundingClientRect();
+        console.log("custom-frame/Maximize", "new-size", rect);
+        entry.surface.requestSetSize({ width: rect.width, height: rect.height });
+      }, 0);
 
       entry.effects.push({
         tag: "custom-frame-effect",
