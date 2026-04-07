@@ -5,15 +5,13 @@ import { WASIShim } from "@bytecodealliance/preview2-shim/instantiation";
 import { instantiate, type ImportObject } from "pkg/egui-renderer";
 import { WasmEngine } from "./engine";
 import { type Route, handleHostCommand } from "./command-handler";
-import type { Event as DispatchEvent } from "pkg/interfaces/local-immediate-renderer-example-render";
+import type { Event as DispatchEvent } from "./types/event/interfaces/local-immediate-renderer-types";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <div>
     <h1>egui + wasi:webgpu example</h1>
     <div class="main">
       <canvas id="main-window"></canvas>
     </div>
-  </div>
 `;
 
 class AppLoop {

@@ -2,13 +2,16 @@ import type {
   ChangeSpec,
   ClipboardData,
   Command,
-  CompositionBounds,
+  Origin,
+  Size,
   CursorStyle,
+  CustomFrameCommand,
   Destination,
 } from "./types/interaction/interfaces/local-immediate-renderer-example-interaction";
 import type { RouteEntry, WasmEngine } from "./engine";
 import { DomEventBridge } from "./event-bridge";
 import { EditEventSource } from "./edit-event-source";
+import { fixElementSize } from "./layout-support";
 
 export type Route = "route://app/main";
 export type HostCommand =
@@ -74,13 +77,17 @@ export function queueCommand(engine: WasmEngine, route: Route, commands: Command
         break;
       }
       case "composition-bounds": {
-        updateCompositionBounds(engine, route, cmd.val);
+        updateCompositionBounds(engine, route, ...cmd.val);
         break;
       }
       case "screenshot": {
         setTimeout(
           async () => await handleHostCommand(engine, route, { tag: "command://app/screenshot", dests: cmd.val }),
         );
+        break;
+      }
+      case "custom-frame": {
+        updateCustomFrameState(engine, route, cmd.val);
         break;
       }
     }
@@ -187,12 +194,12 @@ function updateEditContext(engine: WasmEngine, route: Route, changeSpecs: Change
   }
 }
 
-function updateCompositionBounds(engine: WasmEngine, route: Route, bounds: CompositionBounds) {
+function updateCompositionBounds(engine: WasmEngine, route: Route, origin: Origin, size: Size) {
   const entry = engine.entry(route);
   if (!entry) return;
 
   entry.eventSource.restoreEditMode();
-  entry.eventSource.updateCompositionBounds(bounds);
+  entry.eventSource.updateCompositionBounds(origin, size);
   entry.events.push({ tag: "keep-focus" });
 }
 
@@ -242,4 +249,135 @@ function takeScreenShot(engine: WasmEngine, entry: RouteEntry, dests: Destinatio
       }
     }
   });
+}
+
+function updateCustomFrameState(engine: WasmEngine, route: Route, info: CustomFrameCommand) {
+  function flashCurrentBounds(canvas: HTMLCanvasElement) {
+    const rect = canvas.getBoundingClientRect();
+    canvas.style.width = rect.width + "px";
+    canvas.style.height = rect.height + "px";
+    canvas.style.left = rect.left + "px";
+    canvas.style.top = rect.top + "px";
+    canvas.offsetWidth;
+  }
+
+  const entry = engine.entry(route);
+  if (!entry) return;
+
+  const canvas = entry.eventSource.editHost;
+
+  switch (info.tag) {
+    case "initialize":
+      {
+        console.log("custom-frame", "Initialize");
+
+        if (canvas.parentElement) {
+          fixElementSize(canvas.parentElement, true);
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        const parent = canvas.parentElement;
+        if (parent && parent != document.body) {
+          const rect0 = parent.getBoundingClientRect();
+          rect.x -= rect0.x;
+          rect.y -= rect0.y;
+        }
+
+        canvas.style.margin = "0";
+        canvas.style.position = "absolute";
+        canvas.style.left = `${rect.left}px`;
+        canvas.style.top = `${rect.top}px`;
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+
+        entry.effects.push(
+          {
+            tag: "custom-frame-effect",
+            val: {
+              tag: "initialized",
+              val: [
+                { left: rect.left, top: rect.top },
+                { width: rect.width, height: rect.height },
+              ],
+            },
+          },
+          {
+            tag: "custom-frame-effect",
+            val: {
+              tag: "changed",
+              val: info.val,
+            },
+          },
+        );
+      }
+      break;
+    case "maximize":
+      {
+        console.log("custom-frame", "Maximize");
+
+        flashCurrentBounds(canvas);
+
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.left = "0px";
+        canvas.style.top = "0px";
+        canvas.offsetWidth;
+
+        setTimeout(() => {
+          canvas.style.removeProperty("transition");
+          const rect = canvas.getBoundingClientRect();
+          console.log("custom-frame/Maximize", "new-size", rect);
+          entry.surface.requestSetSize({ width: rect.width, height: rect.height });
+        }, 0);
+
+        entry.effects.push({
+          tag: "custom-frame-effect",
+          val: {
+            tag: "changed",
+            val: "maximized",
+          },
+        });
+      }
+      break;
+    case "minimize": {
+      console.log("custom-frame", "Minimize");
+
+      entry.effects.push({
+        tag: "custom-frame-effect",
+        val: {
+          tag: "changed",
+          val: "minimized",
+        },
+      });
+
+      break;
+    }
+    case "restore": {
+      console.log("custom-frame", "RestoreTo", info.val);
+      const [origin, size] = info.val;
+      canvas.style.transition = "none";
+      canvas.style.width = `${size.width}px`;
+      canvas.style.height = `${size.height}px`;
+      canvas.style.left = `${origin.left}px`;
+      canvas.style.top = `${origin.top}px`;
+
+      canvas.offsetWidth;
+
+      setTimeout(() => {
+        const rect = canvas.getBoundingClientRect();
+        console.log("custom-frame/Maximize", "new-size", rect);
+        entry.surface.requestSetSize({ width: rect.width, height: rect.height });
+      });
+
+      entry.effects.push({
+        tag: "custom-frame-effect",
+        val: {
+          tag: "changed",
+          val: "restored",
+        },
+      });
+
+      break;
+    }
+  }
 }

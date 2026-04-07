@@ -12,14 +12,16 @@ interface interaction {
         clipboard(clipboard-data),
         open-url(tuple<string, open-url-options>),
         change-set(list<change-spec>),
-        composition-bounds(composition-bounds),
-        screenshot(list<destination>)
+        composition-bounds(tuple<origin, size>),
+        screenshot(list<destination>),
+        custom-frame(custom-frame-command),
     }
 
     variant effect {
         image-data(external-asset),
         font-data(external-font),
         request-close-query,
+        custom-frame-effect(custom-frame-effect),
     }
 
     record external-asset {
@@ -81,9 +83,12 @@ interface interaction {
         new-value: option<string>,
     }
 
-    record composition-bounds {
+    record origin {
         left: f32,
         top: f32,
+    }
+
+    record size {
         width: f32,
         height: f32,
     }
@@ -100,6 +105,24 @@ interface interaction {
         origin,
         route(route),
         clipboard,
+    }
+
+    enum custom-frame-status {
+        maximized,
+        minimized,
+        restored,
+    }
+
+    variant custom-frame-command {
+        initialize(custom-frame-status),
+        maximize,
+        minimize(size),
+        restore(tuple<origin, size>),
+    }
+
+    variant custom-frame-effect {
+        initialized(tuple<origin, size>),
+        changed(custom-frame-status),
     }
 }
 

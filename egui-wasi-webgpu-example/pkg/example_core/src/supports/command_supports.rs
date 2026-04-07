@@ -23,9 +23,12 @@ impl From<ExampleCommand> for interaction::Command {
             ExampleCommand::ChangeSet(change_specs) => {
                 interaction::Command::ChangeSet(change_specs.into_iter().map(Into::into).collect::<Vec<_>>())
             }
-            ExampleCommand::CompositionBounds(bounds) =>interaction::Command::CompositionBounds(bounds.into()),
+            ExampleCommand::CompositionBounds(bounds) =>interaction::Command::CompositionBounds(RectW::from(bounds).0),
             ExampleCommand::Screenshot(dests) => {
                 interaction::Command::Screenshot(dests.into_iter().map(Into::into).collect::<Vec<_>>())
+            }
+            ExampleCommand::CustomFrame(info) => {
+                interaction::Command::CustomFrame(info.into())
             }
         }
     }
@@ -42,6 +45,9 @@ impl From<interaction::Effect> for ExampleEffect {
             }
             interaction::Effect::RequestCloseQuery => {
                 ExampleEffect::RequestCloseQuery
+            }
+            interaction::Effect::CustomFrameEffect(effect) => {
+                ExampleEffect::CustomFrameEffect(effect.into())
             }
         }
     }
@@ -124,14 +130,28 @@ impl From<crate::ChangeSpec> for interaction::ChangeSpec {
     }
 }
 
-impl From<egui::Rect> for interaction::CompositionBounds {
+pub struct SizeW(interaction::Size);
+
+impl From<egui::Vec2> for SizeW {
+    fn from(value: egui::Vec2) -> Self {
+        SizeW(interaction::Size { width: value.x, height: value.y })
+    }
+}
+
+struct RectW((interaction::Origin, interaction::Size));
+
+impl From<egui::Rect> for RectW {
     fn from(value: egui::Rect) -> Self {
-        interaction::CompositionBounds{
-            left: value.left(),
-            top: value.top(),
-            width: value.width(),
-            height: value.height(),
-        }
+        RectW((
+            interaction::Origin{left: value.left(), top: value.top() },
+            interaction::Size{width: value.width(), height: value.height() }
+        ))
+    }
+}
+
+impl From<RectW> for egui::Rect {
+    fn from(RectW((origin, size)): RectW) -> Self {
+        Self::from_min_size(egui::Pos2::new(origin.left, origin.top), egui::Vec2::new(size.width, size.height))
     }
 }
 
@@ -141,6 +161,46 @@ impl From<crate::Destination> for interaction::Destination {
             crate::Destination::Origin => Self::Origin,
             crate::Destination::Route(route) => Self::Route(route),
             crate::Destination::Clipboard => Self::Clipboard,
+        }
+    }
+}
+
+impl From<crate::CustomFrameCommand> for interaction::CustomFrameCommand {
+    fn from(value: crate::CustomFrameCommand) -> Self {
+        match value {
+            crate::CustomFrameCommand::Initialize(status) => interaction::CustomFrameCommand::Initialize(status.into()),
+            crate::CustomFrameCommand::Maximize => interaction::CustomFrameCommand::Maximize,
+            crate::CustomFrameCommand::Minimize(size) => interaction::CustomFrameCommand::Minimize(SizeW::from(size).0),
+            crate::CustomFrameCommand::Restore(rect) => interaction::CustomFrameCommand::Restore(RectW::from(rect).0),
+        }
+    }
+}
+
+impl From<interaction::CustomFrameEffect> for crate::CustomFrameEffect {
+    fn from(value: interaction::CustomFrameEffect) -> Self {
+        match value {
+            interaction::CustomFrameEffect::Initialized((origin, size)) => Self::Initialized(RectW((origin, size)).into()),
+            interaction::CustomFrameEffect::Changed(status) => Self::Changed(status.into()),
+        }
+    }
+}
+
+impl From<crate::WindowFrameStatus> for interaction::CustomFrameStatus {
+    fn from(value: crate::WindowFrameStatus) -> Self {
+        match value {
+            crate::WindowFrameStatus::Normal => Self::Restored,
+            crate::WindowFrameStatus::Maximize => Self::Maximized,
+            crate::WindowFrameStatus::Minimize => Self::Minimized,
+        }
+    }
+}
+
+impl From<interaction::CustomFrameStatus> for crate::WindowFrameStatus {
+    fn from(value: interaction::CustomFrameStatus) -> Self {
+        match value {
+            interaction::CustomFrameStatus::Maximized => Self::Maximize,
+            interaction::CustomFrameStatus::Minimized => Self::Minimize,
+            interaction::CustomFrameStatus::Restored => Self::Normal,
         }
     }
 }
