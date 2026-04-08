@@ -1,6 +1,7 @@
 package local:immediate-renderer-example;
 
 interface interaction {
+    use local:immediate-renderer/types.{location, size};
     type route = string;
     type url = string;
 
@@ -12,7 +13,7 @@ interface interaction {
         clipboard(clipboard-data),
         open-url(tuple<string, open-url-options>),
         change-set(list<change-spec>),
-        composition-bounds(tuple<origin, size>),
+        composition-bounds(tuple<location, size>),
         screenshot(list<destination>),
         custom-frame(custom-frame-command),
     }
@@ -83,16 +84,6 @@ interface interaction {
         new-value: option<string>,
     }
 
-    record origin {
-        left: f32,
-        top: f32,
-    }
-
-    record size {
-        width: f32,
-        height: f32,
-    }
-
     flags open-url-options {
         new-tab,
     }
@@ -117,11 +108,12 @@ interface interaction {
         initialize(custom-frame-status),
         maximize,
         minimize(size),
-        restore(tuple<origin, size>),
+        restore(tuple<location, size>),
+        dragging(location),
     }
 
     variant custom-frame-effect {
-        initialized(tuple<origin, size>),
+        initialized(tuple<location, size>),
         changed(custom-frame-status),
     }
 }

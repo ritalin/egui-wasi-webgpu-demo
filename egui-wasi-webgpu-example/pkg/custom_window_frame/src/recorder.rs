@@ -31,7 +31,7 @@ impl recorder::EguiWidgetRecorder for RecoderInner{
         }
     }
 
-    fn bump_events(&mut self, _ctx: &egui::Context, input: &mut egui::RawInput) {
+    fn bump_events(&mut self, _ctx: &egui::Context, _input: &mut egui::RawInput) {
     }
 
     fn record(&mut self, ctx: &egui::Context, mut input: egui::RawInput, unhandled_event: &UnhandledEvent, commands: &mut Vec<ExampleCommand>) -> egui::FullOutput {

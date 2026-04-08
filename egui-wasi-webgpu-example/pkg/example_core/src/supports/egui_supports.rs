@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use egui::{Modifiers, PointerButton, Pos2};
 use wasi_renderer::{ScreenDescriptor, bindings::types};
 
-use crate::{ChangeSpec, ClipboardData, ExampleCommand, UnhandledEvent, supports};
+use crate::{ChangeSpec, ClipboardData, ExampleCommand, UnhandledEvent, supports::{self, command_supports::SizeRef}};
 
 pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, in_compositioning: &mut bool, input: &mut egui::RawInput) -> UnhandledEvent {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();
@@ -13,6 +13,7 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, in_co
     input.screen_rect = Some(egui::Rect::from_min_max(egui::Pos2::ZERO, egui::Pos2::new(w, h)));
 
     let (mut cursor_x, mut cursor_y) = (0.0, 0.0);
+    let mut p0 = egui::Pos2::default();
     let mut modifiers = Modifiers::default();
 
     let mut unhandled_events = UnhandledEvent::default();
@@ -26,9 +27,14 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, in_co
                 modifiers.command = ! m.super_key.is_empty();
                 modifiers.mac_cmd = ! m.super_key.is_empty();
             }
+            types::Event::ViewportBounds((origin, size)) => {
+                p0.x = origin.left;
+                p0.y = origin.top;
+                let size = egui::Vec2::new(size.width, size.height);
+                viewport.outer_rect = Some(egui::Rect::from_min_size(p0 / screen.scale_factor, size / screen.scale_factor));
+            }
             types::Event::Pointer(p) => {
-                (cursor_x, cursor_y) = (p.x / screen.scale_factor, p.y / screen.scale_factor);
-                // For dragging
+                (cursor_x, cursor_y) = ((p.left - p0.x) / screen.scale_factor, (p.top - p0.y) / screen.scale_factor);
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
             types::Event::MouseDown(button) => {

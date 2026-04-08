@@ -130,21 +130,41 @@ impl From<crate::ChangeSpec> for interaction::ChangeSpec {
     }
 }
 
-pub struct SizeW(interaction::Size);
+pub(crate) struct LocationW(pub(crate) types::Location);
+pub(crate) struct LocationRef<'a>(pub(crate) &'a types::Location);
 
-impl From<egui::Vec2> for SizeW {
-    fn from(value: egui::Vec2) -> Self {
-        SizeW(interaction::Size { width: value.x, height: value.y })
+impl From<egui::Pos2> for LocationW {
+    fn from(value: egui::Pos2) -> Self {
+        LocationW(types::Location { left:value.x, top: value.y })
+    }
+}
+impl<'a> From<LocationRef<'a>> for egui::Pos2 {
+    fn from(LocationRef::<'a>(value): LocationRef<'a>) -> Self {
+        Self::new(value.left, value.top)
     }
 }
 
-struct RectW((interaction::Origin, interaction::Size));
+pub(crate) struct SizeW(pub(crate) types::Size);
+pub(crate) struct SizeRef<'a>(pub(crate) &'a types::Size);
+
+impl From<egui::Vec2> for SizeW {
+    fn from(value: egui::Vec2) -> Self {
+        SizeW(types::Size { width: value.x, height: value.y })
+    }
+}
+impl<'a> From<SizeRef<'a>> for egui::Vec2 {
+    fn from(SizeRef::<'a>(value): SizeRef<'a>) -> Self {
+        Self::new(value.width, value.height)
+    }
+}
+
+struct RectW((types::Location, types::Size));
 
 impl From<egui::Rect> for RectW {
     fn from(value: egui::Rect) -> Self {
         RectW((
-            interaction::Origin{left: value.left(), top: value.top() },
-            interaction::Size{width: value.width(), height: value.height() }
+            types::Location{left: value.left(), top: value.top() },
+            types::Size{width: value.width(), height: value.height() }
         ))
     }
 }
@@ -172,6 +192,7 @@ impl From<crate::CustomFrameCommand> for interaction::CustomFrameCommand {
             crate::CustomFrameCommand::Maximize => interaction::CustomFrameCommand::Maximize,
             crate::CustomFrameCommand::Minimize(size) => interaction::CustomFrameCommand::Minimize(SizeW::from(size).0),
             crate::CustomFrameCommand::Restore(rect) => interaction::CustomFrameCommand::Restore(RectW::from(rect).0),
+            crate::CustomFrameCommand::Dragging(pos) => interaction::CustomFrameCommand::Dragging(LocationW::from(pos).0),
         }
     }
 }

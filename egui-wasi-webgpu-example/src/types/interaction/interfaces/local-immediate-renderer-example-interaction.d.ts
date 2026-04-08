@@ -1,4 +1,6 @@
 /** @module Interface local:immediate-renderer-example/interaction **/
+export type Location = import('./local-immediate-renderer-types.js').Location;
+export type Size = import('./local-immediate-renderer-types.js').Size;
 export type Route = string;
 export type Url = string;
 export interface ExternalAsset {
@@ -94,14 +96,6 @@ export interface ChangeSpec {
   len: number,
   newValue?: string,
 }
-export interface Origin {
-  left: number,
-  top: number,
-}
-export interface Size {
-  width: number,
-  height: number,
-}
 export interface OpenUrlOptions {
   newTab?: boolean,
 }
@@ -129,7 +123,7 @@ export interface DestinationClipboard {
  * ## `"restored"`
  */
 export type CustomFrameStatus = 'maximized' | 'minimized' | 'restored';
-export type CustomFrameCommand = CustomFrameCommandInitialize | CustomFrameCommandMaximize | CustomFrameCommandMinimize | CustomFrameCommandRestore;
+export type CustomFrameCommand = CustomFrameCommandInitialize | CustomFrameCommandMaximize | CustomFrameCommandMinimize | CustomFrameCommandRestore | CustomFrameCommandDragging;
 export interface CustomFrameCommandInitialize {
   tag: 'initialize',
   val: CustomFrameStatus,
@@ -143,7 +137,11 @@ export interface CustomFrameCommandMinimize {
 }
 export interface CustomFrameCommandRestore {
   tag: 'restore',
-  val: [Origin, Size],
+  val: [Location, Size],
+}
+export interface CustomFrameCommandDragging {
+  tag: 'dragging',
+  val: Location,
 }
 export type Command = CommandOpenWindow | CommandCloseWindow | CommandRequestImage | CommandCursor | CommandClipboard | CommandOpenUrl | CommandChangeSet | CommandCompositionBounds | CommandScreenshot | CommandCustomFrame;
 export interface CommandOpenWindow {
@@ -176,7 +174,7 @@ export interface CommandChangeSet {
 }
 export interface CommandCompositionBounds {
   tag: 'composition-bounds',
-  val: [Origin, Size],
+  val: [Location, Size],
 }
 export interface CommandScreenshot {
   tag: 'screenshot',
@@ -189,7 +187,7 @@ export interface CommandCustomFrame {
 export type CustomFrameEffect = CustomFrameEffectInitialized | CustomFrameEffectChanged;
 export interface CustomFrameEffectInitialized {
   tag: 'initialized',
-  val: [Origin, Size],
+  val: [Location, Size],
 }
 export interface CustomFrameEffectChanged {
   tag: 'changed',

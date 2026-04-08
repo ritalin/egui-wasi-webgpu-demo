@@ -57,6 +57,7 @@ pub enum CustomFrameCommand {
     Maximize,
     Minimize(egui::Vec2),
     Restore(egui::Rect),
+    Dragging(egui::Pos2),
 }
 
 #[derive(Debug, Default, Copy, Clone, PartialEq)]

@@ -8,7 +8,7 @@ pub struct WindowFrame {
     origin: egui::Pos2,
     size: egui::Vec2,
     status: WindowFrameStatus,
-    drag_start: Option<egui::Pos2>,
+    dragging_delta: Option<egui::Vec2>,
 }
 impl WindowFrame {
     const TITLEBAR_HEIGHT: f32 = 32.0;
@@ -97,7 +97,31 @@ impl WindowFrame {
         }
 
         if title_bar_response.drag_started_by(PointerButton::Primary) {
+            let p1 = ui.input(|ss| ss.pointer.press_origin());
+            let p2 = ui.input(|ss| ss.pointer.latest_pos());
+            println!("*** drag_start: p#1: {p1:?}, p#2: {p2:?}");
+
+            self.dragging_delta = Some(egui::Vec2::default());
             ui.send_viewport_cmd(egui::ViewportCommand::StartDrag);
+        }
+        if let Some(delta) = self.dragging_delta.as_mut() {
+            if title_bar_response.dragged_by(PointerButton::Primary) {
+                let p0 = ui.input(|ss| ss.pointer.press_origin());
+                let p1 = ui.input(|ss| ss.pointer.latest_pos());
+                let r1 = ui.viewport(|ss| ss.input.viewport().outer_rect);
+
+                if let (Some(p0), Some(p1), Some(r1)) = (p0, p1, r1) {
+                    *delta = p1 + r1.min.to_vec2() - self.origin - p0.to_vec2();
+                    let p = self.origin + *delta ;
+                    ui.send_viewport_cmd(egui::ViewportCommand::CursorPosition(p));
+                    ui.send_viewport_cmd(egui::ViewportCommand::StartDrag);
+                }
+            }
+            if title_bar_response.drag_stopped_by(PointerButton::Primary) {
+                println!("*** drag_end");
+                self.origin += *delta;
+                self.dragging_delta = None;
+            }
         }
 
         let builder = UiBuilder::new()
@@ -155,6 +179,9 @@ impl WindowFrame {
     pub fn handle_viewport_output(&self, viewport_output: &BTreeMap<egui::ViewportId, egui::ViewportOutput>, commands: &mut Vec<ExampleCommand>) {
         let Some(output) = viewport_output.get(&egui::ViewportId::ROOT) else { return };
 
+        let mut current_pointer: Option<&egui::Pos2> = None;
+        let mut drag_pointer: Option<&egui::Pos2> = None;
+
         for cmd in &output.commands {
             match cmd {
                 egui::ViewportCommand::Close => {
@@ -164,8 +191,12 @@ impl WindowFrame {
                 // egui::ViewportCommand::Title(_) => todo!(),
                 // egui::ViewportCommand::Transparent(_) => todo!(),
                 // egui::ViewportCommand::Visible(_) => todo!(),
-                egui::ViewportCommand::StartDrag => todo!(),
-                egui::ViewportCommand::OuterPosition(pos2) => todo!(),
+                egui::ViewportCommand::StartDrag => {
+                    if current_pointer.is_some() {
+                        drag_pointer = current_pointer.clone();
+                    }
+                }
+                // egui::ViewportCommand::OuterPosition(pos2) => todo!(),
                 // egui::ViewportCommand::InnerSize(vec2) => todo!(),
                 // egui::ViewportCommand::MinInnerSize(vec2) => todo!(),
                 // egui::ViewportCommand::MaxInnerSize(vec2) => todo!(),
@@ -200,7 +231,9 @@ impl WindowFrame {
                     // discard
                 }
                 // egui::ViewportCommand::ContentProtected(_) => todo!(),
-                egui::ViewportCommand::CursorPosition(pos2) => todo!(),
+                egui::ViewportCommand::CursorPosition(pos) => {
+                    current_pointer = Some(pos);
+                }
                 // egui::ViewportCommand::CursorGrab(cursor_grab) => todo!(),
                 // egui::ViewportCommand::CursorVisible(_) => todo!(),
                 // egui::ViewportCommand::MousePassthrough(_) => todo!(),
@@ -212,6 +245,10 @@ impl WindowFrame {
                     todo!("vireport-cmd: {cmd:?}");
                 }
             }
+        }
+
+        if let Some(p) = drag_pointer {
+            commands.push(ExampleCommand::CustomFrame(CustomFrameCommand::Dragging(p.clone())));
         }
     }
 

@@ -269,8 +269,6 @@ function updateCustomFrameState(engine: WasmEngine, route: Route, info: CustomFr
   switch (info.tag) {
     case "initialize":
       {
-        console.log("custom-frame", "Initialize");
-
         if (canvas.parentElement) {
           fixElementSize(canvas.parentElement, true);
         }
@@ -289,6 +287,11 @@ function updateCustomFrameState(engine: WasmEngine, route: Route, info: CustomFr
         canvas.style.top = `${rect.top}px`;
         canvas.style.width = `${rect.width}px`;
         canvas.style.height = `${rect.height}px`;
+
+        console.log(
+          "custom-frame/Initialize",
+          `left: ${canvas.style.left}, top: ${canvas.style.top}, w: ${canvas.style.width}, h: ${canvas.style.height}`,
+        );
 
         entry.effects.push(
           {
@@ -388,5 +391,14 @@ function updateCustomFrameState(engine: WasmEngine, route: Route, info: CustomFr
 
       break;
     }
+    case "dragging":
+      {
+        const origin = info.val;
+        const parentRect = entry.eventSource.editHost.parentElement?.getBoundingClientRect() ?? new DOMRect();
+        canvas.style.left = `${origin.left - parentRect.left}px`;
+        canvas.style.top = `${origin.top - parentRect.top}px`;
+        console.log("custom-frame/dragging/newValue", canvas.style.left, canvas.style.top);
+      }
+      break;
   }
 }

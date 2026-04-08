@@ -31,13 +31,32 @@ export class DomEventBridge {
 
   static bind(eventSource: EditEventSource, callback: (events: DispatchEvent[]) => any) {
     eventSource.editHost.addEventListener("pointerdown", (ev) => {
+      eventSource.editHost.setPointerCapture(ev.pointerId);
+
       const scaleFactor = window.devicePixelRatio;
       const rect = eventSource.editHost.getBoundingClientRect();
+      const parentRect = eventSource.editHost.parentElement?.getBoundingClientRect() ?? new DOMRect();
+
+      console.log(
+        "mousedown",
+        `{pointer/left: ${ev.clientX}, top: ${ev.clientY}}`,
+        `{parent/left: ${parentRect.left}, top: ${parentRect.top}, width: ${parentRect.width}, height: ${parentRect.height}}`,
+        `{canvas/left: ${rect.left}, top: ${rect.top}, width: ${rect.width}, height: ${rect.height}}`,
+      );
+
       callback([
         makeModifierOptions(ev),
         {
+          tag: "viewport-bounds",
+          val: [
+            { left: rect.left * scaleFactor, top: rect.top * scaleFactor },
+            { width: rect.width * scaleFactor, height: rect.height * scaleFactor },
+          ],
+        },
+        {
           tag: "pointer",
-          val: { x: (ev.clientX - rect.left) * scaleFactor, y: (ev.clientY - rect.top) * scaleFactor },
+          // val: { left: (ev.clientX - rect.left) * scaleFactor, top: (ev.clientY - rect.top) * scaleFactor },
+          val: { left: ev.clientX * scaleFactor, top: ev.clientY * scaleFactor },
         },
         {
           tag: "mouse-down",
@@ -46,13 +65,32 @@ export class DomEventBridge {
       ]);
     });
     eventSource.editHost.addEventListener("pointerup", (ev) => {
+      eventSource.editHost.releasePointerCapture(ev.pointerId);
+
       const scaleFactor = window.devicePixelRatio;
       const rect = eventSource.editHost.getBoundingClientRect();
+      const parentRect = eventSource.editHost.parentElement?.getBoundingClientRect() ?? new DOMRect();
+
+      console.log(
+        "mouseup",
+        `{pointer/left: ${ev.clientX}, top: ${ev.clientY}}`,
+        `{parent/left: ${parentRect.left}, top: ${parentRect.top}, width: ${parentRect.width}, height: ${parentRect.height}}`,
+        `{canvas/left: ${rect.left}, top: ${rect.top}, width: ${rect.width}, height: ${rect.height}}`,
+      );
+
       callback([
         makeModifierOptions(ev),
         {
+          tag: "viewport-bounds",
+          val: [
+            { left: rect.left * scaleFactor, top: rect.top * scaleFactor },
+            { width: rect.width * scaleFactor, height: rect.height * scaleFactor },
+          ],
+        },
+        {
           tag: "pointer",
-          val: { x: (ev.clientX - rect.left) * scaleFactor, y: (ev.clientY - rect.top) * scaleFactor },
+          // val: { left: (ev.clientX - rect.left) * scaleFactor, top: (ev.clientY - rect.top) * scaleFactor },
+          val: { left: ev.clientX * scaleFactor, top: ev.clientY * scaleFactor },
         },
         {
           tag: "mouse-up",
@@ -63,11 +101,23 @@ export class DomEventBridge {
     eventSource.editHost.addEventListener("pointermove", (ev) => {
       const scaleFactor = window.devicePixelRatio;
       const rect = eventSource.editHost.getBoundingClientRect();
+      // console.log("Mouse/move", ev.clientX - rect.left, ev.clientY - rect.top);
+
+      const parentRect = eventSource.editHost.parentElement?.getBoundingClientRect() ?? new DOMRect();
+
       callback([
         makeModifierOptions(ev),
         {
+          tag: "viewport-bounds",
+          val: [
+            { left: rect.left * scaleFactor, top: rect.top * scaleFactor },
+            { width: rect.width * scaleFactor, height: rect.height * scaleFactor },
+          ],
+        },
+        {
           tag: "pointer",
-          val: { x: (ev.clientX - rect.left) * scaleFactor, y: (ev.clientY - rect.top) * scaleFactor },
+          // val: { left: (ev.clientX - rect.left) * scaleFactor, top: (ev.clientY - rect.top) * scaleFactor },
+          val: { left: ev.clientX * scaleFactor, top: ev.clientY * scaleFactor },
         },
         {
           tag: "mouse-move",
@@ -78,11 +128,21 @@ export class DomEventBridge {
       ev.preventDefault();
       const scaleFactor = window.devicePixelRatio;
       const rect = eventSource.editHost.getBoundingClientRect();
+      const parentRect = eventSource.editHost.parentElement?.getBoundingClientRect() ?? new DOMRect();
+
       callback([
         makeModifierOptions(ev),
         {
+          tag: "viewport-bounds",
+          val: [
+            { left: rect.left * scaleFactor, top: rect.top * scaleFactor },
+            { width: rect.width * scaleFactor, height: rect.height * scaleFactor },
+          ],
+        },
+        {
           tag: "pointer",
-          val: { x: (ev.clientX - rect.left) * scaleFactor, y: (ev.clientY - rect.top) * scaleFactor },
+          // val: { left: (ev.clientX - rect.left) * scaleFactor, top: (ev.clientY - rect.top) * scaleFactor },
+          val: { left: ev.clientX * scaleFactor, top: ev.clientY * scaleFactor },
         },
         {
           tag: "mouse-wheel",
