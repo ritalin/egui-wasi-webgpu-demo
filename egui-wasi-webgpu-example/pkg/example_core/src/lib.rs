@@ -15,6 +15,7 @@ pub enum ExampleCommand {
     ChangeSet(Vec<ChangeSpec>),
     CompositionBounds(egui::Rect),
     Screenshot(Vec<Destination>),
+    CustomFrame(CustomFrameCommand),
 }
 
 #[derive(Debug, Clone)]
@@ -27,6 +28,7 @@ pub enum ExampleEffect {
     ImageData{ url: String, bytes: Vec<u8> },
     FontData{ url: String, name: String, bytes: Vec<u8> },
     RequestCloseQuery,
+    CustomFrameEffect(CustomFrameEffect),
 }
 
 #[derive(Debug, Clone, Default)]
@@ -48,5 +50,30 @@ pub enum Destination {
     Route(String),
     Clipboard,
 }
+
+#[derive(Debug, Clone)]
+pub enum CustomFrameCommand {
+    Initialize(WindowFrameStatus),
+    Maximize,
+    Minimize(egui::Vec2),
+    Restore(egui::Rect),
+    Dragging(egui::Pos2),
+}
+
+#[derive(Debug, Default, Copy, Clone, PartialEq)]
+pub enum WindowFrameStatus {
+    #[default]
+    Normal,
+    Maximize,
+    Minimize,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum CustomFrameEffect {
+    Initialized(egui::Rect),
+    Changed(WindowFrameStatus),
+}
+
+
 
 pub use bindings::example_world::export;

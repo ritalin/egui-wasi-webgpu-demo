@@ -11,6 +11,7 @@ import {
 } from "wasi-webgpu-shim/host-api";
 import SHADER_SOURCE from "./shaders/shader.wgsl.js";
 import type { FrameSize } from "./types/local-immediate-renderer-surface.js";
+import type { GpuCanvasAlphaMode } from "wasi-webgpu-shim/webgpu";
 
 export interface IRenderContext {
   size(): FrameSize;
@@ -24,10 +25,8 @@ export interface IRenderContext {
 }
 class ProtectedRenderContext extends RenderContext implements IRenderContext {}
 
-export type BlendingMode = "premultiplied" | "plain";
-
 export type WebGpuRuntimeInit = {
-  blendingMode: BlendingMode;
+  blendingMode: GpuCanvasAlphaMode;
 };
 const defaults: WebGpuRuntimeInit = {
   blendingMode: "premultiplied",
@@ -65,7 +64,7 @@ export class WebGpuRuntime {
     context.getCanvas().configure({
       device: new GpuDevice(this.device),
       format: TextureFormat.intoWasi(format),
-      alphaMode: "opaque",
+      alphaMode: blendingMode,
     });
     console.log("Surface configured");
 
@@ -111,7 +110,7 @@ function createRenderPipeline(
   device: GPUDevice,
   format: GPUTextureFormat,
   bindGroups: Array<GPUBindGroupLayout>,
-  blendingMode: BlendingMode,
+  blendingMode: GpuCanvasAlphaMode,
 ): GPURenderPipeline {
   const module_desc: GPUShaderModuleDescriptor = {
     label: "shader",
@@ -179,7 +178,7 @@ function vertexDesc(shader_raw: GPUShaderModule): GPUVertexState {
 function fragmentDesc(
   shader_raw: GPUShaderModule,
   format: GPUTextureFormat,
-  blendingMode: BlendingMode,
+  blendingMode: GpuCanvasAlphaMode,
 ): GPUFragmentState {
   let blend: GPUBlendState;
 
@@ -198,7 +197,7 @@ function fragmentDesc(
         },
       };
       break;
-    case "plain":
+    case "opaque":
       blend = {
         color: {
           srcFactor: "src-alpha",

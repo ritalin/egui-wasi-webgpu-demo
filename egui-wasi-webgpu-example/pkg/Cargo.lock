@@ -177,6 +177,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "custom_window_frame"
+version = "0.1.0"
+dependencies = [
+ "egui",
+ "example_core",
+ "wasi-renderer",
+]
+
+[[package]]
 name = "data-url"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"

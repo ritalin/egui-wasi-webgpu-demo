@@ -10,8 +10,12 @@ export interface ModifierOptions {
   superKey: ModifierPressed,
 }
 export interface Location {
-  x: number,
-  y: number,
+  left: number,
+  top: number,
+}
+export interface Size {
+  width: number,
+  height: number,
 }
 /**
  * # Variants
@@ -131,10 +135,14 @@ export interface CompositionBoundsReqCharacterBounds {
   tag: 'character-bounds',
   val: CompositionRange | undefined,
 }
-export type Event = EventModifiers | EventPointer | EventMouseDown | EventMouseUp | EventMouseMove | EventMouseWheel | EventKeyDown | EventKeyUp | EventRequestCompositionBounds | EventUpdateCompositionState | EventHistory | EventCut | EventCopy | EventPaste | EventActivate | EventKeepFocus;
+export type Event = EventModifiers | EventViewportBounds | EventPointer | EventMouseDown | EventMouseUp | EventMouseMove | EventMouseWheel | EventKeyDown | EventKeyUp | EventRequestCompositionBounds | EventUpdateCompositionState | EventHistory | EventCut | EventCopy | EventPaste | EventActivate | EventKeepFocus;
 export interface EventModifiers {
   tag: 'modifiers',
   val: ModifierOptions,
+}
+export interface EventViewportBounds {
+  tag: 'viewport-bounds',
+  val: [Location, Size],
 }
 export interface EventPointer {
   tag: 'pointer',

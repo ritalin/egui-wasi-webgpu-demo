@@ -5,6 +5,7 @@ export function createViteConfig(appName: string): UserConfig {
   return defineConfig({
     base: process.env.NODE_ENV === "production" ? `/egui-wasi-webgpu-demo/examples/${appName}/` : "/",
     build: {
+      emptyOutDir: true,
       outDir: `../dist/examples/${appName}`,
     },
     resolve: {

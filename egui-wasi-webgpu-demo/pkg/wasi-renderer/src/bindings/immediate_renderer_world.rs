@@ -14726,12 +14726,23 @@ pub mod wasi {
                                                                                       #[repr(C)]
                                                                                       #[derive(Clone, Copy)]
                                                                                       pub struct Location {
-                                                                                        pub x: f32,
-                                                                                        pub y: f32,
+                                                                                        pub left: f32,
+                                                                                        pub top: f32,
                                                                                       }
                                                                                       impl ::core::fmt::Debug for Location {
                                                                                         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                                                                                          f.debug_struct("Location").field("x", &self.x).field("y", &self.y).finish()
+                                                                                          f.debug_struct("Location").field("left", &self.left).field("top", &self.top).finish()
+                                                                                        }
+                                                                                      }
+                                                                                      #[repr(C)]
+                                                                                      #[derive(Clone, Copy)]
+                                                                                      pub struct Size {
+                                                                                        pub width: f32,
+                                                                                        pub height: f32,
+                                                                                      }
+                                                                                      impl ::core::fmt::Debug for Size {
+                                                                                        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                                                                                          f.debug_struct("Size").field("width", &self.width).field("height", &self.height).finish()
                                                                                         }
                                                                                       }
                                                                                       #[repr(u8)]
@@ -15104,6 +15115,7 @@ pub mod wasi {
                                                                                       #[derive(Clone)]
                                                                                       pub enum Event {
                                                                                         Modifiers(ModifierOptions),
+                                                                                        ViewportBounds((Location,Size,)),
                                                                                         Pointer(Location),
                                                                                         MouseDown(MouseButton),
                                                                                         MouseUp(MouseButton),
@@ -15125,6 +15137,9 @@ pub mod wasi {
                                                                                           match self {
                                                                                             Event::Modifiers(e) => {
                                                                                               f.debug_tuple("Event::Modifiers").field(e).finish()
+                                                                                            }
+                                                                                            Event::ViewportBounds(e) => {
+                                                                                              f.debug_tuple("Event::ViewportBounds").field(e).finish()
                                                                                             }
                                                                                             Event::Pointer(e) => {
                                                                                               f.debug_tuple("Event::Pointer").field(e).finish()
@@ -15861,8 +15876,8 @@ pub mod wasi {
                                                                   #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer:immediate-renderer-world:imports and exports")]
                                                                   #[doc(hidden)]
                                                                   #[allow(clippy::octal_escapes)]
-                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30500] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x94\xed\x01\x01A\x02\
+                                                                  pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30557] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xcd\xed\x01\x01A\x02\
 \x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
@@ -16432,30 +16447,31 @@ self\x0b\x04size\x09\x01\0\x04\0'[method]render-context.request-set-size\x01\x0e
 \x01\x12\x01i\x05\x01@\x01\x04self\x0b\0\x13\x04\0#[method]render-context.get-pi\
 peline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\x04\0)[method]render-context.\
 get-uniform-layout\x01\x16\x04\0)[method]render-context.get-texture-layout\x01\x16\
-\x04\0\x1clocal:webgpu-runtime/surface\x05\x0b\x01B$\x01n\x02\x04left\x05right\x04\
+\x04\0\x1clocal:webgpu-runtime/surface\x05\x0b\x01B'\x01n\x02\x04left\x05right\x04\
 \0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09s\
-uper-key\x01\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08l\
-ocation\x03\0\x04\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0c\
-mouse-button\x03\0\x06\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10mouse-\
-wheel-unit\x03\0\x08\x01r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\x04\0\x0b\
-mouse-wheel\x03\0\x0a\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\x01m\x03\
-\x05enter\x03tab\x05space\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09backspac\
-e\x06delete\x04\0\x08edit-key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\
-\x12\x01m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08na\
-vi-key\x03\0\x14\x01q\x04\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02ui\x01\x13\
-\0\x04navi\x01\x15\0\x04\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\0\x0bh\
-istory-ops\x03\0\x18\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\
-\x1a\x01q\x04\x05start\0\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\0\x06co\
-mmit\x01s\0\x04\0\x11composition-state\x03\0\x1c\x01k\x1b\x01q\x01\x10character-\
-bounds\x01\x1e\0\x04\0\x16composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\x01q\
-\x10\x09modifiers\x01\x03\0\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mous\
-e-up\x01\x07\0\x0amouse-move\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\x06\
-key-up\x01\x17\0\x1arequest-composition-bounds\x01\x20\0\x18update-composition-s\
-tate\x01\x1d\0\x07history\x01\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08ac\
-tivate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0\"\x04\0\x1elocal:immediate-ren\
-derer/types\x05\x0c\x04\01local:immediate-renderer/immediate-renderer-world\x04\0\
-\x0b\x1e\x01\0\x18immediate-renderer-world\x03\0\0\0G\x09producers\x01\x0cproces\
-sed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+uper-key\x01\x04\0\x10modifier-options\x03\0\x02\x01r\x02\x04leftv\x03topv\x04\0\
+\x08location\x03\0\x04\x01r\x02\x05widthv\x06heightv\x04\0\x04size\x03\0\x06\x01\
+m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x08\
+\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10mouse-wheel-unit\x03\0\x0a\x01\
+r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x0b\x04\0\x0bmouse-wheel\x03\0\x0c\x01\
+n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0e\x01m\x03\x05enter\x03tab\x05space\
+\x04\0\x0ewhitespace-key\x03\0\x10\x01m\x02\x09backspace\x06delete\x04\0\x08edit\
+-key\x03\0\x12\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x14\x01m\x04\x0aarrow-do\
+wn\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x16\x01q\x04\
+\x0awhitespace\x01\x11\0\x04edit\x01\x13\0\x02ui\x01\x15\0\x04navi\x01\x17\0\x04\
+\0\x04keys\x03\0\x18\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x1a\x01\
+r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x1c\x01q\x04\x05start\0\
+\0\x0fselection-range\x01\x1d\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11com\
+position-state\x03\0\x1e\x01k\x1d\x01q\x01\x10character-bounds\x01\x20\0\x04\0\x16\
+composition-bounds-req\x03\0!\x01o\x02\x05\x07\x01o\x02\x19\x0f\x01q\x11\x09modi\
+fiers\x01\x03\0\x0fviewport-bounds\x01#\0\x07pointer\x01\x05\0\x0amouse-down\x01\
+\x09\0\x08mouse-up\x01\x09\0\x0amouse-move\0\0\x0bmouse-wheel\x01\x0d\0\x08key-d\
+own\x01$\0\x06key-up\x01\x19\0\x1arequest-composition-bounds\x01\"\0\x18update-c\
+omposition-state\x01\x1f\0\x07history\x01\x1b\0\x03cut\0\0\x04copy\0\0\x05paste\x01\
+s\0\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\0%\x04\0\x1elocal:immed\
+iate-renderer/types\x05\x0c\x04\01local:immediate-renderer/immediate-renderer-wo\
+rld\x04\0\x0b\x1e\x01\0\x18immediate-renderer-world\x03\0\0\0G\x09producers\x01\x0c\
+processed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                 };
                                                                 )
                                                               }
