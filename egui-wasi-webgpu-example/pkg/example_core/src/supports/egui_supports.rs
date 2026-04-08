@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use egui::{Modifiers, PointerButton, Pos2};
 use wasi_renderer::{ScreenDescriptor, bindings::types};
 
-use crate::{ChangeSpec, ClipboardData, ExampleCommand, UnhandledEvent, supports::{self, command_supports::SizeRef}};
+use crate::{ChangeSpec, ClipboardData, ExampleCommand, UnhandledEvent, supports};
 
 pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, in_compositioning: &mut bool, input: &mut egui::RawInput) -> UnhandledEvent {
     let viewport = input.viewports.entry(egui::ViewportId::ROOT).or_default();

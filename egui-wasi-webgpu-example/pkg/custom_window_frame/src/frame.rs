@@ -96,7 +96,7 @@ impl WindowFrame {
             }
         }
 
-        if title_bar_response.drag_started_by(PointerButton::Primary) {
+        if (self.status == WindowFrameStatus::Normal) && title_bar_response.drag_started_by(PointerButton::Primary) {
             let p1 = ui.input(|ss| ss.pointer.press_origin());
             let p2 = ui.input(|ss| ss.pointer.latest_pos());
             println!("*** drag_start: p#1: {p1:?}, p#2: {p2:?}");
