@@ -6,7 +6,7 @@ import { promisify } from "util";
 const execAsync = promisify(exec);
 
 export function getConcurrency(): number {
-  return Math.max(1, Math.floor(os.cpus().length * 0.75));
+  return Math.max(1, Math.floor(os.cpus().length * 0.5));
 }
 
 export async function listWorkspaceMembers(manifestPath: string): Promise<string[]> {

@@ -1,4 +1,4 @@
-import type { CompositionBounds } from "./types/interaction/interfaces/local-immediate-renderer-example-interaction";
+import type { Location, Size } from "./types/event/interfaces/local-immediate-renderer-types";
 
 export class EditEventSource {
   #editHost: HTMLCanvasElement;
@@ -50,7 +50,7 @@ export class EditEventSource {
     );
   }
 
-  updateCompositionBounds(bounds: CompositionBounds) {
+  updateCompositionBounds(origin: Location, size: Size) {
     // console.log(
     //   `composition-bounds/new: (left: ${bounds.left}, top: ${bounds.top}, width: ${bounds.width}, height: ${bounds.height}`,
     // );
@@ -60,10 +60,10 @@ export class EditEventSource {
     //   `bounding-rect/new: (left: ${boundingRect.left}, top: ${boundingRect.top}, width: ${boundingRect.width}, height: ${boundingRect.height}`,
     // );
 
-    bounds.left += boundingRect.left;
-    bounds.top += boundingRect.top;
+    origin.left += boundingRect.left;
+    origin.top += boundingRect.top;
 
-    this.#context.updateSelectionBounds(new DOMRect(bounds.left, bounds.top, bounds.width, bounds.height));
+    this.#context.updateSelectionBounds(new DOMRect(origin.left, origin.top, size.width, size.height));
   }
 
   private attachEvents() {

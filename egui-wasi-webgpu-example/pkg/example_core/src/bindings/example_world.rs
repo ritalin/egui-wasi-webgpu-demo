@@ -20,6 +20,8 @@ pub mod local {
       super::super::super::__link_custom_section_describing_imports;
       
       use super::super::super::_rt;
+      pub type Location = super::super::super::__with_name1::Location;
+      pub type Size = super::super::super::__with_name1::Size;
       pub type Route = _rt::String;
       pub type Url = _rt::String;
       #[derive(Clone)]
@@ -41,27 +43,6 @@ pub mod local {
       impl ::core::fmt::Debug for ExternalFont {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
           f.debug_struct("ExternalFont").field("source", &self.source).field("name", &self.name).field("bytes", &self.bytes).finish()
-        }
-      }
-      #[derive(Clone)]
-      pub enum Effect {
-        ImageData(ExternalAsset),
-        FontData(ExternalFont),
-        RequestCloseQuery,
-      }
-      impl ::core::fmt::Debug for Effect {
-        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-          match self {
-            Effect::ImageData(e) => {
-              f.debug_tuple("Effect::ImageData").field(e).finish()
-            }
-            Effect::FontData(e) => {
-              f.debug_tuple("Effect::FontData").field(e).finish()
-            }
-            Effect::RequestCloseQuery => {
-              f.debug_tuple("Effect::RequestCloseQuery").finish()
-            }
-          }
         }
       }
       #[repr(u8)]
@@ -288,19 +269,6 @@ pub mod local {
           f.debug_struct("ChangeSpec").field("offset", &self.offset).field("len", &self.len).field("new-value", &self.new_value).finish()
         }
       }
-      #[repr(C)]
-      #[derive(Clone, Copy)]
-      pub struct CompositionBounds {
-        pub left: f32,
-        pub top: f32,
-        pub width: f32,
-        pub height: f32,
-      }
-      impl ::core::fmt::Debug for CompositionBounds {
-        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-          f.debug_struct("CompositionBounds").field("left", &self.left).field("top", &self.top).field("width", &self.width).field("height", &self.height).finish()
-        }
-      }
       wit_bindgen::rt::bitflags::bitflags! {
         #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Clone, Copy)]
         pub struct OpenUrlOptions: u8 {
@@ -334,6 +302,75 @@ pub mod local {
           }
         }
       }
+      #[repr(u8)]
+      #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
+      pub enum CustomFrameStatus {
+        Maximized,
+        Minimized,
+        Restored,
+      }
+      impl ::core::fmt::Debug for CustomFrameStatus {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          match self {
+            CustomFrameStatus::Maximized => {
+              f.debug_tuple("CustomFrameStatus::Maximized").finish()
+            }
+            CustomFrameStatus::Minimized => {
+              f.debug_tuple("CustomFrameStatus::Minimized").finish()
+            }
+            CustomFrameStatus::Restored => {
+              f.debug_tuple("CustomFrameStatus::Restored").finish()
+            }
+          }
+        }
+      }
+
+      impl CustomFrameStatus{
+        #[doc(hidden)]
+        pub unsafe fn _lift(val: u8) -> CustomFrameStatus{
+          if !cfg!(debug_assertions) {
+            return unsafe { ::core::mem::transmute(val) };
+          }
+
+          match val {
+            0 => CustomFrameStatus::Maximized,
+            1 => CustomFrameStatus::Minimized,
+            2 => CustomFrameStatus::Restored,
+
+            _ => panic!("invalid enum discriminant"),
+          }
+        }
+      }
+
+      #[derive(Clone, Copy)]
+      pub enum CustomFrameCommand {
+        Initialize(CustomFrameStatus),
+        Maximize,
+        Minimize(Size),
+        Restore((Location,Size,)),
+        Dragging(Location),
+      }
+      impl ::core::fmt::Debug for CustomFrameCommand {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          match self {
+            CustomFrameCommand::Initialize(e) => {
+              f.debug_tuple("CustomFrameCommand::Initialize").field(e).finish()
+            }
+            CustomFrameCommand::Maximize => {
+              f.debug_tuple("CustomFrameCommand::Maximize").finish()
+            }
+            CustomFrameCommand::Minimize(e) => {
+              f.debug_tuple("CustomFrameCommand::Minimize").field(e).finish()
+            }
+            CustomFrameCommand::Restore(e) => {
+              f.debug_tuple("CustomFrameCommand::Restore").field(e).finish()
+            }
+            CustomFrameCommand::Dragging(e) => {
+              f.debug_tuple("CustomFrameCommand::Dragging").field(e).finish()
+            }
+          }
+        }
+      }
       #[derive(Clone)]
       pub enum Command {
         OpenWindow(Route),
@@ -343,8 +380,9 @@ pub mod local {
         Clipboard(ClipboardData),
         OpenUrl((_rt::String,OpenUrlOptions,)),
         ChangeSet(_rt::Vec::<ChangeSpec>),
-        CompositionBounds(CompositionBounds),
+        CompositionBounds((Location,Size,)),
         Screenshot(_rt::Vec::<Destination>),
+        CustomFrame(CustomFrameCommand),
       }
       impl ::core::fmt::Debug for Command {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
@@ -375,6 +413,51 @@ pub mod local {
             }
             Command::Screenshot(e) => {
               f.debug_tuple("Command::Screenshot").field(e).finish()
+            }
+            Command::CustomFrame(e) => {
+              f.debug_tuple("Command::CustomFrame").field(e).finish()
+            }
+          }
+        }
+      }
+      #[derive(Clone, Copy)]
+      pub enum CustomFrameEffect {
+        Initialized((Location,Size,)),
+        Changed(CustomFrameStatus),
+      }
+      impl ::core::fmt::Debug for CustomFrameEffect {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          match self {
+            CustomFrameEffect::Initialized(e) => {
+              f.debug_tuple("CustomFrameEffect::Initialized").field(e).finish()
+            }
+            CustomFrameEffect::Changed(e) => {
+              f.debug_tuple("CustomFrameEffect::Changed").field(e).finish()
+            }
+          }
+        }
+      }
+      #[derive(Clone)]
+      pub enum Effect {
+        ImageData(ExternalAsset),
+        FontData(ExternalFont),
+        RequestCloseQuery,
+        CustomFrameEffect(CustomFrameEffect),
+      }
+      impl ::core::fmt::Debug for Effect {
+        fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+          match self {
+            Effect::ImageData(e) => {
+              f.debug_tuple("Effect::ImageData").field(e).finish()
+            }
+            Effect::FontData(e) => {
+              f.debug_tuple("Effect::FontData").field(e).finish()
+            }
+            Effect::RequestCloseQuery => {
+              f.debug_tuple("Effect::RequestCloseQuery").finish()
+            }
+            Effect::CustomFrameEffect(e) => {
+              f.debug_tuple("Effect::CustomFrameEffect").field(e).finish()
             }
           }
         }
@@ -15268,17 +15351,17 @@ pub mod wasi {
                                                                                       #[allow(non_snake_case, unused_unsafe)]
                                                                                       pub unsafe fn _export_method_event_channel_post_cabi<T_: GuestEventChannel>(arg0: *mut u8,arg1: *mut u8,arg2: usize,) { unsafe {#[cfg(target_arch="wasm32")]
                                                                                       _rt::run_ctors_once();{
-                                                                                        let base45 = arg1;
-                                                                                        let len45 = arg2;
-                                                                                        let mut result45 = _rt::Vec::with_capacity(len45);
-                                                                                        for i in 0..len45 {
-                                                                                          let base = base45.add(i * (8+3*::core::mem::size_of::<*const u8>()));
-                                                                                          let e45 = {
+                                                                                        let base49 = arg1;
+                                                                                        let len49 = arg2;
+                                                                                        let mut result49 = _rt::Vec::with_capacity(len49);
+                                                                                        for i in 0..len49 {
+                                                                                          let base = base49.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                          let e49 = {
                                                                                             let l0 = i32::from(*base.add(0).cast::<u8>());
-                                                                                            use super::super::super::super::__with_name1::Event as V44;
-                                                                                            let v44 = match l0 {
+                                                                                            use super::super::super::super::__with_name1::Event as V48;
+                                                                                            let v48 = match l0 {
                                                                                               0 => {
-                                                                                                let e44 = {
+                                                                                                let e48 = {
                                                                                                   let l1 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                   let l2 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
                                                                                                   let l3 = i32::from(*base.add(2+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
@@ -15291,162 +15374,179 @@ pub mod wasi {
                                                                                                     super_key: super::super::super::super::__with_name1::ModifierPressed::empty() | super::super::super::super::__with_name1::ModifierPressed::from_bits_retain(((l4 as u8) << 0) as _),
                                                                                                   }
                                                                                                 };
-                                                                                                V44::Modifiers(e44)
+                                                                                                V48::Modifiers(e48)
                                                                                               }
                                                                                               1 => {
-                                                                                                let e44 = {
+                                                                                                let e48 = {
                                                                                                   let l5 = *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>();
                                                                                                   let l6 = *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                  let l7 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                  let l8 = *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
 
-                                                                                                  super::super::super::super::__with_name1::Location{
-                                                                                                    x: l5,
-                                                                                                    y: l6,
-                                                                                                  }
+                                                                                                  (super::super::super::super::__with_name1::Location{
+                                                                                                    left: l5,
+                                                                                                    top: l6,
+                                                                                                  }, super::super::super::super::__with_name1::Size{
+                                                                                                    width: l7,
+                                                                                                    height: l8,
+                                                                                                  })
                                                                                                 };
-                                                                                                V44::Pointer(e44)
+                                                                                                V48::ViewportBounds(e48)
                                                                                               }
                                                                                               2 => {
-                                                                                                let e44 = {
-                                                                                                  let l7 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                  super::super::super::super::__with_name1::MouseButton::_lift(l7 as u8)
-                                                                                                };
-                                                                                                V44::MouseDown(e44)
-                                                                                              }
-                                                                                              3 => {
-                                                                                                let e44 = {
-                                                                                                  let l8 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                  super::super::super::super::__with_name1::MouseButton::_lift(l8 as u8)
-                                                                                                };
-                                                                                                V44::MouseUp(e44)
-                                                                                              }
-                                                                                              4 => {
-                                                                                                V44::MouseMove
-                                                                                              }
-                                                                                              5 => {
-                                                                                                let e44 = {
+                                                                                                let e48 = {
                                                                                                   let l9 = *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>();
                                                                                                   let l10 = *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
-                                                                                                  let l11 = i32::from(*base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                  super::super::super::super::__with_name1::MouseWheel{
-                                                                                                    delta_x: l9,
-                                                                                                    delta_y: l10,
-                                                                                                    wheel_unit: super::super::super::super::__with_name1::MouseWheelUnit::_lift(l11 as u8),
+                                                                                                  super::super::super::super::__with_name1::Location{
+                                                                                                    left: l9,
+                                                                                                    top: l10,
                                                                                                   }
                                                                                                 };
-                                                                                                V44::MouseWheel(e44)
+                                                                                                V48::Pointer(e48)
+                                                                                              }
+                                                                                              3 => {
+                                                                                                let e48 = {
+                                                                                                  let l11 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                  super::super::super::super::__with_name1::MouseButton::_lift(l11 as u8)
+                                                                                                };
+                                                                                                V48::MouseDown(e48)
+                                                                                              }
+                                                                                              4 => {
+                                                                                                let e48 = {
+                                                                                                  let l12 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                  super::super::super::super::__with_name1::MouseButton::_lift(l12 as u8)
+                                                                                                };
+                                                                                                V48::MouseUp(e48)
+                                                                                              }
+                                                                                              5 => {
+                                                                                                V48::MouseMove
                                                                                               }
                                                                                               6 => {
-                                                                                                let e44 = {
-                                                                                                  let l12 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::Keys as V17;
-                                                                                                  let v17 = match l12 {
-                                                                                                    0 => {
-                                                                                                      let e17 = {
-                                                                                                        let l13 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                let e48 = {
+                                                                                                  let l13 = *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                  let l14 = *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                  let l15 = i32::from(*base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::WhitespaceKey::_lift(l13 as u8)
-                                                                                                      };
-                                                                                                      V17::Whitespace(e17)
-                                                                                                    }
-                                                                                                    1 => {
-                                                                                                      let e17 = {
-                                                                                                        let l14 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                        super::super::super::super::__with_name1::EditKey::_lift(l14 as u8)
-                                                                                                      };
-                                                                                                      V17::Edit(e17)
-                                                                                                    }
-                                                                                                    2 => {
-                                                                                                      let e17 = {
-                                                                                                        let l15 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                        super::super::super::super::__with_name1::UiKey::_lift(l15 as u8)
-                                                                                                      };
-                                                                                                      V17::Ui(e17)
-                                                                                                    }
-                                                                                                    n => {
-                                                                                                      debug_assert_eq!(n, 3, "invalid enum discriminant");
-                                                                                                      let e17 = {
-                                                                                                        let l16 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                        super::super::super::super::__with_name1::NaviKey::_lift(l16 as u8)
-                                                                                                      };
-                                                                                                      V17::Navi(e17)
-                                                                                                    }
-                                                                                                  };
-                                                                                                  let l18 = i32::from(*base.add(2+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                  (v17, super::super::super::super::__with_name1::KeyOptions::empty() | super::super::super::super::__with_name1::KeyOptions::from_bits_retain(((l18 as u8) << 0) as _))
+                                                                                                  super::super::super::super::__with_name1::MouseWheel{
+                                                                                                    delta_x: l13,
+                                                                                                    delta_y: l14,
+                                                                                                    wheel_unit: super::super::super::super::__with_name1::MouseWheelUnit::_lift(l15 as u8),
+                                                                                                  }
                                                                                                 };
-                                                                                                V44::KeyDown(e44)
+                                                                                                V48::MouseWheel(e48)
                                                                                               }
                                                                                               7 => {
-                                                                                                let e44 = {
-                                                                                                  let l19 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::Keys as V24;
-                                                                                                  let v24 = match l19 {
+                                                                                                let e48 = {
+                                                                                                  let l16 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::Keys as V21;
+                                                                                                  let v21 = match l16 {
                                                                                                     0 => {
-                                                                                                      let e24 = {
-                                                                                                        let l20 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e21 = {
+                                                                                                        let l17 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::WhitespaceKey::_lift(l20 as u8)
+                                                                                                        super::super::super::super::__with_name1::WhitespaceKey::_lift(l17 as u8)
                                                                                                       };
-                                                                                                      V24::Whitespace(e24)
+                                                                                                      V21::Whitespace(e21)
                                                                                                     }
                                                                                                     1 => {
-                                                                                                      let e24 = {
-                                                                                                        let l21 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e21 = {
+                                                                                                        let l18 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::EditKey::_lift(l21 as u8)
+                                                                                                        super::super::super::super::__with_name1::EditKey::_lift(l18 as u8)
                                                                                                       };
-                                                                                                      V24::Edit(e24)
+                                                                                                      V21::Edit(e21)
                                                                                                     }
                                                                                                     2 => {
-                                                                                                      let e24 = {
-                                                                                                        let l22 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e21 = {
+                                                                                                        let l19 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::UiKey::_lift(l22 as u8)
+                                                                                                        super::super::super::super::__with_name1::UiKey::_lift(l19 as u8)
                                                                                                       };
-                                                                                                      V24::Ui(e24)
+                                                                                                      V21::Ui(e21)
                                                                                                     }
                                                                                                     n => {
                                                                                                       debug_assert_eq!(n, 3, "invalid enum discriminant");
-                                                                                                      let e24 = {
-                                                                                                        let l23 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e21 = {
+                                                                                                        let l20 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        super::super::super::super::__with_name1::NaviKey::_lift(l23 as u8)
+                                                                                                        super::super::super::super::__with_name1::NaviKey::_lift(l20 as u8)
                                                                                                       };
-                                                                                                      V24::Navi(e24)
+                                                                                                      V21::Navi(e21)
+                                                                                                    }
+                                                                                                  };
+                                                                                                  let l22 = i32::from(*base.add(2+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                  (v21, super::super::super::super::__with_name1::KeyOptions::empty() | super::super::super::super::__with_name1::KeyOptions::from_bits_retain(((l22 as u8) << 0) as _))
+                                                                                                };
+                                                                                                V48::KeyDown(e48)
+                                                                                              }
+                                                                                              8 => {
+                                                                                                let e48 = {
+                                                                                                  let l23 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::Keys as V28;
+                                                                                                  let v28 = match l23 {
+                                                                                                    0 => {
+                                                                                                      let e28 = {
+                                                                                                        let l24 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                        super::super::super::super::__with_name1::WhitespaceKey::_lift(l24 as u8)
+                                                                                                      };
+                                                                                                      V28::Whitespace(e28)
+                                                                                                    }
+                                                                                                    1 => {
+                                                                                                      let e28 = {
+                                                                                                        let l25 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                        super::super::super::super::__with_name1::EditKey::_lift(l25 as u8)
+                                                                                                      };
+                                                                                                      V28::Edit(e28)
+                                                                                                    }
+                                                                                                    2 => {
+                                                                                                      let e28 = {
+                                                                                                        let l26 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                        super::super::super::super::__with_name1::UiKey::_lift(l26 as u8)
+                                                                                                      };
+                                                                                                      V28::Ui(e28)
+                                                                                                    }
+                                                                                                    n => {
+                                                                                                      debug_assert_eq!(n, 3, "invalid enum discriminant");
+                                                                                                      let e28 = {
+                                                                                                        let l27 = i32::from(*base.add(1+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                        super::super::super::super::__with_name1::NaviKey::_lift(l27 as u8)
+                                                                                                      };
+                                                                                                      V28::Navi(e28)
                                                                                                     }
                                                                                                   };
 
-                                                                                                  v24
+                                                                                                  v28
                                                                                                 };
-                                                                                                V44::KeyUp(e44)
+                                                                                                V48::KeyUp(e48)
                                                                                               }
-                                                                                              8 => {
-                                                                                                let e44 = {
-                                                                                                  let l25 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::CompositionBoundsReq as V29;
-                                                                                                  let v29 = match l25 {
+                                                                                              9 => {
+                                                                                                let e48 = {
+                                                                                                  let l29 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::CompositionBoundsReq as V33;
+                                                                                                  let v33 = match l29 {
                                                                                                     n => {
                                                                                                       debug_assert_eq!(n, 0, "invalid enum discriminant");
-                                                                                                      let e29 = {
-                                                                                                        let l26 = i32::from(*base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                      let e33 = {
+                                                                                                        let l30 = i32::from(*base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
 
-                                                                                                        match l26 {
+                                                                                                        match l30 {
                                                                                                           0 => None,
                                                                                                           1 => {
                                                                                                             let e = {
-                                                                                                              let l27 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
-                                                                                                              let l28 = *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                              let l31 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                              let l32 = *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<i32>();
 
                                                                                                               super::super::super::super::__with_name1::CompositionRange{
-                                                                                                                offset: l27 as u32,
-                                                                                                                len: l28 as u32,
+                                                                                                                offset: l31 as u32,
+                                                                                                                len: l32 as u32,
                                                                                                               }
                                                                                                             };
                                                                                                             Some(e)
@@ -15454,120 +15554,120 @@ pub mod wasi {
                                                                                                           _ => _rt::invalid_enum_discriminant(),
                                                                                                         }
                                                                                                       };
-                                                                                                      V29::CharacterBounds(e29)
+                                                                                                      V33::CharacterBounds(e33)
                                                                                                     }
                                                                                                   };
 
-                                                                                                  v29
+                                                                                                  v33
                                                                                                 };
-                                                                                                V44::RequestCompositionBounds(e44)
+                                                                                                V48::RequestCompositionBounds(e48)
                                                                                               }
-                                                                                              9 => {
-                                                                                                let e44 = {
-                                                                                                  let l30 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-                                                                                                  use super::super::super::super::__with_name1::CompositionState as V39;
-                                                                                                  let v39 = match l30 {
+                                                                                              10 => {
+                                                                                                let e48 = {
+                                                                                                  let l34 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                  use super::super::super::super::__with_name1::CompositionState as V43;
+                                                                                                  let v43 = match l34 {
                                                                                                     0 => {
-                                                                                                      V39::Start
+                                                                                                      V43::Start
                                                                                                     }
                                                                                                     1 => {
-                                                                                                      let e39 = {
-                                                                                                        let l31 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<i32>();
-                                                                                                        let l32 = *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                      let e43 = {
+                                                                                                        let l35 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<i32>();
+                                                                                                        let l36 = *base.add(4+2*::core::mem::size_of::<*const u8>()).cast::<i32>();
 
                                                                                                         super::super::super::super::__with_name1::CompositionRange{
-                                                                                                          offset: l31 as u32,
-                                                                                                          len: l32 as u32,
+                                                                                                          offset: l35 as u32,
+                                                                                                          len: l36 as u32,
                                                                                                         }
                                                                                                       };
-                                                                                                      V39::SelectionRange(e39)
+                                                                                                      V43::SelectionRange(e43)
                                                                                                     }
                                                                                                     2 => {
-                                                                                                      let e39 = {
-                                                                                                        let l33 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                        let l34 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                        let len35 = l34;
-                                                                                                        let bytes35 = _rt::Vec::from_raw_parts(l33.cast(), len35, len35);
+                                                                                                      let e43 = {
+                                                                                                        let l37 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                        let l38 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                        let len39 = l38;
+                                                                                                        let bytes39 = _rt::Vec::from_raw_parts(l37.cast(), len39, len39);
 
-                                                                                                        _rt::string_lift(bytes35)
+                                                                                                        _rt::string_lift(bytes39)
                                                                                                       };
-                                                                                                      V39::PreEdit(e39)
+                                                                                                      V43::PreEdit(e43)
                                                                                                     }
                                                                                                     n => {
                                                                                                       debug_assert_eq!(n, 3, "invalid enum discriminant");
-                                                                                                      let e39 = {
-                                                                                                        let l36 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                        let l37 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                        let len38 = l37;
-                                                                                                        let bytes38 = _rt::Vec::from_raw_parts(l36.cast(), len38, len38);
+                                                                                                      let e43 = {
+                                                                                                        let l40 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                        let l41 = *base.add(3*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                        let len42 = l41;
+                                                                                                        let bytes42 = _rt::Vec::from_raw_parts(l40.cast(), len42, len42);
 
-                                                                                                        _rt::string_lift(bytes38)
+                                                                                                        _rt::string_lift(bytes42)
                                                                                                       };
-                                                                                                      V39::Commit(e39)
+                                                                                                      V43::Commit(e43)
                                                                                                     }
                                                                                                   };
 
-                                                                                                  v39
+                                                                                                  v43
                                                                                                 };
-                                                                                                V44::UpdateCompositionState(e44)
-                                                                                              }
-                                                                                              10 => {
-                                                                                                let e44 = {
-                                                                                                  let l40 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
-
-                                                                                                  super::super::super::super::__with_name1::HistoryOps::_lift(l40 as u8)
-                                                                                                };
-                                                                                                V44::History(e44)
+                                                                                                V48::UpdateCompositionState(e48)
                                                                                               }
                                                                                               11 => {
-                                                                                                V44::Cut
+                                                                                                let e48 = {
+                                                                                                  let l44 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                  super::super::super::super::__with_name1::HistoryOps::_lift(l44 as u8)
+                                                                                                };
+                                                                                                V48::History(e48)
                                                                                               }
                                                                                               12 => {
-                                                                                                V44::Copy
+                                                                                                V48::Cut
                                                                                               }
                                                                                               13 => {
-                                                                                                let e44 = {
-                                                                                                  let l41 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
-                                                                                                  let l42 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
-                                                                                                  let len43 = l42;
-                                                                                                  let bytes43 = _rt::Vec::from_raw_parts(l41.cast(), len43, len43);
-
-                                                                                                  _rt::string_lift(bytes43)
-                                                                                                };
-                                                                                                V44::Paste(e44)
+                                                                                                V48::Copy
                                                                                               }
                                                                                               14 => {
-                                                                                                V44::Activate
+                                                                                                let e48 = {
+                                                                                                  let l45 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
+                                                                                                  let l46 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
+                                                                                                  let len47 = l46;
+                                                                                                  let bytes47 = _rt::Vec::from_raw_parts(l45.cast(), len47, len47);
+
+                                                                                                  _rt::string_lift(bytes47)
+                                                                                                };
+                                                                                                V48::Paste(e48)
+                                                                                              }
+                                                                                              15 => {
+                                                                                                V48::Activate
                                                                                               }
                                                                                               n => {
-                                                                                                debug_assert_eq!(n, 15, "invalid enum discriminant");
-                                                                                                V44::KeepFocus
+                                                                                                debug_assert_eq!(n, 16, "invalid enum discriminant");
+                                                                                                V48::KeepFocus
                                                                                               }
                                                                                             };
 
-                                                                                            v44
+                                                                                            v48
                                                                                           };
-                                                                                          result45.push(e45);
+                                                                                          result49.push(e49);
                                                                                         }
-                                                                                        _rt::cabi_dealloc(base45, len45 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                                        T_::post(EventChannelBorrow::lift(arg0 as u32 as usize).get(), result45)
+                                                                                        _rt::cabi_dealloc(base49, len49 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                        T_::post(EventChannelBorrow::lift(arg0 as u32 as usize).get(), result49)
                                                                                       };
                                                                                     } }
                                                                                     #[doc(hidden)]
                                                                                     #[allow(non_snake_case, unused_unsafe)]
                                                                                     pub unsafe fn _export_method_command_channel_post_cabi<T_: GuestCommandChannel>(arg0: *mut u8,arg1: *mut u8,arg2: usize,) { unsafe {#[cfg(target_arch="wasm32")]
                                                                                     _rt::run_ctors_once();{
-                                                                                      let base17 = arg1;
-                                                                                      let len17 = arg2;
-                                                                                      let mut result17 = _rt::Vec::with_capacity(len17);
-                                                                                      for i in 0..len17 {
-                                                                                        let base = base17.add(i * (7*::core::mem::size_of::<*const u8>()));
-                                                                                        let e17 = {
+                                                                                      let base24 = arg1;
+                                                                                      let len24 = arg2;
+                                                                                      let mut result24 = _rt::Vec::with_capacity(len24);
+                                                                                      for i in 0..len24 {
+                                                                                        let base = base24.add(i * (7*::core::mem::size_of::<*const u8>()));
+                                                                                        let e24 = {
                                                                                           let l0 = i32::from(*base.add(0).cast::<u8>());
-                                                                                          use super::super::super::super::local::immediate_renderer_example::interaction::Effect as V16;
-                                                                                          let v16 = match l0 {
+                                                                                          use super::super::super::super::local::immediate_renderer_example::interaction::Effect as V23;
+                                                                                          let v23 = match l0 {
                                                                                             0 => {
-                                                                                              let e16 = {
+                                                                                              let e23 = {
                                                                                                 let l1 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                                 let l2 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                                 let len3 = l2;
@@ -15581,10 +15681,10 @@ pub mod wasi {
                                                                                                   bytes: <_ as From<_rt::Vec<_>>>::from(_rt::Vec::from_raw_parts(l4.cast(), len6, len6)),
                                                                                                 }
                                                                                               };
-                                                                                              V16::ImageData(e16)
+                                                                                              V23::ImageData(e23)
                                                                                             }
                                                                                             1 => {
-                                                                                              let e16 = {
+                                                                                              let e23 = {
                                                                                                 let l7 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                                 let l8 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                                 let len9 = l8;
@@ -15603,20 +15703,57 @@ pub mod wasi {
                                                                                                   bytes: <_ as From<_rt::Vec<_>>>::from(_rt::Vec::from_raw_parts(l13.cast(), len15, len15)),
                                                                                                 }
                                                                                               };
-                                                                                              V16::FontData(e16)
+                                                                                              V23::FontData(e23)
+                                                                                            }
+                                                                                            2 => {
+                                                                                              V23::RequestCloseQuery
                                                                                             }
                                                                                             n => {
-                                                                                              debug_assert_eq!(n, 2, "invalid enum discriminant");
-                                                                                              V16::RequestCloseQuery
+                                                                                              debug_assert_eq!(n, 3, "invalid enum discriminant");
+                                                                                              let e23 = {
+                                                                                                let l16 = i32::from(*base.add(::core::mem::size_of::<*const u8>()).cast::<u8>());
+                                                                                                use super::super::super::super::local::immediate_renderer_example::interaction::CustomFrameEffect as V22;
+                                                                                                let v22 = match l16 {
+                                                                                                  0 => {
+                                                                                                    let e22 = {
+                                                                                                      let l17 = *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                      let l18 = *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                      let l19 = *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
+                                                                                                      let l20 = *base.add(16+1*::core::mem::size_of::<*const u8>()).cast::<f32>();
+
+                                                                                                      (super::super::super::super::__with_name1::Location{
+                                                                                                        left: l17,
+                                                                                                        top: l18,
+                                                                                                      }, super::super::super::super::__with_name1::Size{
+                                                                                                        width: l19,
+                                                                                                        height: l20,
+                                                                                                      })
+                                                                                                    };
+                                                                                                    V22::Initialized(e22)
+                                                                                                  }
+                                                                                                  n => {
+                                                                                                    debug_assert_eq!(n, 1, "invalid enum discriminant");
+                                                                                                    let e22 = {
+                                                                                                      let l21 = i32::from(*base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>());
+
+                                                                                                      super::super::super::super::local::immediate_renderer_example::interaction::CustomFrameStatus::_lift(l21 as u8)
+                                                                                                    };
+                                                                                                    V22::Changed(e22)
+                                                                                                  }
+                                                                                                };
+
+                                                                                                v22
+                                                                                              };
+                                                                                              V23::CustomFrameEffect(e23)
                                                                                             }
                                                                                           };
 
-                                                                                          v16
+                                                                                          v23
                                                                                         };
-                                                                                        result17.push(e17);
+                                                                                        result24.push(e24);
                                                                                       }
-                                                                                      _rt::cabi_dealloc(base17, len17 * (7*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
-                                                                                      T_::post(CommandChannelBorrow::lift(arg0 as u32 as usize).get(), result17)
+                                                                                      _rt::cabi_dealloc(base24, len24 * (7*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                      T_::post(CommandChannelBorrow::lift(arg0 as u32 as usize).get(), result24)
                                                                                     };
                                                                                   } }
                                                                                   #[doc(hidden)]
@@ -15642,16 +15779,16 @@ pub mod wasi {
                                                                                 T_::dispatch(DispatcherBorrow::lift(arg0 as u32 as usize).get())
                                                                               };
                                                                               let ptr1 = (&raw mut _RET_AREA.0).cast::<u8>();
-                                                                              let vec19 = result0;
-                                                                              let len19 = vec19.len();
-                                                                              let layout19 = _rt::alloc::Layout::from_size_align(vec19.len() * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                              let (result19, _cleanup19) = wit_bindgen::rt::Cleanup::new(layout19);if let Some(cleanup) = _cleanup19 { cleanup.forget(); }
-                                                                              for (i, e) in vec19.into_iter().enumerate() {
-                                                                                let base = result19.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                              let vec27 = result0;
+                                                                              let len27 = vec27.len();
+                                                                              let layout27 = _rt::alloc::Layout::from_size_align(vec27.len() * (16+2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                              let (result27, _cleanup27) = wit_bindgen::rt::Cleanup::new(layout27);if let Some(cleanup) = _cleanup27 { cleanup.forget(); }
+                                                                              for (i, e) in vec27.into_iter().enumerate() {
+                                                                                let base = result27.add(i * (16+2*::core::mem::size_of::<*const u8>()));
                                                                                 {
-                                                                                  use super::super::super::super::local::immediate_renderer_example::interaction::Command as V18;
+                                                                                  use super::super::super::super::local::immediate_renderer_example::interaction::Command as V26;
                                                                                   match e {
-                                                                                    V18::OpenWindow(e) => {
+                                                                                    V26::OpenWindow(e) => {
                                                                                       *base.add(0).cast::<u8>() = (0i32) as u8;
                                                                                       let vec2 = (e.into_bytes()).into_boxed_slice();
                                                                                       let ptr2 = vec2.as_ptr().cast::<u8>();
@@ -15660,12 +15797,12 @@ pub mod wasi {
                                                                                       *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len2;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr2.cast_mut();
                                                                                     },
-                                                                                    V18::CloseWindow(e) => {
+                                                                                    V26::CloseWindow(e) => {
                                                                                       *base.add(0).cast::<u8>() = (1i32) as u8;
                                                                                       let flags3 = e;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags3.bits() >> 0) as i32) as u8;
                                                                                     },
-                                                                                    V18::RequestImage(e) => {
+                                                                                    V26::RequestImage(e) => {
                                                                                       *base.add(0).cast::<u8>() = (2i32) as u8;
                                                                                       let vec5 = e;
                                                                                       let len5 = vec5.len();
@@ -15685,11 +15822,11 @@ pub mod wasi {
                                                                                       *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len5;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result5;
                                                                                     },
-                                                                                    V18::Cursor(e) => {
+                                                                                    V26::Cursor(e) => {
                                                                                       *base.add(0).cast::<u8>() = (3i32) as u8;
                                                                                       *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
                                                                                     },
-                                                                                    V18::Clipboard(e) => {
+                                                                                    V26::Clipboard(e) => {
                                                                                       *base.add(0).cast::<u8>() = (4i32) as u8;
                                                                                       use super::super::super::super::local::immediate_renderer_example::interaction::ClipboardData as V7;
                                                                                       match e {
@@ -15704,7 +15841,7 @@ pub mod wasi {
                                                                                         },
                                                                                       }
                                                                                     },
-                                                                                    V18::OpenUrl(e) => {
+                                                                                    V26::OpenUrl(e) => {
                                                                                       *base.add(0).cast::<u8>() = (5i32) as u8;
                                                                                       let (t8_0, t8_1, ) = e;
                                                                                       let vec9 = (t8_0.into_bytes()).into_boxed_slice();
@@ -15716,7 +15853,7 @@ pub mod wasi {
                                                                                       let flags10 = t8_1;
                                                                                       *base.add(3*::core::mem::size_of::<*const u8>()).cast::<u8>() = ((flags10.bits() >> 0) as i32) as u8;
                                                                                     },
-                                                                                    V18::ChangeSet(e) => {
+                                                                                    V26::ChangeSet(e) => {
                                                                                       *base.add(0).cast::<u8>() = (6i32) as u8;
                                                                                       let vec13 = e;
                                                                                       let len13 = vec13.len();
@@ -15748,40 +15885,42 @@ pub mod wasi {
                                                                                         *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len13;
                                                                                         *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result13;
                                                                                       },
-                                                                                      V18::CompositionBounds(e) => {
+                                                                                      V26::CompositionBounds(e) => {
                                                                                         *base.add(0).cast::<u8>() = (7i32) as u8;
-                                                                                        let super::super::super::super::local::immediate_renderer_example::interaction::CompositionBounds{ left:left14, top:top14, width:width14, height:height14, } = e;
-                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left14);
-                                                                                        *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top14);
-                                                                                        *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width14);
-                                                                                        *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height14);
+                                                                                        let (t14_0, t14_1, ) = e;
+                                                                                        let super::super::super::super::__with_name1::Location{ left:left15, top:top15, } = t14_0;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left15);
+                                                                                        *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top15);
+                                                                                        let super::super::super::super::__with_name1::Size{ width:width16, height:height16, } = t14_1;
+                                                                                        *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width16);
+                                                                                        *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height16);
                                                                                       },
-                                                                                      V18::Screenshot(e) => {
+                                                                                      V26::Screenshot(e) => {
                                                                                         *base.add(0).cast::<u8>() = (8i32) as u8;
-                                                                                        let vec17 = e;
-                                                                                        let len17 = vec17.len();
-                                                                                        let layout17 = _rt::alloc::Layout::from_size_align(vec17.len() * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
-                                                                                        let (result17, _cleanup17) = wit_bindgen::rt::Cleanup::new(layout17);if let Some(cleanup) = _cleanup17 { cleanup.forget(); }
-                                                                                        for (i, e) in vec17.into_iter().enumerate() {
-                                                                                          let base = result17.add(i * (3*::core::mem::size_of::<*const u8>()));
+                                                                                        let vec19 = e;
+                                                                                        let len19 = vec19.len();
+                                                                                        let layout19 = _rt::alloc::Layout::from_size_align(vec19.len() * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>()).unwrap();
+                                                                                        let (result19, _cleanup19) = wit_bindgen::rt::Cleanup::new(layout19);if let Some(cleanup) = _cleanup19 { cleanup.forget(); }
+                                                                                        for (i, e) in vec19.into_iter().enumerate() {
+                                                                                          let base = result19.add(i * (3*::core::mem::size_of::<*const u8>()));
                                                                                           {
-                                                                                            use super::super::super::super::local::immediate_renderer_example::interaction::Destination as V16;
+                                                                                            use super::super::super::super::local::immediate_renderer_example::interaction::Destination as V18;
                                                                                             match e {
-                                                                                              V16::Origin=> {
+                                                                                              V18::Origin=> {
                                                                                                 {
                                                                                                   *base.add(0).cast::<u8>() = (0i32) as u8;
                                                                                                 }
                                                                                               }
-                                                                                              V16::Route(e) => {
+                                                                                              V18::Route(e) => {
                                                                                                 *base.add(0).cast::<u8>() = (1i32) as u8;
-                                                                                                let vec15 = (e.into_bytes()).into_boxed_slice();
-                                                                                                let ptr15 = vec15.as_ptr().cast::<u8>();
-                                                                                                let len15 = vec15.len();
-                                                                                                ::core::mem::forget(vec15);
-                                                                                                *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len15;
-                                                                                                *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr15.cast_mut();
+                                                                                                let vec17 = (e.into_bytes()).into_boxed_slice();
+                                                                                                let ptr17 = vec17.as_ptr().cast::<u8>();
+                                                                                                let len17 = vec17.len();
+                                                                                                ::core::mem::forget(vec17);
+                                                                                                *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len17;
+                                                                                                *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = ptr17.cast_mut();
                                                                                               },
-                                                                                              V16::Clipboard=> {
+                                                                                              V18::Clipboard=> {
                                                                                                 {
                                                                                                   *base.add(0).cast::<u8>() = (2i32) as u8;
                                                                                                 }
@@ -15789,14 +15928,51 @@ pub mod wasi {
                                                                                             }
                                                                                           }
                                                                                         }
-                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len17;
-                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result17;
+                                                                                        *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>() = len19;
+                                                                                        *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>() = result19;
+                                                                                      },
+                                                                                      V26::CustomFrame(e) => {
+                                                                                        *base.add(0).cast::<u8>() = (9i32) as u8;
+                                                                                        use super::super::super::super::local::immediate_renderer_example::interaction::CustomFrameCommand as V25;
+                                                                                        match e {
+                                                                                          V25::Initialize(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (0i32) as u8;
+                                                                                            *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<u8>() = (e.clone() as i32) as u8;
+                                                                                          },
+                                                                                          V25::Maximize=> {
+                                                                                            {
+                                                                                              *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (1i32) as u8;
+                                                                                            }
+                                                                                          }
+                                                                                          V25::Minimize(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (2i32) as u8;
+                                                                                            let super::super::super::super::__with_name1::Size{ width:width20, height:height20, } = e;
+                                                                                            *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width20);
+                                                                                            *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height20);
+                                                                                          },
+                                                                                          V25::Restore(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (3i32) as u8;
+                                                                                            let (t21_0, t21_1, ) = e;
+                                                                                            let super::super::super::super::__with_name1::Location{ left:left22, top:top22, } = t21_0;
+                                                                                            *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left22);
+                                                                                            *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top22);
+                                                                                            let super::super::super::super::__with_name1::Size{ width:width23, height:height23, } = t21_1;
+                                                                                            *base.add(12+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(width23);
+                                                                                            *base.add(16+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(height23);
+                                                                                          },
+                                                                                          V25::Dragging(e) => {
+                                                                                            *base.add(::core::mem::size_of::<*const u8>()).cast::<u8>() = (4i32) as u8;
+                                                                                            let super::super::super::super::__with_name1::Location{ left:left24, top:top24, } = e;
+                                                                                            *base.add(4+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(left24);
+                                                                                            *base.add(8+1*::core::mem::size_of::<*const u8>()).cast::<f32>() = _rt::as_f32(top24);
+                                                                                          },
+                                                                                        }
                                                                                       },
                                                                                     }
                                                                                   }
                                                                                 }
-                                                                                *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len19;
-                                                                                *ptr1.add(0).cast::<*mut u8>() = result19;
+                                                                                *ptr1.add(::core::mem::size_of::<*const u8>()).cast::<usize>() = len27;
+                                                                                *ptr1.add(0).cast::<*mut u8>() = result27;
                                                                                 ptr1
                                                                               } }
                                                                               #[doc(hidden)]
@@ -15807,7 +15983,7 @@ pub mod wasi {
                                                                                 let base27 = l0;
                                                                                 let len27 = l1;
                                                                                 for i in 0..len27 {
-                                                                                  let base = base27.add(i * (8+3*::core::mem::size_of::<*const u8>()));
+                                                                                  let base = base27.add(i * (16+2*::core::mem::size_of::<*const u8>()));
                                                                                   {
                                                                                     let l2 = i32::from(*base.add(0).cast::<u8>());
                                                                                     match l2 {
@@ -15870,7 +16046,7 @@ pub mod wasi {
                                                                                         _rt::cabi_dealloc(base20, len20 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                       },
                                                                                       7 => (),
-                                                                                      _ => {
+                                                                                      8 => {
                                                                                         let l21 = *base.add(::core::mem::size_of::<*const u8>()).cast::<*mut u8>();
                                                                                         let l22 = *base.add(2*::core::mem::size_of::<*const u8>()).cast::<usize>();
                                                                                         let base26 = l21;
@@ -15892,10 +16068,11 @@ pub mod wasi {
                                                                                         }
                                                                                         _rt::cabi_dealloc(base26, len26 * (3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                                       },
+                                                                                      _ => (),
                                                                                     }
                                                                                   }
                                                                                 }
-                                                                                _rt::cabi_dealloc(base27, len27 * (8+3*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
+                                                                                _rt::cabi_dealloc(base27, len27 * (16+2*::core::mem::size_of::<*const u8>()), ::core::mem::size_of::<*const u8>());
                                                                               } }
                                                                               #[doc(hidden)]
                                                                               #[allow(non_snake_case, unused_unsafe)]
@@ -16445,9 +16622,9 @@ pub mod wasi {
                                                                         #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world:imports and exports")]
                                                                         #[doc(hidden)]
                                                                         #[allow(clippy::octal_escapes)]
-                                                                        pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31361] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xfc\xf3\x01\x01A\x02\
-\x01A\x19\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
+                                                                        pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31665] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xac\xf6\x01\x01A\x02\
+\x01A\x1b\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
 \x06\x03\0\x12wasi:io/poll@0.2.9\x05\0\x01B\x0b\x04\0\x07context\x03\x01\x04\0\x0f\
@@ -17004,61 +17181,68 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x20\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
-source\x03\x05bytes\x04\x04\0\x0eexternal-asset\x03\0\x05\x01r\x03\x06source\x03\
-\x04names\x05bytes\x04\x04\0\x0dexternal-font\x03\0\x07\x01q\x03\x0aimage-data\x01\
-\x06\0\x09font-data\x01\x08\0\x13request-close-query\0\0\x04\0\x06effect\x03\0\x09\
-\x01m#\x07default\x04none\x0ccontext-menu\x04help\x07pointer\x08progress\x04wait\
-\x04cell\x09crosshair\x04text\x0dvertical-text\x05alias\x04copy\x04move\x07no-dr\
-op\x0bnot-allowed\x04grab\x08grabbing\x0aall-scroll\x0acol-resize\x0arow-resize\x08\
-n-resize\x08e-resize\x08s-resize\x08w-resize\x09ne-resize\x09nw-resize\x09se-res\
-ize\x09sw-resize\x09ew-resize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07zoom\
--in\x08zoom-out\x04\0\x0ccursor-style\x03\0\x0b\x01q\x01\x04text\x01s\0\x04\0\x0e\
-clipboard-data\x03\0\x0d\x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x0f\x04\0\
-\x0bchange-spec\x03\0\x10\x01r\x04\x04leftv\x03topv\x05widthv\x06heightv\x04\0\x12\
-composition-bounds\x03\0\x12\x01n\x01\x07new-tab\x04\0\x10open-url-options\x03\0\
-\x14\x01n\x01\x0awith-query\x04\0\x0dclose-options\x03\0\x16\x01q\x03\x06origin\0\
-\0\x05route\x01\x01\0\x09clipboard\0\0\x04\0\x0bdestination\x03\0\x18\x01p\x03\x01\
-o\x02s\x15\x01p\x11\x01p\x19\x01q\x09\x0bopen-window\x01\x01\0\x0cclose-window\x01\
-\x17\0\x0drequest-image\x01\x1a\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x08\
-open-url\x01\x1b\0\x0achange-set\x01\x1c\0\x12composition-bounds\x01\x13\0\x0asc\
-reenshot\x01\x1d\0\x04\0\x07command\x03\0\x1e\x03\0,local:immediate-renderer-exa\
-mple/interaction\x05\x0b\x01B$\x01n\x02\x04left\x05right\x04\0\x10modifier-press\
-ed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10\
-modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\
-\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\
-\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10mouse-wheel-unit\x03\0\x08\x01\
-r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\x04\0\x0bmouse-wheel\x03\0\x0a\x01\
-n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\x01m\x03\x05enter\x03tab\x05space\
-\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09backspace\x06delete\x04\0\x08edit\
--key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x12\x01m\x04\x0aarrow-do\
-wn\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x14\x01q\x04\
-\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02ui\x01\x13\0\x04navi\x01\x15\0\x04\
-\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x18\x01\
-r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x1a\x01q\x04\x05start\0\
-\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11com\
-position-state\x03\0\x1c\x01k\x1b\x01q\x01\x10character-bounds\x01\x1e\0\x04\0\x16\
-composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\x01q\x10\x09modifiers\x01\x03\0\
-\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-mov\
-e\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\x06key-up\x01\x17\0\x1arequest\
--composition-bounds\x01\x20\0\x18update-composition-state\x01\x1d\0\x07history\x01\
-\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\
-\0\x05event\x03\0\"\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x02\x03\0\x04\
-\x07command\x02\x03\0\x04\x06effect\x02\x03\0\x03\x0erender-context\x02\x03\0\x05\
-\x05event\x01B!\x02\x03\x02\x01\x0d\x04\0\x07command\x03\0\0\x02\x03\x02\x01\x0e\
-\x04\0\x06effect\x03\0\x02\x02\x03\x02\x01\x0f\x04\0\x0erender-context\x03\0\x04\
-\x02\x03\x02\x01\x10\x04\0\x05event\x03\0\x06\x04\0\x0devent-channel\x03\x01\x04\
-\0\x0fcommand-channel\x03\x01\x04\0\x0adispatcher\x03\x01\x01h\x08\x01p\x07\x01@\
-\x02\x04self\x0b\x06events\x0c\x01\0\x04\0\x1a[method]event-channel.post\x01\x0d\
-\x01h\x09\x01p\x03\x01@\x02\x04self\x0e\x07effects\x0f\x01\0\x04\0\x1c[method]co\
-mmand-channel.post\x01\x10\x01h\x0a\x01i\x08\x01@\x01\x04self\x11\0\x12\x04\0\x20\
-[method]dispatcher.event-channel\x01\x13\x01i\x09\x01@\x01\x04self\x11\0\x14\x04\
-\0\"[method]dispatcher.command-channel\x01\x15\x01p\x01\x01@\x01\x04self\x11\0\x16\
-\x04\0\x1b[method]dispatcher.dispatch\x01\x17\x01i\x05\x01i\x0a\x01@\x01\x07cont\
-ext\x18\0\x19\x04\0\x0fcreate-renderer\x01\x1a\x04\0'local:immediate-renderer-ex\
-ample/render\x05\x11\x04\0.local:immediate-renderer-example/example-world\x04\0\x0b\
-\x13\x01\0\x0dexample-world\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dw\
-it-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+B'\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\
+\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\x02\x01\
+r\x02\x04leftv\x03topv\x04\0\x08location\x03\0\x04\x01r\x02\x05widthv\x06heightv\
+\x04\0\x04size\x03\0\x06\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\
+\0\x0cmouse-button\x03\0\x08\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10\
+mouse-wheel-unit\x03\0\x0a\x01r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x0b\x04\
+\0\x0bmouse-wheel\x03\0\x0c\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0e\x01\
+m\x03\x05enter\x03tab\x05space\x04\0\x0ewhitespace-key\x03\0\x10\x01m\x02\x09bac\
+kspace\x06delete\x04\0\x08edit-key\x03\0\x12\x01m\x01\x06escape\x04\0\x06ui-key\x03\
+\0\x14\x01m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08\
+navi-key\x03\0\x16\x01q\x04\x0awhitespace\x01\x11\0\x04edit\x01\x13\0\x02ui\x01\x15\
+\0\x04navi\x01\x17\0\x04\0\x04keys\x03\0\x18\x01m\x02\x04undo\x04redo\x04\0\x0bh\
+istory-ops\x03\0\x1a\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\
+\x1c\x01q\x04\x05start\0\0\x0fselection-range\x01\x1d\0\x08pre-edit\x01s\0\x06co\
+mmit\x01s\0\x04\0\x11composition-state\x03\0\x1e\x01k\x1d\x01q\x01\x10character-\
+bounds\x01\x20\0\x04\0\x16composition-bounds-req\x03\0!\x01o\x02\x05\x07\x01o\x02\
+\x19\x0f\x01q\x11\x09modifiers\x01\x03\0\x0fviewport-bounds\x01#\0\x07pointer\x01\
+\x05\0\x0amouse-down\x01\x09\0\x08mouse-up\x01\x09\0\x0amouse-move\0\0\x0bmouse-\
+wheel\x01\x0d\0\x08key-down\x01$\0\x06key-up\x01\x19\0\x1arequest-composition-bo\
+unds\x01\"\0\x18update-composition-state\x01\x1f\0\x07history\x01\x1b\0\x03cut\0\
+\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\
+\0%\x03\0\x1elocal:immediate-renderer/types\x05\x0b\x02\x03\0\x04\x08location\x02\
+\x03\0\x04\x04size\x01B)\x02\x03\x02\x01\x0c\x04\0\x08location\x03\0\0\x02\x03\x02\
+\x01\x0d\x04\0\x04size\x03\0\x02\x01s\x04\0\x05route\x03\0\x04\x01s\x04\0\x03url\
+\x03\0\x06\x01p}\x01r\x02\x06source\x07\x05bytes\x08\x04\0\x0eexternal-asset\x03\
+\0\x09\x01r\x03\x06source\x07\x04names\x05bytes\x08\x04\0\x0dexternal-font\x03\0\
+\x0b\x01m#\x07default\x04none\x0ccontext-menu\x04help\x07pointer\x08progress\x04\
+wait\x04cell\x09crosshair\x04text\x0dvertical-text\x05alias\x04copy\x04move\x07n\
+o-drop\x0bnot-allowed\x04grab\x08grabbing\x0aall-scroll\x0acol-resize\x0arow-res\
+ize\x08n-resize\x08e-resize\x08s-resize\x08w-resize\x09ne-resize\x09nw-resize\x09\
+se-resize\x09sw-resize\x09ew-resize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07\
+zoom-in\x08zoom-out\x04\0\x0ccursor-style\x03\0\x0d\x01q\x01\x04text\x01s\0\x04\0\
+\x0eclipboard-data\x03\0\x0f\x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x11\x04\
+\0\x0bchange-spec\x03\0\x12\x01n\x01\x07new-tab\x04\0\x10open-url-options\x03\0\x14\
+\x01n\x01\x0awith-query\x04\0\x0dclose-options\x03\0\x16\x01q\x03\x06origin\0\0\x05\
+route\x01\x05\0\x09clipboard\0\0\x04\0\x0bdestination\x03\0\x18\x01m\x03\x09maxi\
+mized\x09minimized\x08restored\x04\0\x13custom-frame-status\x03\0\x1a\x01o\x02\x01\
+\x03\x01q\x05\x0ainitialize\x01\x1b\0\x08maximize\0\0\x08minimize\x01\x03\0\x07r\
+estore\x01\x1c\0\x08dragging\x01\x01\0\x04\0\x14custom-frame-command\x03\0\x1d\x01\
+p\x07\x01o\x02s\x15\x01p\x13\x01p\x19\x01q\x0a\x0bopen-window\x01\x05\0\x0cclose\
+-window\x01\x17\0\x0drequest-image\x01\x1f\0\x06cursor\x01\x0e\0\x09clipboard\x01\
+\x10\0\x08open-url\x01\x20\0\x0achange-set\x01!\0\x12composition-bounds\x01\x1c\0\
+\x0ascreenshot\x01\"\0\x0ccustom-frame\x01\x1e\0\x04\0\x07command\x03\0#\x01q\x02\
+\x0binitialized\x01\x1c\0\x07changed\x01\x1b\0\x04\0\x13custom-frame-effect\x03\0\
+%\x01q\x04\x0aimage-data\x01\x0a\0\x09font-data\x01\x0c\0\x13request-close-query\
+\0\0\x13custom-frame-effect\x01&\0\x04\0\x06effect\x03\0'\x03\0,local:immediate-\
+renderer-example/interaction\x05\x0e\x02\x03\0\x05\x07command\x02\x03\0\x05\x06e\
+ffect\x02\x03\0\x03\x0erender-context\x02\x03\0\x04\x05event\x01B!\x02\x03\x02\x01\
+\x0f\x04\0\x07command\x03\0\0\x02\x03\x02\x01\x10\x04\0\x06effect\x03\0\x02\x02\x03\
+\x02\x01\x11\x04\0\x0erender-context\x03\0\x04\x02\x03\x02\x01\x12\x04\0\x05even\
+t\x03\0\x06\x04\0\x0devent-channel\x03\x01\x04\0\x0fcommand-channel\x03\x01\x04\0\
+\x0adispatcher\x03\x01\x01h\x08\x01p\x07\x01@\x02\x04self\x0b\x06events\x0c\x01\0\
+\x04\0\x1a[method]event-channel.post\x01\x0d\x01h\x09\x01p\x03\x01@\x02\x04self\x0e\
+\x07effects\x0f\x01\0\x04\0\x1c[method]command-channel.post\x01\x10\x01h\x0a\x01\
+i\x08\x01@\x01\x04self\x11\0\x12\x04\0\x20[method]dispatcher.event-channel\x01\x13\
+\x01i\x09\x01@\x01\x04self\x11\0\x14\x04\0\"[method]dispatcher.command-channel\x01\
+\x15\x01p\x01\x01@\x01\x04self\x11\0\x16\x04\0\x1b[method]dispatcher.dispatch\x01\
+\x17\x01i\x05\x01i\x0a\x01@\x01\x07context\x18\0\x19\x04\0\x0fcreate-renderer\x01\
+\x1a\x04\0'local:immediate-renderer-example/render\x05\x13\x04\0.local:immediate\
+-renderer-example/example-world\x04\0\x0b\x13\x01\0\x0dexample-world\x03\0\0\0G\x09\
+producers\x01\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rus\
+t\x060.53.1";
                                                                       };
                                                                       )
                                                                     }
@@ -17069,9 +17253,9 @@ it-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
                                                                     #[unsafe(link_section = "component-type:wit-bindgen:0.53.1:local:immediate-renderer-example:example-world-with-all-of-its-exports-removed:encoded world")]
                                                                     #[doc(hidden)]
                                                                     #[allow(clippy::octal_escapes)]
-                                                                    pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 30889] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x84\xf0\x01\x01A\x02\
-\x01A\x13\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
+                                                                    pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 31193] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xb4\xf2\x01\x01A\x02\
+\x01A\x15\x01B\x0a\x04\0\x08pollable\x03\x01\x01h\0\x01@\x01\x04self\x01\0\x7f\x04\
 \0\x16[method]pollable.ready\x01\x02\x01@\x01\x04self\x01\x01\0\x04\0\x16[method\
 ]pollable.block\x01\x03\x01p\x01\x01py\x01@\x01\x02in\x04\0\x05\x04\0\x04poll\x01\
 \x06\x03\0\x12wasi:io/poll@0.2.9\x05\0\x01B\x0b\x04\0\x07context\x03\x01\x04\0\x0f\
@@ -17628,49 +17812,56 @@ thod]render-context.get-device\x01\x10\x01i\x03\x01@\x01\x04self\x0b\0\x11\x04\0
 \0#[method]render-context.get-pipeline\x01\x14\x01i\x07\x01@\x01\x04self\x0b\0\x15\
 \x04\0)[method]render-context.get-uniform-layout\x01\x16\x04\0)[method]render-co\
 ntext.get-texture-layout\x01\x16\x03\0\x1clocal:webgpu-runtime/surface\x05\x0a\x01\
-B\x20\x01s\x04\0\x05route\x03\0\0\x01s\x04\0\x03url\x03\0\x02\x01p}\x01r\x02\x06\
-source\x03\x05bytes\x04\x04\0\x0eexternal-asset\x03\0\x05\x01r\x03\x06source\x03\
-\x04names\x05bytes\x04\x04\0\x0dexternal-font\x03\0\x07\x01q\x03\x0aimage-data\x01\
-\x06\0\x09font-data\x01\x08\0\x13request-close-query\0\0\x04\0\x06effect\x03\0\x09\
-\x01m#\x07default\x04none\x0ccontext-menu\x04help\x07pointer\x08progress\x04wait\
-\x04cell\x09crosshair\x04text\x0dvertical-text\x05alias\x04copy\x04move\x07no-dr\
-op\x0bnot-allowed\x04grab\x08grabbing\x0aall-scroll\x0acol-resize\x0arow-resize\x08\
-n-resize\x08e-resize\x08s-resize\x08w-resize\x09ne-resize\x09nw-resize\x09se-res\
-ize\x09sw-resize\x09ew-resize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07zoom\
--in\x08zoom-out\x04\0\x0ccursor-style\x03\0\x0b\x01q\x01\x04text\x01s\0\x04\0\x0e\
-clipboard-data\x03\0\x0d\x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x0f\x04\0\
-\x0bchange-spec\x03\0\x10\x01r\x04\x04leftv\x03topv\x05widthv\x06heightv\x04\0\x12\
-composition-bounds\x03\0\x12\x01n\x01\x07new-tab\x04\0\x10open-url-options\x03\0\
-\x14\x01n\x01\x0awith-query\x04\0\x0dclose-options\x03\0\x16\x01q\x03\x06origin\0\
-\0\x05route\x01\x01\0\x09clipboard\0\0\x04\0\x0bdestination\x03\0\x18\x01p\x03\x01\
-o\x02s\x15\x01p\x11\x01p\x19\x01q\x09\x0bopen-window\x01\x01\0\x0cclose-window\x01\
-\x17\0\x0drequest-image\x01\x1a\0\x06cursor\x01\x0c\0\x09clipboard\x01\x0e\0\x08\
-open-url\x01\x1b\0\x0achange-set\x01\x1c\0\x12composition-bounds\x01\x13\0\x0asc\
-reenshot\x01\x1d\0\x04\0\x07command\x03\0\x1e\x03\0,local:immediate-renderer-exa\
-mple/interaction\x05\x0b\x01B$\x01n\x02\x04left\x05right\x04\0\x10modifier-press\
-ed\x03\0\0\x01r\x04\x04ctrl\x01\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10\
-modifier-options\x03\0\x02\x01r\x02\x01xv\x01yv\x04\0\x08location\x03\0\x04\x01m\
-\x05\x04left\x05right\x06middle\x04back\x07forward\x04\0\x0cmouse-button\x03\0\x06\
-\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10mouse-wheel-unit\x03\0\x08\x01\
-r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x09\x04\0\x0bmouse-wheel\x03\0\x0a\x01\
-n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0c\x01m\x03\x05enter\x03tab\x05space\
-\x04\0\x0ewhitespace-key\x03\0\x0e\x01m\x02\x09backspace\x06delete\x04\0\x08edit\
--key\x03\0\x10\x01m\x01\x06escape\x04\0\x06ui-key\x03\0\x12\x01m\x04\x0aarrow-do\
-wn\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08navi-key\x03\0\x14\x01q\x04\
-\x0awhitespace\x01\x0f\0\x04edit\x01\x11\0\x02ui\x01\x13\0\x04navi\x01\x15\0\x04\
-\0\x04keys\x03\0\x16\x01m\x02\x04undo\x04redo\x04\0\x0bhistory-ops\x03\0\x18\x01\
-r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\x1a\x01q\x04\x05start\0\
-\0\x0fselection-range\x01\x1b\0\x08pre-edit\x01s\0\x06commit\x01s\0\x04\0\x11com\
-position-state\x03\0\x1c\x01k\x1b\x01q\x01\x10character-bounds\x01\x1e\0\x04\0\x16\
-composition-bounds-req\x03\0\x1f\x01o\x02\x17\x0d\x01q\x10\x09modifiers\x01\x03\0\
-\x07pointer\x01\x05\0\x0amouse-down\x01\x07\0\x08mouse-up\x01\x07\0\x0amouse-mov\
-e\0\0\x0bmouse-wheel\x01\x0b\0\x08key-down\x01!\0\x06key-up\x01\x17\0\x1arequest\
--composition-bounds\x01\x20\0\x18update-composition-state\x01\x1d\0\x07history\x01\
-\x19\0\x03cut\0\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\
-\0\x05event\x03\0\"\x03\0\x1elocal:immediate-renderer/types\x05\x0c\x04\0Nlocal:\
-immediate-renderer-example/example-world-with-all-of-its-exports-removed\x04\0\x0b\
-3\x01\0-example-world-with-all-of-its-exports-removed\x03\0\0\0G\x09producers\x01\
-\x0cprocessed-by\x02\x0dwit-component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
+B'\x01n\x02\x04left\x05right\x04\0\x10modifier-pressed\x03\0\0\x01r\x04\x04ctrl\x01\
+\x05shift\x01\x03alt\x01\x09super-key\x01\x04\0\x10modifier-options\x03\0\x02\x01\
+r\x02\x04leftv\x03topv\x04\0\x08location\x03\0\x04\x01r\x02\x05widthv\x06heightv\
+\x04\0\x04size\x03\0\x06\x01m\x05\x04left\x05right\x06middle\x04back\x07forward\x04\
+\0\x0cmouse-button\x03\0\x08\x01m\x03\x0dlogical-pixel\x04line\x04page\x04\0\x10\
+mouse-wheel-unit\x03\0\x0a\x01r\x03\x07delta-xv\x07delta-yv\x0awheel-unit\x0b\x04\
+\0\x0bmouse-wheel\x03\0\x0c\x01n\x01\x06repeat\x04\0\x0bkey-options\x03\0\x0e\x01\
+m\x03\x05enter\x03tab\x05space\x04\0\x0ewhitespace-key\x03\0\x10\x01m\x02\x09bac\
+kspace\x06delete\x04\0\x08edit-key\x03\0\x12\x01m\x01\x06escape\x04\0\x06ui-key\x03\
+\0\x14\x01m\x04\x0aarrow-down\x0aarrow-left\x0barrow-right\x08arrow-up\x04\0\x08\
+navi-key\x03\0\x16\x01q\x04\x0awhitespace\x01\x11\0\x04edit\x01\x13\0\x02ui\x01\x15\
+\0\x04navi\x01\x17\0\x04\0\x04keys\x03\0\x18\x01m\x02\x04undo\x04redo\x04\0\x0bh\
+istory-ops\x03\0\x1a\x01r\x02\x06offsety\x03leny\x04\0\x11composition-range\x03\0\
+\x1c\x01q\x04\x05start\0\0\x0fselection-range\x01\x1d\0\x08pre-edit\x01s\0\x06co\
+mmit\x01s\0\x04\0\x11composition-state\x03\0\x1e\x01k\x1d\x01q\x01\x10character-\
+bounds\x01\x20\0\x04\0\x16composition-bounds-req\x03\0!\x01o\x02\x05\x07\x01o\x02\
+\x19\x0f\x01q\x11\x09modifiers\x01\x03\0\x0fviewport-bounds\x01#\0\x07pointer\x01\
+\x05\0\x0amouse-down\x01\x09\0\x08mouse-up\x01\x09\0\x0amouse-move\0\0\x0bmouse-\
+wheel\x01\x0d\0\x08key-down\x01$\0\x06key-up\x01\x19\0\x1arequest-composition-bo\
+unds\x01\"\0\x18update-composition-state\x01\x1f\0\x07history\x01\x1b\0\x03cut\0\
+\0\x04copy\0\0\x05paste\x01s\0\x08activate\0\0\x0akeep-focus\0\0\x04\0\x05event\x03\
+\0%\x03\0\x1elocal:immediate-renderer/types\x05\x0b\x02\x03\0\x04\x08location\x02\
+\x03\0\x04\x04size\x01B)\x02\x03\x02\x01\x0c\x04\0\x08location\x03\0\0\x02\x03\x02\
+\x01\x0d\x04\0\x04size\x03\0\x02\x01s\x04\0\x05route\x03\0\x04\x01s\x04\0\x03url\
+\x03\0\x06\x01p}\x01r\x02\x06source\x07\x05bytes\x08\x04\0\x0eexternal-asset\x03\
+\0\x09\x01r\x03\x06source\x07\x04names\x05bytes\x08\x04\0\x0dexternal-font\x03\0\
+\x0b\x01m#\x07default\x04none\x0ccontext-menu\x04help\x07pointer\x08progress\x04\
+wait\x04cell\x09crosshair\x04text\x0dvertical-text\x05alias\x04copy\x04move\x07n\
+o-drop\x0bnot-allowed\x04grab\x08grabbing\x0aall-scroll\x0acol-resize\x0arow-res\
+ize\x08n-resize\x08e-resize\x08s-resize\x08w-resize\x09ne-resize\x09nw-resize\x09\
+se-resize\x09sw-resize\x09ew-resize\x09ns-resize\x0bnesw-resize\x0bnwse-resize\x07\
+zoom-in\x08zoom-out\x04\0\x0ccursor-style\x03\0\x0d\x01q\x01\x04text\x01s\0\x04\0\
+\x0eclipboard-data\x03\0\x0f\x01ks\x01r\x03\x06offsety\x03leny\x09new-value\x11\x04\
+\0\x0bchange-spec\x03\0\x12\x01n\x01\x07new-tab\x04\0\x10open-url-options\x03\0\x14\
+\x01n\x01\x0awith-query\x04\0\x0dclose-options\x03\0\x16\x01q\x03\x06origin\0\0\x05\
+route\x01\x05\0\x09clipboard\0\0\x04\0\x0bdestination\x03\0\x18\x01m\x03\x09maxi\
+mized\x09minimized\x08restored\x04\0\x13custom-frame-status\x03\0\x1a\x01o\x02\x01\
+\x03\x01q\x05\x0ainitialize\x01\x1b\0\x08maximize\0\0\x08minimize\x01\x03\0\x07r\
+estore\x01\x1c\0\x08dragging\x01\x01\0\x04\0\x14custom-frame-command\x03\0\x1d\x01\
+p\x07\x01o\x02s\x15\x01p\x13\x01p\x19\x01q\x0a\x0bopen-window\x01\x05\0\x0cclose\
+-window\x01\x17\0\x0drequest-image\x01\x1f\0\x06cursor\x01\x0e\0\x09clipboard\x01\
+\x10\0\x08open-url\x01\x20\0\x0achange-set\x01!\0\x12composition-bounds\x01\x1c\0\
+\x0ascreenshot\x01\"\0\x0ccustom-frame\x01\x1e\0\x04\0\x07command\x03\0#\x01q\x02\
+\x0binitialized\x01\x1c\0\x07changed\x01\x1b\0\x04\0\x13custom-frame-effect\x03\0\
+%\x01q\x04\x0aimage-data\x01\x0a\0\x09font-data\x01\x0c\0\x13request-close-query\
+\0\0\x13custom-frame-effect\x01&\0\x04\0\x06effect\x03\0'\x03\0,local:immediate-\
+renderer-example/interaction\x05\x0e\x04\0Nlocal:immediate-renderer-example/exam\
+ple-world-with-all-of-its-exports-removed\x04\0\x0b3\x01\0-example-world-with-al\
+l-of-its-exports-removed\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-\
+component\x070.245.1\x10wit-bindgen-rust\x060.53.1";
 
                                                                     #[inline(never)]
                                                                     #[doc(hidden)]

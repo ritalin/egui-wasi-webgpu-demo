@@ -3,6 +3,7 @@ package local:immediate-renderer;
 interface types {
     variant event {
         modifiers(modifier-options),
+        viewport-bounds(tuple<location, size>),
         pointer(location),
         mouse-down(mouse-button),
         mouse-up(mouse-button),
@@ -33,8 +34,13 @@ interface types {
     }
 
     record location {
-        x: f32,
-        y: f32,
+        left: f32,
+        top: f32,
+    }
+
+    record size {
+        width: f32,
+        height: f32,
     }
 
     enum mouse-button {

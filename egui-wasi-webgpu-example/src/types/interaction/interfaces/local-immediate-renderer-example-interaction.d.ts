@@ -1,4 +1,6 @@
 /** @module Interface local:immediate-renderer-example/interaction **/
+export type Location = import('./local-immediate-renderer-types.js').Location;
+export type Size = import('./local-immediate-renderer-types.js').Size;
 export type Route = string;
 export type Url = string;
 export interface ExternalAsset {
@@ -9,18 +11,6 @@ export interface ExternalFont {
   source: Url,
   name: string,
   bytes: Uint8Array,
-}
-export type Effect = EffectImageData | EffectFontData | EffectRequestCloseQuery;
-export interface EffectImageData {
-  tag: 'image-data',
-  val: ExternalAsset,
-}
-export interface EffectFontData {
-  tag: 'font-data',
-  val: ExternalFont,
-}
-export interface EffectRequestCloseQuery {
-  tag: 'request-close-query',
 }
 /**
  * # Variants
@@ -106,12 +96,6 @@ export interface ChangeSpec {
   len: number,
   newValue?: string,
 }
-export interface CompositionBounds {
-  left: number,
-  top: number,
-  width: number,
-  height: number,
-}
 export interface OpenUrlOptions {
   newTab?: boolean,
 }
@@ -129,7 +113,37 @@ export interface DestinationRoute {
 export interface DestinationClipboard {
   tag: 'clipboard',
 }
-export type Command = CommandOpenWindow | CommandCloseWindow | CommandRequestImage | CommandCursor | CommandClipboard | CommandOpenUrl | CommandChangeSet | CommandCompositionBounds | CommandScreenshot;
+/**
+ * # Variants
+ * 
+ * ## `"maximized"`
+ * 
+ * ## `"minimized"`
+ * 
+ * ## `"restored"`
+ */
+export type CustomFrameStatus = 'maximized' | 'minimized' | 'restored';
+export type CustomFrameCommand = CustomFrameCommandInitialize | CustomFrameCommandMaximize | CustomFrameCommandMinimize | CustomFrameCommandRestore | CustomFrameCommandDragging;
+export interface CustomFrameCommandInitialize {
+  tag: 'initialize',
+  val: CustomFrameStatus,
+}
+export interface CustomFrameCommandMaximize {
+  tag: 'maximize',
+}
+export interface CustomFrameCommandMinimize {
+  tag: 'minimize',
+  val: Size,
+}
+export interface CustomFrameCommandRestore {
+  tag: 'restore',
+  val: [Location, Size],
+}
+export interface CustomFrameCommandDragging {
+  tag: 'dragging',
+  val: Location,
+}
+export type Command = CommandOpenWindow | CommandCloseWindow | CommandRequestImage | CommandCursor | CommandClipboard | CommandOpenUrl | CommandChangeSet | CommandCompositionBounds | CommandScreenshot | CommandCustomFrame;
 export interface CommandOpenWindow {
   tag: 'open-window',
   val: Route,
@@ -160,9 +174,38 @@ export interface CommandChangeSet {
 }
 export interface CommandCompositionBounds {
   tag: 'composition-bounds',
-  val: CompositionBounds,
+  val: [Location, Size],
 }
 export interface CommandScreenshot {
   tag: 'screenshot',
   val: Array<Destination>,
+}
+export interface CommandCustomFrame {
+  tag: 'custom-frame',
+  val: CustomFrameCommand,
+}
+export type CustomFrameEffect = CustomFrameEffectInitialized | CustomFrameEffectChanged;
+export interface CustomFrameEffectInitialized {
+  tag: 'initialized',
+  val: [Location, Size],
+}
+export interface CustomFrameEffectChanged {
+  tag: 'changed',
+  val: CustomFrameStatus,
+}
+export type Effect = EffectImageData | EffectFontData | EffectRequestCloseQuery | EffectCustomFrameEffect;
+export interface EffectImageData {
+  tag: 'image-data',
+  val: ExternalAsset,
+}
+export interface EffectFontData {
+  tag: 'font-data',
+  val: ExternalFont,
+}
+export interface EffectRequestCloseQuery {
+  tag: 'request-close-query',
+}
+export interface EffectCustomFrameEffect {
+  tag: 'custom-frame-effect',
+  val: CustomFrameEffect,
 }

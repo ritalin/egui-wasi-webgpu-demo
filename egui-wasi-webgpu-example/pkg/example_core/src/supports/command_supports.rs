@@ -23,9 +23,12 @@ impl From<ExampleCommand> for interaction::Command {
             ExampleCommand::ChangeSet(change_specs) => {
                 interaction::Command::ChangeSet(change_specs.into_iter().map(Into::into).collect::<Vec<_>>())
             }
-            ExampleCommand::CompositionBounds(bounds) =>interaction::Command::CompositionBounds(bounds.into()),
+            ExampleCommand::CompositionBounds(bounds) =>interaction::Command::CompositionBounds(RectW::from(bounds).0),
             ExampleCommand::Screenshot(dests) => {
                 interaction::Command::Screenshot(dests.into_iter().map(Into::into).collect::<Vec<_>>())
+            }
+            ExampleCommand::CustomFrame(info) => {
+                interaction::Command::CustomFrame(info.into())
             }
         }
     }
@@ -42,6 +45,9 @@ impl From<interaction::Effect> for ExampleEffect {
             }
             interaction::Effect::RequestCloseQuery => {
                 ExampleEffect::RequestCloseQuery
+            }
+            interaction::Effect::CustomFrameEffect(effect) => {
+                ExampleEffect::CustomFrameEffect(effect.into())
             }
         }
     }
@@ -124,14 +130,48 @@ impl From<crate::ChangeSpec> for interaction::ChangeSpec {
     }
 }
 
-impl From<egui::Rect> for interaction::CompositionBounds {
+pub(crate) struct LocationW(pub(crate) types::Location);
+pub(crate) struct LocationRef<'a>(pub(crate) &'a types::Location);
+
+impl From<egui::Pos2> for LocationW {
+    fn from(value: egui::Pos2) -> Self {
+        LocationW(types::Location { left:value.x, top: value.y })
+    }
+}
+impl<'a> From<LocationRef<'a>> for egui::Pos2 {
+    fn from(LocationRef::<'a>(value): LocationRef<'a>) -> Self {
+        Self::new(value.left, value.top)
+    }
+}
+
+pub(crate) struct SizeW(pub(crate) types::Size);
+pub(crate) struct SizeRef<'a>(pub(crate) &'a types::Size);
+
+impl From<egui::Vec2> for SizeW {
+    fn from(value: egui::Vec2) -> Self {
+        SizeW(types::Size { width: value.x, height: value.y })
+    }
+}
+impl<'a> From<SizeRef<'a>> for egui::Vec2 {
+    fn from(SizeRef::<'a>(value): SizeRef<'a>) -> Self {
+        Self::new(value.width, value.height)
+    }
+}
+
+struct RectW((types::Location, types::Size));
+
+impl From<egui::Rect> for RectW {
     fn from(value: egui::Rect) -> Self {
-        interaction::CompositionBounds{
-            left: value.left(),
-            top: value.top(),
-            width: value.width(),
-            height: value.height(),
-        }
+        RectW((
+            types::Location{left: value.left(), top: value.top() },
+            types::Size{width: value.width(), height: value.height() }
+        ))
+    }
+}
+
+impl From<RectW> for egui::Rect {
+    fn from(RectW((origin, size)): RectW) -> Self {
+        Self::from_min_size(egui::Pos2::new(origin.left, origin.top), egui::Vec2::new(size.width, size.height))
     }
 }
 
@@ -141,6 +181,47 @@ impl From<crate::Destination> for interaction::Destination {
             crate::Destination::Origin => Self::Origin,
             crate::Destination::Route(route) => Self::Route(route),
             crate::Destination::Clipboard => Self::Clipboard,
+        }
+    }
+}
+
+impl From<crate::CustomFrameCommand> for interaction::CustomFrameCommand {
+    fn from(value: crate::CustomFrameCommand) -> Self {
+        match value {
+            crate::CustomFrameCommand::Initialize(status) => interaction::CustomFrameCommand::Initialize(status.into()),
+            crate::CustomFrameCommand::Maximize => interaction::CustomFrameCommand::Maximize,
+            crate::CustomFrameCommand::Minimize(size) => interaction::CustomFrameCommand::Minimize(SizeW::from(size).0),
+            crate::CustomFrameCommand::Restore(rect) => interaction::CustomFrameCommand::Restore(RectW::from(rect).0),
+            crate::CustomFrameCommand::Dragging(pos) => interaction::CustomFrameCommand::Dragging(LocationW::from(pos).0),
+        }
+    }
+}
+
+impl From<interaction::CustomFrameEffect> for crate::CustomFrameEffect {
+    fn from(value: interaction::CustomFrameEffect) -> Self {
+        match value {
+            interaction::CustomFrameEffect::Initialized((origin, size)) => Self::Initialized(RectW((origin, size)).into()),
+            interaction::CustomFrameEffect::Changed(status) => Self::Changed(status.into()),
+        }
+    }
+}
+
+impl From<crate::WindowFrameStatus> for interaction::CustomFrameStatus {
+    fn from(value: crate::WindowFrameStatus) -> Self {
+        match value {
+            crate::WindowFrameStatus::Normal => Self::Restored,
+            crate::WindowFrameStatus::Maximize => Self::Maximized,
+            crate::WindowFrameStatus::Minimize => Self::Minimized,
+        }
+    }
+}
+
+impl From<interaction::CustomFrameStatus> for crate::WindowFrameStatus {
+    fn from(value: interaction::CustomFrameStatus) -> Self {
+        match value {
+            interaction::CustomFrameStatus::Maximized => Self::Maximize,
+            interaction::CustomFrameStatus::Minimized => Self::Minimize,
+            interaction::CustomFrameStatus::Restored => Self::Normal,
         }
     }
 }
