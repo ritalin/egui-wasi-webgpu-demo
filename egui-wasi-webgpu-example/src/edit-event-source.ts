@@ -1,4 +1,4 @@
-import type { Origin, Size } from "./types/interaction/interfaces/local-immediate-renderer-example-interaction";
+import type { Location, Size } from "./types/event/interfaces/local-immediate-renderer-types";
 
 export class EditEventSource {
   #editHost: HTMLCanvasElement;
@@ -50,7 +50,7 @@ export class EditEventSource {
     );
   }
 
-  updateCompositionBounds(origin: Origin, size: Size) {
+  updateCompositionBounds(origin: Location, size: Size) {
     // console.log(
     //   `composition-bounds/new: (left: ${bounds.left}, top: ${bounds.top}, width: ${bounds.width}, height: ${bounds.height}`,
     // );

@@ -11,7 +11,7 @@ import {
 } from "wasi-webgpu-shim/host-api";
 import SHADER_SOURCE from "./shaders/shader.wgsl.js";
 import type { FrameSize } from "./types/local-immediate-renderer-surface.js";
-import { GpuCanvasAlphaMode } from "wasi-webgpu-shim/webgpu";
+import type { GpuCanvasAlphaMode } from "wasi-webgpu-shim/webgpu";
 
 export interface IRenderContext {
   size(): FrameSize;

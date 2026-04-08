@@ -2,8 +2,6 @@ import type {
   ChangeSpec,
   ClipboardData,
   Command,
-  Origin,
-  Size,
   CursorStyle,
   CustomFrameCommand,
   Destination,
@@ -12,6 +10,7 @@ import type { RouteEntry, WasmEngine } from "./engine";
 import { DomEventBridge } from "./event-bridge";
 import { EditEventSource } from "./edit-event-source";
 import { fixElementSize } from "./layout-support";
+import type { Location, Size } from "./types/event/interfaces/local-immediate-renderer-types";
 
 export type Route = "route://app/main";
 export type HostCommand =
@@ -194,7 +193,7 @@ function updateEditContext(engine: WasmEngine, route: Route, changeSpecs: Change
   }
 }
 
-function updateCompositionBounds(engine: WasmEngine, route: Route, origin: Origin, size: Size) {
+function updateCompositionBounds(engine: WasmEngine, route: Route, origin: Location, size: Size) {
   const entry = engine.entry(route);
   if (!entry) return;
 
@@ -252,15 +251,6 @@ function takeScreenShot(engine: WasmEngine, entry: RouteEntry, dests: Destinatio
 }
 
 function updateCustomFrameState(engine: WasmEngine, route: Route, info: CustomFrameCommand) {
-  function flashCurrentBounds(canvas: HTMLCanvasElement) {
-    const rect = canvas.getBoundingClientRect();
-    canvas.style.width = rect.width + "px";
-    canvas.style.height = rect.height + "px";
-    canvas.style.left = rect.left + "px";
-    canvas.style.top = rect.top + "px";
-    canvas.offsetWidth;
-  }
-
   const entry = engine.entry(route);
   if (!entry) return;
 

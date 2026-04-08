@@ -14,7 +14,7 @@
     "build:pkg": "./scripts/transpile.sh",
     "build:dist": "node ./scripts/build-dist.ts",
     "build": "pnpm run build:shim && pnpm run build:types && pnpm run build:dist",
-    "preview": "vite preview -c"
+    "preview": "vite preview -c "
   },
   "devDependencies": {
     "@bytecodealliance/jco": "^1.16.1",
