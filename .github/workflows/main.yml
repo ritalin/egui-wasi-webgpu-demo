@@ -43,10 +43,14 @@ jobs:
         run: |
           cargo install wit-deps-cli
           wit-deps --version
-      - name: Update wid dependencies
+      - name: Update wit dependencies (demo)
         run: |
           cd "$PWD/egui-wasi-webgpu-demo/pkg/wit"
           wit-deps -m renderer/deps.toml -d renderer/deps -l renderer/deps.lock update
+      - name: Update wit dependencies (example)
+        run: |
+          cd "$PWD/egui-wasi-webgpu-example/pkg/wit"
+          wit-deps -m ./deps.toml -d ./deps -l ./deps.lock update
       - name: Set up NodeJS
         uses: actions/setup-node@v6
         with:
