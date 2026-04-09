@@ -9,6 +9,7 @@ members = [
     "confirm_exit",
     "screenshot",
     "custom_window_frame",
+    "multiple_viewports",
 ]
 resolver = "2"
 
