@@ -60,7 +60,7 @@ class DomEventBridge {
       callback([
         {
           tag: "pointer",
-          val: { x: (ev.clientX - rect.left) * scaleFcactor, y: (ev.clientY - rect.top) * scaleFcactor },
+          val: { left: (ev.clientX - rect.left) * scaleFcactor, top: (ev.clientY - rect.top) * scaleFcactor },
         },
         {
           tag: "mouse-down",
@@ -74,7 +74,7 @@ class DomEventBridge {
       callback([
         {
           tag: "pointer",
-          val: { x: (ev.clientX - rect.left) * scaleFcactor, y: (ev.clientY - rect.top) * scaleFcactor },
+          val: { left: (ev.clientX - rect.left) * scaleFcactor, top: (ev.clientY - rect.top) * scaleFcactor },
         },
         {
           tag: "mouse-up",
@@ -88,7 +88,7 @@ class DomEventBridge {
       callback([
         {
           tag: "pointer",
-          val: { x: (ev.clientX - rect.left) * scaleFcactor, y: (ev.clientY - rect.top) * scaleFcactor },
+          val: { left: (ev.clientX - rect.left) * scaleFcactor, top: (ev.clientY - rect.top) * scaleFcactor },
         },
         {
           tag: "mouse-move",
