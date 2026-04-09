@@ -22,8 +22,14 @@ pub fn populate_events(events: &[types::Event], screen: &ScreenDescriptor, input
                 modifiers.command = ! m.super_key.is_empty();
                 modifiers.mac_cmd = ! m.super_key.is_empty();
             }
+            types::Event::ViewportBounds((origin, size)) => {
+                viewport.outer_rect = Some(egui::Rect::from_min_size(
+                    egui::Pos2::new(origin.left, origin.top),
+                    egui::Vec2::new(size.width, size.height)
+                ))
+            }
             types::Event::Pointer(p) => {
-                (cursor_x, cursor_y) = (p.x / screen.scale_factor, p.y / screen.scale_factor);
+                (cursor_x, cursor_y) = (p.left / screen.scale_factor, p.top / screen.scale_factor);
                 // For dragging
                 input.events.push(egui::Event::PointerMoved(Pos2::new(cursor_x, cursor_y)));
             }
